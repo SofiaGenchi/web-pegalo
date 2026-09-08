@@ -3,7 +3,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Pegalo | Adhesivos y selladores',
   description:
-    'Adhesivos y selladores para construcción, industria y profesionales. Conocé las líneas Pegalo, Artesanato e Instalador y consultá por venta mayorista.',
+    'Pegalo: importación y comercialización mayorista de adhesivos y selladores en Argentina. Conocé Pegalo y Artesanato y encontrá la solución para tu proyecto.',
 };
 export default function RootLayout({
   children,
