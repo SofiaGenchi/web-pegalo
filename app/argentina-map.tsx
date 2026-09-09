@@ -115,18 +115,10 @@ export default function ArgentinaMap() {
           </title>
           <path d={geometry.path} fill="#102a83" />
           <path d={territories.malvinas} fill="#102a83" />
-          <text
-            x="253"
-            y="570"
-            textAnchor="middle"
-            className="map-territory-label"
-          >
-            Islas Malvinas
-          </text>
-          <g transform="translate(207 348)">
+          <g transform="translate(274 498) scale(0.52)">
             <rect
               width="148"
-              height="180"
+              height="156"
               rx="12"
               fill="#fff"
               stroke="#b8c1e8"
@@ -140,22 +132,6 @@ export default function ArgentinaMap() {
               strokeDasharray="3 4"
             />
             <path d={territories.antarctica} fill="#102a83" />
-            <text
-              x="74"
-              y="158"
-              textAnchor="middle"
-              className="map-territory-label"
-            >
-              Sector Antártico
-            </text>
-            <text
-              x="74"
-              y="172"
-              textAnchor="middle"
-              className="map-territory-label"
-            >
-              Argentino
-            </text>
           </g>
         </svg>
         {contactLocations.map((location) => (
