@@ -1,7 +1,7 @@
 'use client';
 import PegaloName from './pegalo-name';
 import { useEffect, useState } from 'react';
-import { Download, FileText, RefreshCw } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import {
   documentKinds,
   documentLabels,
@@ -71,7 +71,7 @@ export default function Downloads() {
               </p>
               {document?.available ? (
                 <a href={`/api/documents/${kind}`} download>
-                  Descargar PDF <Download size={18} />
+                  Descargar PDF
                 </a>
               ) : (
                 <span className="download-unavailable">
@@ -83,7 +83,7 @@ export default function Downloads() {
         })}
         {error && (
           <button onClick={refresh} className="download-retry">
-            <RefreshCw size={16} /> Volver a intentar
+            Volver a intentar
           </button>
         )}
       </div>

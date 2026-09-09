@@ -11,7 +11,7 @@ export default async function AdminPage() {
     return (
       <main className="admin-page">
         <a href="/">
-          ← Volver a <PegaloName />
+          Volver a <PegaloName />
         </a>
         <h1>Administrar documentos</h1>
         <p>Ingresá con la cuenta autorizada de la empresa.</p>

@@ -63,7 +63,7 @@ export default function DocumentManager({
   }
   return (
     <main className="admin-page">
-      <a href="/#descargas">← Volver a la web</a>
+      <a href="/#descargas">Volver a la web</a>
       <p>
         <PegaloName /> / ADMINISTRACIÓN
       </p>

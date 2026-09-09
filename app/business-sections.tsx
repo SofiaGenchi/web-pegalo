@@ -1,6 +1,5 @@
 'use client';
 import ArgentinaMap from './argentina-map';
-import { ArrowUpRight } from 'lucide-react';
 export default function BusinessSections() {
   return (
     <>
@@ -20,7 +19,7 @@ export default function BusinessSections() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Encontrá tu distribuidor <ArrowUpRight size={18} />
+              Encontrá tu distribuidor
             </a>
           </div>
           <address className="coverage-details">
@@ -74,19 +73,16 @@ export default function BusinessSections() {
             <span>
               <small>01 / CELULAR Y WHATSAPP</small>+54 9 11 6417-4036
             </span>
-            <ArrowUpRight />
           </a>
           <a className="contact-channel" href="tel:08001220975">
             <span>
               <small>02 / TELÉFONO</small>0800-122-0975
             </span>
-            <ArrowUpRight />
           </a>
           <a className="contact-channel" href="mailto:ventas@pegalo.com.ar">
             <span>
               <small>03 / CORREO ELECTRÓNICO</small>ventas@pegalo.com.ar
             </span>
-            <ArrowUpRight />
           </a>
           <div className="contact-network">
             <p>
@@ -98,21 +94,21 @@ export default function BusinessSections() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Instagram <ArrowUpRight size={16} />
+                Instagram
               </a>
               <a
                 href="https://www.facebook.com/adhesivospegalo/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Facebook <ArrowUpRight size={16} />
+                Facebook
               </a>
               <a
                 href="https://www.tiktok.com/@adhesivospegalo"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                TikTok <ArrowUpRight size={16} />
+                TikTok
               </a>
             </div>
           </div>

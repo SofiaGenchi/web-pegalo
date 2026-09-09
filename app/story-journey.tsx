@@ -2,7 +2,6 @@
 import PegaloName from './pegalo-name';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { ArrowDown, ArrowUpRight, ArrowRight } from 'lucide-react';
 import './story.css';
 import { distanceAtY, type PathSample } from './scroll-path';
 
@@ -247,7 +246,7 @@ export default function StoryJourney({
       </svg>
       <section className="journey-hero" id="inicio" data-scene>
         <div className="hero-halo" aria-hidden="true" />
-        <span className="hero-side-note">UN MUNDO DE POSIBILIDADES ↓</span>
+        <span className="hero-side-note">UN MUNDO DE POSIBILIDADES</span>
         <div className="journey-hero-copy">
           <p className="story-eyebrow">ADHESIVOS QUE CONECTAN TU MUNDO</p>
           <h1>
@@ -381,7 +380,7 @@ export default function StoryJourney({
             className="story-button"
             onClick={() => onProduct('ciano-20')}
           >
-            Conocé los cianoacrilatos <ArrowUpRight size={19} />
+            Conocé los cianoacrilatos
           </button>
         </div>
       </section>
@@ -414,7 +413,7 @@ export default function StoryJourney({
             className="story-button"
             onClick={() => onProduct('artesanato')}
           >
-            Explorá las siliconas <ArrowUpRight size={19} />
+            Explorá las siliconas
           </button>
         </div>
         <div className="scene-art" data-reveal>
@@ -469,25 +468,18 @@ export default function StoryJourney({
             catálogo para acompañarte de principio a fin.
           </p>
           <div className="solution-links">
-            <button onClick={() => onProduct('acrilico')}>
-              Selladores <ArrowUpRight size={18} />
-            </button>
-            <button onClick={() => onProduct('espuma')}>
-              Poliuretanos <ArrowUpRight size={18} />
-            </button>
+            <button onClick={() => onProduct('acrilico')}>Selladores</button>
+            <button onClick={() => onProduct('espuma')}>Poliuretanos</button>
             <button onClick={() => onProduct('barras')}>
-              Hot melt y aplicadores <ArrowUpRight size={18} />
+              Hot melt y aplicadores
             </button>
           </div>
           <button className="story-button" onClick={() => onBrowse('Todos')}>
-            Ver todas las soluciones <ArrowRight size={19} />
+            Ver todas las soluciones
           </button>
         </div>
       </section>
       <section className="journey-finale" id="seguir" data-scene>
-        <span className="final-graphic" aria-hidden="true">
-          ↗
-        </span>
         <p className="story-eyebrow" data-reveal>
           EL RECORRIDO SIGUE CON VOS
         </p>
@@ -503,11 +495,11 @@ export default function StoryJourney({
         <div className="drop-destination">
           <span data-route-point />
           <button className="story-button" onClick={onContact}>
-            Hablemos de tu proyecto <ArrowUpRight size={20} />
+            Hablemos de tu proyecto
           </button>
         </div>
         <a href="#catalogo" className="final-catalog-link">
-          O recorré el catálogo completo <ArrowDown size={16} />
+          O recorré el catálogo completo
         </a>
         <span className="final-foot">ATENCIÓN MAYORISTA EN TODO EL PAÍS.</span>
       </section>

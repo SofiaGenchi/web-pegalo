@@ -8,15 +8,7 @@ import BusinessSections from './business-sections';
 import BusinessStack from './business-stack';
 import './business-stack.css';
 import './business-sections.css';
-import {
-  ArrowUpRight,
-  ArrowRight,
-  Menu,
-  X,
-  Plus,
-  Check,
-  Search,
-} from 'lucide-react';
+import { Menu, X, Plus, Check, Search } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -269,7 +261,6 @@ export default function Home() {
           {quote.length > 0 && (
             <span className="nav-quote-count">{quote.length}</span>
           )}{' '}
-          <ArrowUpRight size={19} />
         </button>
         <button
           className="mobile-toggle"
@@ -291,7 +282,6 @@ export default function Home() {
           {navigation.map(([label, id]) => (
             <a href={'#' + id} key={id} onClick={() => setMenu(false)}>
               {label}
-              <ArrowUpRight />
             </a>
           ))}
         </nav>
@@ -422,9 +412,6 @@ export default function Home() {
                       loading="lazy"
                       decoding="async"
                     />
-                    <span className="product-arrow">
-                      <ArrowUpRight size={22} />
-                    </span>
                   </div>
                   <div className="product-info">
                     <h3>{p.name}</h3>
@@ -464,7 +451,7 @@ export default function Home() {
                   setFamily('Todos');
                 }}
               >
-                Ver todos los productos <ArrowRight size={18} />
+                Ver todos los productos
               </button>
             </div>
           )}
@@ -529,21 +516,21 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Instagram <ArrowUpRight size={17} />
+              Instagram
             </a>
             <a
               href="https://www.facebook.com/adhesivospegalo/"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Facebook <ArrowUpRight size={17} />
+              Facebook
             </a>
             <a
               href="https://www.tiktok.com/@adhesivospegalo"
               target="_blank"
               rel="noopener noreferrer"
             >
-              TikTok <ArrowUpRight size={17} />
+              TikTok
             </a>
           </nav>
         </div>
@@ -552,9 +539,7 @@ export default function Home() {
             © 2026 <PegaloName />. Todos los derechos reservados.
           </p>
           <div>
-            <a href="#inicio">
-              Volver arriba <ArrowUpRight size={16} />
-            </a>
+            <a href="#inicio">Volver arriba</a>
           </div>
         </div>
       </footer>
@@ -562,7 +547,6 @@ export default function Home() {
         <button className="quote-float" onClick={() => setQuoteOpen(true)}>
           Tu consulta <span>{quote.length}</span>
           <small>{total} unidades</small>
-          <ArrowUpRight size={20} />
         </button>
       )}
       <Dialog
@@ -649,7 +633,7 @@ export default function Home() {
                       setQuoteOpen(true);
                     }}
                   >
-                    Continuar con mi consulta <ArrowRight size={16} />
+                    Continuar con mi consulta
                   </button>
                 )}
                 <details className="technical-info">
@@ -663,7 +647,7 @@ export default function Home() {
                   </dl>
                   {selected.pdf ? (
                     <a href="/fichas/silicona-acetica.pdf" download>
-                      Descargar ficha técnica PDF <ArrowUpRight size={16} />
+                      Descargar ficha técnica PDF
                     </a>
                   ) : (
                     <p className="technical-pending">
@@ -821,7 +805,7 @@ export default function Home() {
                 .join('\n\n'),
             )}
           >
-            Continuar por WhatsApp <ArrowUpRight size={20} />
+            Continuar por WhatsApp
           </a>
         </DialogContent>
       </Dialog>
