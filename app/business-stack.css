@@ -477,3 +477,10 @@
     right: -35px;
   }
 }
+
+.map-territory-label {
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  fill: #102a83;
+}

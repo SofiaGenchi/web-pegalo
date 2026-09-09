@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState, type KeyboardEvent } from 'react';
 import geometry from './argentina-geometry.json';
+import territories from './argentina-territories.json';
 import { contactLocations, type ContactLocation } from './contact-locations';
 import PegaloName from './pegalo-name';
 function LocationPoint({ location }: { location: ContactLocation }) {
@@ -104,8 +105,58 @@ export default function ArgentinaMap() {
   return (
     <div className="argentina-map">
       <div className="argentina-canvas">
-        <svg viewBox="0 0 360 620" aria-hidden="true">
+        <svg
+          viewBox="0 0 360 620"
+          role="img"
+          aria-labelledby="argentina-map-title"
+        >
+          <title id="argentina-map-title">
+            Argentina, Islas Malvinas y Sector Antártico Argentino en recuadro
+          </title>
           <path d={geometry.path} fill="#102a83" />
+          <path d={territories.malvinas} fill="#102a83" />
+          <text
+            x="253"
+            y="570"
+            textAnchor="middle"
+            className="map-territory-label"
+          >
+            Islas Malvinas
+          </text>
+          <g transform="translate(207 348)">
+            <rect
+              width="148"
+              height="180"
+              rx="12"
+              fill="#fff"
+              stroke="#b8c1e8"
+            />
+            <path
+              d="M22,31 Q72,9 122,31 L72,140 Z"
+              fill="#b8c1e8"
+              fillOpacity=".18"
+              stroke="#102a83"
+              strokeOpacity=".35"
+              strokeDasharray="3 4"
+            />
+            <path d={territories.antarctica} fill="#102a83" />
+            <text
+              x="74"
+              y="158"
+              textAnchor="middle"
+              className="map-territory-label"
+            >
+              Sector Antártico
+            </text>
+            <text
+              x="74"
+              y="172"
+              textAnchor="middle"
+              className="map-territory-label"
+            >
+              Argentino
+            </text>
+          </g>
         </svg>
         {contactLocations.map((location) => (
           <LocationPoint key={location.id} location={location} />
