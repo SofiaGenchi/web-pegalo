@@ -476,30 +476,89 @@ export default function Home() {
         </section>
         <Downloads />
       </main>
-      <footer>
-        <Link href="/admin" className="admin-link">
-          Administración
-        </Link>
-        <a
-          href="#inicio"
-          className="logo"
-          aria-label="Pegalo, volver al inicio"
-        >
-          <span className="pegalo-wordmark" aria-hidden="true">
-            PEGALO<sup className="pegalo-registered">®</sup>
-          </span>
-        </a>
-        <p>
-          ADHESIVOS Y SELLADORES
-          <br />
-          ARGENTINA · DESDE 1998
-        </p>
-        <a href="mailto:ventas@pegalo.com.ar">
-          ventas@pegalo.com.ar <ArrowUpRight size={16} />
-        </a>
-        <a href="#inicio" aria-label="Volver al inicio" className="back-top">
-          <ArrowUpRight />
-        </a>
+      <footer className="company-footer">
+        <div className="footer-main">
+          <div className="footer-brand">
+            <a
+              href="#inicio"
+              className="logo"
+              aria-label="Pegalo, volver al inicio"
+            >
+              <span className="pegalo-wordmark" aria-hidden="true">
+                PEGALO<sup className="pegalo-registered">®</sup>
+              </span>
+            </a>
+            <p>
+              A lo largo de más de 18 años, <PegaloName /> ha mostrado claros
+              signos de liderazgo. Desarrollando ideas al servicio de las
+              empresas del sector, aportando soluciones concretas a los
+              obstáculos que se interponen en el camino.
+            </p>
+          </div>
+          <div className="footer-contact">
+            <h2>Contactanos</h2>
+            <address>
+              <a
+                href="https://wa.me/541164174036"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Celular / WhatsApp</span>+54 9 11 6417-4036
+              </a>
+              <a href="tel:08001220975">
+                <span>Teléfono</span>0800-122-0975
+              </a>
+              <a href="mailto:ventas@pegalo.com.ar">
+                <span>Correo electrónico</span>ventas@pegalo.com.ar
+              </a>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Asamblea%204355%2C%20Santos%20Lugares%2C%20Buenos%20Aires"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Encontranos</span>Asamblea 4355, Santos Lugares
+                <br />
+                CP 1676, Buenos Aires
+              </a>
+            </address>
+          </div>
+          <nav className="footer-social" aria-label="Redes sociales">
+            <h2>Seguinos</h2>
+            <p>@adhesivospegalo</p>
+            <a
+              href="https://www.instagram.com/adhesivospegalo/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Instagram <ArrowUpRight size={17} />
+            </a>
+            <a
+              href="https://www.facebook.com/adhesivospegalo/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Facebook <ArrowUpRight size={17} />
+            </a>
+            <a
+              href="https://www.tiktok.com/@adhesivospegalo"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              TikTok <ArrowUpRight size={17} />
+            </a>
+          </nav>
+        </div>
+        <div className="footer-bottom">
+          <p>
+            © 2026 <PegaloName />. Todos los derechos reservados.
+          </p>
+          <div>
+            <Link href="/admin">Administración</Link>
+            <a href="#inicio">
+              Volver arriba <ArrowUpRight size={16} />
+            </a>
+          </div>
+        </div>
       </footer>
       {quote.length > 0 && (
         <button className="quote-float" onClick={() => setQuoteOpen(true)}>
