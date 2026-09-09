@@ -265,7 +265,7 @@ export default function Home() {
           ))}
         </nav>
         <button className="header-cta" onClick={() => setQuoteOpen(true)}>
-          Consulta mayorista{' '}
+          Contactanos{' '}
           {quote.length > 0 && (
             <span className="nav-quote-count">{quote.length}</span>
           )}{' '}
