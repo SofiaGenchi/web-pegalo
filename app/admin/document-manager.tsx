@@ -1,0 +1,116 @@
+/* oxlint-disable next/no-html-link-for-pages -- SIWC requires top-level, non-prefetched navigation. */
+'use client';
+import { useState } from 'react';
+import {
+  documentKinds,
+  documentLabels,
+  MAX_PDF_BYTES,
+  type DocumentKind,
+} from '../document-policy';
+import type { DocumentInfo } from '../downloads';
+export default function DocumentManager({
+  initial,
+}: {
+  initial: DocumentInfo[];
+}) {
+  const [documents, setDocuments] = useState(initial);
+  const [files, setFiles] = useState<Partial<Record<DocumentKind, File>>>({});
+  const [busy, setBusy] = useState<DocumentKind | null>(null);
+  const [message, setMessage] = useState('');
+  async function upload(kind: DocumentKind) {
+    const file = files[kind];
+    if (!file || busy) return;
+    if (file.size > MAX_PDF_BYTES) {
+      setMessage('El PDF debe pesar menos de 12 MB.');
+      return;
+    }
+    setBusy(kind);
+    setMessage('');
+    try {
+      const response = await fetch(`/api/documents/${kind}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/pdf' },
+        body: file,
+      });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) throw new Error(result.error);
+      setDocuments((previous) =>
+        previous.map((doc) =>
+          doc.kind === kind
+            ? {
+                ...doc,
+                available: true,
+                updatedAt: new Date().toISOString(),
+                size: file.size,
+              }
+            : doc,
+        ),
+      );
+      setFiles((previous) => ({ ...previous, [kind]: undefined }));
+      setMessage(
+        `${documentLabels[kind]} publicada. Los visitantes ya pueden descargar la nueva versión.`,
+      );
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : 'No se pudo publicar el archivo.',
+      );
+    } finally {
+      setBusy(null);
+    }
+  }
+  return (
+    <main className="admin-page">
+      <a href="/#descargas">← Volver a la web</a>
+      <p>PEGALO / ADMINISTRACIÓN</p>
+      <h1>Listas y promociones</h1>
+      <p>
+        Subí el PDF actualizado. Al publicarlo reemplazará la versión anterior
+        para todos los visitantes. Máximo 12 MB por archivo.
+      </p>
+      <div className="admin-documents">
+        {documentKinds.map((kind) => {
+          const doc = documents.find((item) => item.kind === kind);
+          return (
+            <section key={kind}>
+              <h2>{documentLabels[kind]}</h2>
+              <p>
+                {doc?.available
+                  ? `Última publicación: ${new Date(doc.updatedAt!).toLocaleDateString('es-AR')}`
+                  : 'Todavía no hay un PDF publicado.'}
+              </p>
+              {doc?.available && (
+                <a href={`/api/documents/${kind}`}>Descargar versión actual</a>
+              )}
+              <label htmlFor={kind}>Seleccionar nuevo PDF</label>
+              <input
+                id={kind}
+                type="file"
+                accept="application/pdf,.pdf"
+                disabled={!!busy}
+                onChange={(event) =>
+                  setFiles((previous) => ({
+                    ...previous,
+                    [kind]: event.target.files?.[0],
+                  }))
+                }
+              />
+              <button
+                className="admin-button"
+                disabled={!files[kind] || !!busy}
+                onClick={() => upload(kind)}
+              >
+                {busy === kind ? 'Publicando…' : 'Publicar PDF'}
+              </button>
+            </section>
+          );
+        })}
+      </div>
+      <output aria-live="polite">{message}</output>
+      <a href="/signout-with-chatgpt?return_to=%2F" target="_top">
+        Cerrar sesión
+      </a>
+    </main>
+  );
+}

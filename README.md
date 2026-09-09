@@ -53,3 +53,29 @@ El seguimiento de la gota precalcula 513 muestras cuando cambia el tamaño del r
 ## Nueva puesta en escena
 
 Se reemplazó la hoja de estilos del recorrido: portada azul inmersiva, pico central, titulares escalonados, franja roja continua, escenas con grandes números de capítulo, superficies curvas y fotografías con paralaje y rotación vinculados al scroll. El cierre azul recibe la gota en la consulta. Móvil apila productos y textos, conserva navegación contrastada y respeta movimiento reducido. La medición de escenas se cachea en cambios de tamaño; el scroll no lee el layout de cada sección. Vista previa desde /#inicio para mostrar el rediseño, manteniendo catálogo y consultas existentes.
+
+## Documentos comerciales y fichas integradas
+
+Se agregó /#descargas con dos documentos públicos: precios y promociones. /admin permite reemplazar los PDF (máximo 12 MB), con inicio de sesión de ChatGPT y autorización por correo ADMIN_EMAILS en el servidor. El almacenamiento usa R2 DOCUMENTS, con un objeto por tipo; la sustitución conserva la URL y la descarga siempre consulta la última versión. No hay listas comerciales de ejemplo publicadas. La cuenta de administración de producción está pendiente de que la empresa indique el correo; sin configuración todas las cargas se deniegan.
+
+Configurar ADMIN_EMAILS en Sites antes del próximo despliegue. Para desarrollo, .dev.vars contiene únicamente seedy@sites.test, la identidad de prueba del plugin local; no se incluye en el paquete ni en Git. La variable de ejemplo no contiene cuentas reales.
+
+La ficha de silicona acética se descargó del PDF original y se sirve en /fichas/silicona-acetica.pdf. El resto muestra los datos disponibles dentro de la ficha, sin enlaces al sitio anterior ni características técnicas inventadas. Las fichas técnicas completas restantes deben ser aportadas por la empresa.
+
+Se corrigieron tamaños y ajuste contain de las fotos dentro de los diálogos, grillas y navegación para tablet/celular. Validación de servidor local: listado 200, carga autorizada 200, descarga idéntica al archivo cargado, carga anónima 403 y origen ajeno 403. El archivo de prueba fue retirado del almacenamiento local. Seis pruebas de lógica pasan. Sin auditoría visual en navegador.
+
+Logo: pendiente archivo web Stop (WOFF/WOFF2) para reemplazar el PNG conservando la tipografía exacta; no está disponible en los archivos del proyecto.
+
+## Vista simple y materiales del recorrido
+
+Selector persistente de vista simple/animada, y enlaces ?vista=simple y ?vista=animada. La vista simple se activa por defecto cuando el navegador informa prefers-reduced-motion o saveData, salvo elección explícita. El render inicial usa la vista simple para no descargar imágenes decorativas antes de consultar preferencias. No monta StoryJourney. Conserva las fotografías de todas las tarjetas con carga diferida nativa y sin transformaciones animadas. Conserva catálogo, búsqueda, consultas y descargas con navegación semántica y desplazamiento nativo. No equivale a una certificación de accesibilidad: no se realizó una auditoría de lector de pantalla.
+
+La versión animada sustituye gradualmente la gota por cordón blanco en la escena Artesanato, y por trazo ancho color espuma en poliuretanos. Los segmentos siguen el mismo recorrido y se revierten al subir.
+
+## Selección automática de experiencia
+
+El botón y las preferencias manuales se retiraron. La decisión se toma una vez por carga usando movimiento reducido, saveData, estado sin conexión, effectiveType slow-2g/2g/3g, downlink positivo de hasta 1 Mbps o RTT de al menos 600 ms. No usa pruebas de velocidad ni descarga archivos para medir. Sin señales de red disponibles, respeta movimiento reducido y usa la experiencia animada en los demás casos. La accesibilidad del contenido no depende de detectar una discapacidad.
+
+La decisión queda estable mientras se navega; recargar vuelve a evaluar. Los antiguos parámetros ?vista y la preferencia guardada ya no fuerzan una vista. La vista simple conserva las fotografías con carga diferida. El movimiento reducido activado durante la visita sigue deteniendo animaciones mediante CSS y el listener propio del recorrido, sin cambiar la estructura de la página.
+
+Fuente oficial Stop incorporada desde STOP.ttf aportada por la usuaria. Se sirve en /fonts/stop.ttf y se aplica al texto del logo del menú, sin depender de fuentes instaladas en el dispositivo.

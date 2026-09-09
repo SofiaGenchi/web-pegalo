@@ -32,3 +32,34 @@ test('scroll tracking is bounded, reversible and interpolated between samples',(
  assert.equal(distanceAtY(samples,1000),600);
  assert.equal(distanceAtY(samples,150),65);
 });
+
+const { canManage, isPdf, isDocumentKind } = await moduleFrom('../app/document-policy.ts');
+test('document management denies anonymous, empty configuration and unlisted accounts', () => {
+ assert.equal(canManage(null, 'admin@example.com'), false);
+ assert.equal(canManage('admin@example.com', ''), false);
+ assert.equal(canManage('other@example.com', 'admin@example.com'), false);
+ assert.equal(canManage('ADMIN@example.com', ' admin@example.com '), true);
+});
+test('document slots and PDF signatures reject arbitrary files', () => {
+ assert.equal(isDocumentKind('../other'), false);
+ assert.equal(isDocumentKind('precios'), true);
+ assert.equal(isPdf(new TextEncoder().encode('<script>not a pdf</script>')), false);
+ assert.equal(isPdf(new TextEncoder().encode('%PDF-1.7\n')), true);
+});
+
+const { shouldUseSimpleView, createViewDecision } = await moduleFrom('../app/view-policy.ts');
+test('automatic view honors reduced data, reduced motion and slow estimated networks', () => {
+ for (const signals of [{saveData:true}, {reducedMotion:true}, {online:false}, {effectiveType:'slow-2g'}, {effectiveType:'2g'}, {effectiveType:'3g'}, {downlink:0.7}, {rtt:700}]) assert.equal(shouldUseSimpleView(signals),true);
+ assert.equal(shouldUseSimpleView({effectiveType:'4g',downlink:10,rtt:50}),false);
+ assert.equal(shouldUseSimpleView({}),false);
+ assert.equal(shouldUseSimpleView({downlink:0,rtt:0}),false);
+ assert.equal(shouldUseSimpleView({downlink:NaN,rtt:Infinity}),false);
+});
+test('network fluctuations cannot replace the view during a visit', () => {
+ let current = {effectiveType:'3g'};
+ const view = createViewDecision(() => current);
+ assert.equal(view(),true);
+ current = {effectiveType:'4g'};
+ assert.equal(view(),true);
+ assert.equal(createViewDecision(() => current)(),false);
+});

@@ -1,0 +1,392 @@
+.downloads-section {
+  padding: 100px 7%;
+  background: #eef1fb;
+  color: #102a83;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 7%;
+  scroll-margin-top: 100px;
+}
+.downloads-section h2 {
+  font-size: clamp(36px, 4vw, 60px);
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  line-height: 1.1;
+  margin: 20px 0;
+}
+.downloads-section h2 span {
+  color: #7385bd;
+}
+.downloads-section p {
+  font-size: 16px;
+  line-height: 1.7;
+}
+.download-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-content: center;
+}
+.download-cards article {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+}
+.download-cards h3 {
+  font-size: 22px;
+  font-weight: 600;
+}
+.download-cards article p {
+  font-size: 14px;
+  flex: 1;
+}
+.download-cards a,
+.download-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 44px;
+}
+.download-unavailable {
+  font-size: 13px;
+  color: #596681;
+  padding: 12px 0;
+}
+.admin-page {
+  max-width: 1050px;
+  margin: auto;
+  padding: 60px 25px;
+  color: #102a83;
+  font-family: Montserrat, Arial, sans-serif;
+}
+.admin-page h1 {
+  font-size: clamp(32px, 5vw, 50px);
+  font-weight: 600;
+  margin: 30px 0 20px;
+  line-height: 1.1;
+}
+.admin-page p {
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 20px 0;
+}
+.admin-page a {
+  display: inline-block;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  margin-right: 20px;
+}
+.admin-documents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin: 35px 0;
+}
+.admin-documents section {
+  border: 1px solid #b8c1e8;
+  border-radius: 20px;
+  padding: 28px;
+  background: #f8f9fe;
+}
+.admin-documents h2 {
+  font-size: 24px;
+  font-weight: 600;
+}
+.admin-documents label {
+  display: block;
+  margin: 25px 0 12px;
+  font-size: 14px;
+}
+.admin-documents input {
+  font-size: 14px;
+  max-width: 100%;
+  display: block;
+}
+.admin-button {
+  display: inline-flex !important;
+  background: #102a83;
+  color: #fff;
+  padding: 14px 22px;
+  border-radius: 30px;
+  border: 0;
+  font-size: 15px;
+  margin-top: 24px;
+  text-decoration: none !important;
+}
+.admin-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.admin-page [role='status'] {
+  font-weight: 600;
+}
+.technical-info {
+  border-top: 1px solid #b8c1e8;
+  margin-top: 25px;
+  padding-top: 18px;
+}
+.technical-info summary {
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 44px;
+  color: #102a83;
+}
+.technical-info p,
+.technical-info dl {
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 15px 0;
+}
+.technical-info a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  text-decoration: underline;
+  min-height: 44px;
+}
+.technical-pending {
+  color: #64708b;
+}
+.site footer {
+  flex-wrap: wrap;
+  gap: 25px;
+}
+.admin-link {
+  font-size: 12px !important;
+  opacity: 0.8;
+}
+/* Dialog portals sit outside .site. Constrain the actual image, not only its wrapper. */
+body .product-dialog[data-slot='dialog-content'] {
+  width: min(960px, calc(100vw - 32px));
+  max-width: 960px;
+  max-height: calc(100svh - 32px);
+  padding: 0;
+  border-radius: 22px;
+  overflow: auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 0;
+}
+body .product-dialog .detail-image {
+  width: 100%;
+  height: min(560px, 75svh);
+  min-height: 0;
+  padding: 40px 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f6fc;
+}
+body .product-dialog .detail-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+  position: static;
+  margin: 0;
+  mix-blend-mode: multiply;
+}
+body .product-dialog .detail-copy {
+  min-width: 0;
+  padding: 55px 30px 30px;
+}
+body .product-dialog .modal-close {
+  position: sticky;
+  top: 12px;
+  right: 12px;
+  margin: 12px 12px -52px auto;
+  grid-column: 1/-1;
+  width: 40px;
+  height: 40px;
+  z-index: 20;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px #102a8318;
+}
+body .product-dialog .detail-copy .button {
+  width: 100%;
+  min-height: 50px;
+  font-size: 14px;
+  padding: 14px 18px;
+  white-space: normal;
+}
+@media (max-width: 1100px) {
+  .site .header nav {
+    gap: 18px;
+  }
+  .site .header nav a {
+    font-size: 12px;
+  }
+  .site .header-cta {
+    padding: 10px 16px;
+  }
+  .downloads-section {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+  .site .catalog-tools {
+    flex-wrap: wrap;
+  }
+  .site .search {
+    flex: 1;
+    min-width: 220px;
+  }
+  .site .filters {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 800px) {
+  body .product-dialog[data-slot='dialog-content'] {
+    grid-template-columns: minmax(0, 1fr);
+    width: calc(100vw - 24px);
+    max-height: calc(100svh - 24px);
+    border-radius: 18px;
+  }
+  body .product-dialog .detail-image {
+    height: clamp(260px, 42svh, 400px);
+    padding: 35px 20px 10px;
+    min-height: 0;
+  }
+  body .product-dialog .detail-copy {
+    padding: 25px;
+  }
+  body .product-dialog .detail-title[data-slot='dialog-title'] {
+    font-size: 27px;
+  }
+  body .product-dialog .detail-description {
+    font-size: 15px;
+  }
+  .site .header nav {
+    display: none;
+  }
+  .site .mobile-toggle {
+    display: flex;
+  }
+  .site .catalog-tools {
+    position: static;
+  }
+  .site .filters {
+    width: 100%;
+    gap: 8px;
+  }
+  .site .search {
+    width: 100%;
+    min-width: 0;
+  }
+  .site .search input {
+    font-size: 16px;
+  }
+  .site .section-heading {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .downloads-section {
+    padding: 65px 7%;
+  }
+  .download-cards {
+    gap: 14px;
+  }
+  .download-cards article {
+    padding: 22px;
+  }
+  .admin-documents {
+    grid-template-columns: 1fr;
+  }
+  .site footer {
+    padding-inline: 7%;
+  }
+}
+@media (max-width: 480px) {
+  .download-cards {
+    grid-template-columns: 1fr;
+  }
+  .download-cards article {
+    padding: 25px;
+  }
+  .site .header-cta {
+    font-size: 11px;
+    padding: 9px 12px;
+  }
+  .site .logo img {
+    max-width: 125px;
+    height: auto;
+  }
+  .site .header {
+    gap: 12px;
+  }
+  .site .catalog .section-heading h2 {
+    font-size: 35px;
+  }
+  .site .product-info h3 {
+    overflow-wrap: anywhere;
+  }
+  .site .product-info {
+    padding-inline: 12px;
+  }
+  .site .filters button {
+    font-size: 12px;
+  }
+  .admin-page {
+    padding: 35px 20px;
+  }
+}
+
+/* Official Stop font supplied by the brand, served locally for every visitor. */
+@font-face {
+  font-family: 'Pegalo Stop';
+  src: url('/fonts/stop.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+.site .header .logo {
+  flex-shrink: 0;
+}
+.site .header .pegalo-wordmark {
+  display: block;
+  font-family: 'Pegalo Stop', 'Stop', Montserrat, sans-serif;
+  font-size: 38px;
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: #fff;
+}
+@media (max-width: 700px) {
+  .site .header .pegalo-wordmark {
+    font-size: 30px;
+  }
+}
+@media (max-width: 380px) {
+  .site .header .pegalo-wordmark {
+    font-size: 26px;
+  }
+}
+
+.site .header .pegalo-wordmark {
+  position: relative;
+  padding-right: 0.28em;
+}
+.site .header .pegalo-registered {
+  position: absolute;
+  top: -0.05em;
+  right: 0;
+  font-family: Arial, sans-serif;
+  font-size: 0.28em;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   ArrowUpRight,
   ArrowRight,
@@ -23,12 +24,17 @@ import { products, productFamilies, type Product } from './products';
 import { useQuote } from './use-quote';
 import './refinements.css';
 import StoryJourney from './story-journey';
+import Downloads from './downloads';
+import './documents.css';
+import './simple-view.css';
+import { useSimpleView } from './use-simple-view';
 
 const whatsapp = (message: string) =>
   `https://wa.me/541164174036?text=${encodeURIComponent(message)}`;
 
 export default function Home() {
   const root = useRef<HTMLDivElement>(null);
+  const { simple } = useSimpleView();
   const [menu, setMenu] = useState(false);
   const [filter, setFilter] = useState('Todos');
   const [query, setQuery] = useState('');
@@ -71,9 +77,10 @@ export default function Home() {
     setFamily('Todos');
     setQuery('');
     document.getElementById('catalogo')?.scrollIntoView({
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ? 'instant'
-        : 'smooth',
+      behavior:
+        simple || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? 'instant'
+          : 'smooth',
     });
   };
   useEffect(() => {
@@ -106,6 +113,10 @@ export default function Home() {
   useEffect(() => {
     const el = root.current;
     if (!el) return;
+    if (simple) {
+      el.classList.remove('motion-ready');
+      return;
+    }
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     const reveals = el.querySelectorAll<HTMLElement>('[data-reveal]');
     const observer = new IntersectionObserver(
@@ -145,8 +156,9 @@ export default function Home() {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
       reduced.removeEventListener('change', onScroll);
+      el.classList.remove('motion-ready');
     };
-  }, []);
+  }, [simple]);
   useEffect(() => {
     type CatalogTool = {
       name: string;
@@ -217,21 +229,18 @@ export default function Home() {
     return () => lifecycle.abort();
   }, []);
   return (
-    <div ref={root} className="site">
+    <div ref={root} className={'site' + (simple ? ' simple-view' : '')}>
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>
       <header className="header">
         <a href="#inicio" className="logo" aria-label="Pegalo, inicio">
-          <Image
-            unoptimized
-            src="/logo.png"
-            alt="PEGALO"
-            width="178"
-            height="39"
-          />
+          <span className="pegalo-wordmark" aria-hidden="true">
+            PEGALO<sup className="pegalo-registered">®</sup>
+          </span>
         </a>
         <nav aria-label="Navegación principal">
+          <a href="#descargas">Descargas</a>
           <a
             href="#productos"
             aria-current={
@@ -281,6 +290,7 @@ export default function Home() {
             ['Soluciones', 'productos'],
             ['Productos', 'catalogo'],
             ['Empresa', 'empresa'],
+            ['Descargas', 'descargas'],
             ['Contacto', 'contacto'],
           ].map(([label, id]) => (
             <a href={'#' + id} key={id} onClick={() => setMenu(false)}>
@@ -291,13 +301,38 @@ export default function Home() {
         </nav>
       )}
       <main id="contenido">
-        <StoryJourney
-          onProduct={(id) =>
-            setSelected(products.find((p) => p.id === id) ?? null)
-          }
-          onContact={() => setQuoteOpen(true)}
-          onBrowse={browse}
-        />
+        {simple ? (
+          <section className="simple-intro" id="inicio">
+            <h1>Adhesivos y selladores PEGALO</h1>
+            <p id="empresa">
+              Empresa argentina dedicada a la importación y comercialización
+              mayorista de adhesivos y selladores desde 1998.
+            </p>
+            <p>
+              Vista sin animaciones, con fotos y acceso directo a toda la
+              información.
+            </p>
+            <nav
+              className="simple-links"
+              id="productos"
+              aria-label="Accesos directos"
+            >
+              <a href="#catalogo">Consultar productos</a>
+              <a href="#descargas">Precios y promociones</a>
+              <button id="contacto" onClick={() => setQuoteOpen(true)}>
+                Consulta mayorista
+              </button>
+            </nav>
+          </section>
+        ) : (
+          <StoryJourney
+            onProduct={(id) =>
+              setSelected(products.find((p) => p.id === id) ?? null)
+            }
+            onContact={() => setQuoteOpen(true)}
+            onBrowse={browse}
+          />
+        )}
         <section className="catalog section" id="catalogo">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">02 — EXPLORÁ EL CATÁLOGO</p>
@@ -385,6 +420,7 @@ export default function Home() {
                       src={'/productos/' + p.id + '.png'}
                       alt={p.name}
                       loading="lazy"
+                      decoding="async"
                     />
                     <span className="product-arrow">
                       <ArrowUpRight size={22} />
@@ -433,8 +469,12 @@ export default function Home() {
             </div>
           )}
         </section>
+        <Downloads />
       </main>
       <footer>
+        <Link href="/admin" className="admin-link">
+          Administración
+        </Link>
         <a href="#inicio" className="logo">
           <Image
             unoptimized
@@ -543,29 +583,26 @@ export default function Home() {
                     Continuar con mi consulta <ArrowRight size={16} />
                   </button>
                 )}
-                <a
-                  className="text-link"
-                  href={
-                    selected.pdf
-                      ? 'https://adhesivospegalo.com.ar/wp-content/uploads/2016/02/' +
-                        selected.pdf
-                      : selected.url
-                        ? 'https://adhesivospegalo.com.ar/' + selected.url + '/'
-                        : whatsapp(
-                            'Hola, quisiera información técnica de ' +
-                              selected.name,
-                          )
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {selected.pdf
-                    ? 'Ver hoja técnica'
-                    : selected.url
-                      ? 'Ver información técnica'
-                      : 'Consultar información técnica'}
-                  <ArrowUpRight size={18} />
-                </a>
+                <details className="technical-info">
+                  <summary>Información técnica</summary>
+                  <p>{selected.use}</p>
+                  <dl>
+                    <dt>Presentación</dt>
+                    <dd>{selected.size}</dd>
+                    <dt>Colores disponibles</dt>
+                    <dd>{selected.colors}</dd>
+                  </dl>
+                  {selected.pdf ? (
+                    <a href="/fichas/silicona-acetica.pdf" download>
+                      Descargar ficha técnica PDF <ArrowUpRight size={16} />
+                    </a>
+                  ) : (
+                    <p className="technical-pending">
+                      La ficha técnica completa de este producto todavía no está
+                      publicada.
+                    </p>
+                  )}
+                </details>
               </div>
             </>
           )}

@@ -20,6 +20,9 @@ export default function StoryJourney({
   const guide = useRef<SVGPathElement>(null);
   const drop = useRef<SVGGElement>(null);
   const neck = useRef<SVGPathElement>(null);
+  const silicone = useRef<SVGPathElement>(null);
+  const foam = useRef<SVGPathElement>(null);
+  const foamTexture = useRef<SVGPathElement>(null);
   useEffect(() => {
     const container = root.current,
       path = trail.current,
@@ -29,6 +32,10 @@ export default function StoryJourney({
     if (!container || !path || !base || !ball || !surface) return;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)');
     let samples: PathSample[] = [];
+    let siliconeY = 0,
+      foamY = 0,
+      siliconeStart = 0,
+      foamStart = 0;
     let scenes: { el: HTMLElement; top: number; height: number }[] = [];
     let frame = 0,
       total = 0,
@@ -79,7 +86,22 @@ export default function StoryJourney({
       }
       path.style.strokeDashoffset = String(total - distance);
       base.style.opacity = '1';
-      ball.style.opacity = String(1 - land * 0.9);
+      const materialChange = clamp((target - siliconeY) / 100);
+      ball.style.opacity = String((1 - land * 0.9) * (1 - materialChange));
+      const drawSegment = (
+        el: SVGPathElement | null,
+        start: number,
+        end: number,
+      ) => {
+        if (!el) return;
+        const length = Math.max(0, Math.min(distance, end) - start);
+        el.style.opacity = length > 0 ? '1' : '0';
+        el.style.strokeDasharray = `${length} ${total}`;
+        el.style.strokeDashoffset = String(-start);
+      };
+      drawSegment(silicone.current, siliconeStart, foamStart);
+      drawSegment(foam.current, foamStart, total);
+      drawSegment(foamTexture.current, foamStart, total);
       const sx = 0.6 + formation * 0.85 + land * 0.6;
       const sy =
         (0.6 + formation * 0.85) *
@@ -139,6 +161,21 @@ export default function StoryJourney({
         const distance = (total * i) / 512;
         return { distance, y: path.getPointAtLength(distance).y };
       });
+      siliconeY =
+        (scenes.find((scene) => scene.el.classList.contains('artesanato-scene'))
+          ?.top ?? top) -
+        top +
+        90;
+      foamY =
+        (scenes.find((scene) => scene.el.classList.contains('solutions-scene'))
+          ?.top ?? top) -
+        top +
+        90;
+      siliconeStart = distanceAtY(samples, siliconeY);
+      foamStart = distanceAtY(samples, foamY);
+      [silicone.current, foam.current, foamTexture.current].forEach((el) =>
+        el?.setAttribute('d', d),
+      );
       path.style.strokeDasharray = String(total);
       request();
     };
@@ -165,6 +202,21 @@ export default function StoryJourney({
         preserveAspectRatio="none"
       >
         <defs>
+          <filter id="foam-surface" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.035"
+              numOctaves="1"
+              result="texture"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="texture"
+              scale="7"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
           <linearGradient id="cyano-liquid" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
             <stop offset="32%" stopColor="#ffffff" stopOpacity="0.38" />
@@ -179,6 +231,9 @@ export default function StoryJourney({
         </defs>
         <path ref={guide} className="route-guide" />
         <path ref={trail} className="route-trail" />
+        <path ref={silicone} className="silicone-cord" />
+        <path ref={foam} className="foam-cord" />
+        <path ref={foamTexture} className="foam-core" />
         <path ref={neck} className="drop-neck" />
         <g ref={drop}>
           <path

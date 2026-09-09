@@ -205,14 +205,14 @@
   outline-offset: 5px;
 }
 .journey-hero {
-  min-height: 1000px;
-  height: 115svh;
-  max-height: 1250px;
+  min-height: 0;
+  height: auto;
+  max-height: none;
   position: relative;
   background: #102a83;
   color: #fff;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
   padding: 470px 6% 110px;
   text-align: center;
@@ -806,7 +806,7 @@
     font-size: 13px;
   }
   .journey-hero {
-    min-height: 960px;
+    min-height: 0;
   }
   .journey-hero h1 {
     font-size: 82px;
@@ -815,9 +815,9 @@
 @media (max-width: 700px) {
   .journey-hero {
     height: auto;
-    min-height: 900px;
+    min-height: 0;
     max-height: none;
-    padding: 400px 6% 110px;
+    padding: 380px 6% 110px;
   }
   .journey-hero h1 {
     font-size: clamp(42px, 10.5vw, 72px);
@@ -1057,5 +1057,36 @@
     opacity: 1;
     transform: translateY(0);
     clip-path: inset(0);
+  }
+}
+
+.silicone-cord,
+.foam-cord,
+.foam-core {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+.silicone-cord {
+  stroke: #fff;
+  stroke-width: 12;
+  filter: drop-shadow(1px 2px 2px #102a8333);
+}
+.foam-cord {
+  stroke: #f5ebcc;
+  stroke-width: 23;
+  filter: url(#foam-surface);
+}
+.foam-core {
+  stroke: #fff9e7;
+  stroke-width: 12;
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .silicone-cord,
+  .foam-cord,
+  .foam-core {
+    display: none;
   }
 }
