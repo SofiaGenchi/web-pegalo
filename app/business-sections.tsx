@@ -5,7 +5,7 @@ export default function BusinessSections() {
     <>
       <section className="coverage-section" id="donde-atendemos">
         <div className="coverage-copy">
-          <p className="section-kicker">DÓNDE ATENDEMOS</p>
+          <p className="section-kicker">DÓNDE ESTAMOS</p>
           <h2>
             Atendemos en
             <br />

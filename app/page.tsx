@@ -29,9 +29,9 @@ import { useSimpleView } from './use-simple-view';
 
 const navigation = [
   ['Inicio', 'inicio'],
-  ['Empresa', 'empresa'],
   ['Productos', 'catalogo'],
-  ['Dónde atendemos', 'donde-atendemos'],
+  ['Empresa', 'empresa'],
+  ['Dónde estamos', 'donde-atendemos'],
   ['Contacto', 'contacto'],
 ];
 
