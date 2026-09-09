@@ -1090,3 +1090,10 @@
     display: none;
   }
 }
+
+.journey-ribbon .ribbon-artesanato {
+  font-family: Poppins, Arial, sans-serif;
+  font-weight: 700;
+  color: #ffdf00;
+  letter-spacing: -1px;
+}

@@ -329,7 +329,6 @@ export default function Home() {
             onBrowse={browse}
           />
         )}
-        {simple && <CompanySection />}
         <section className="catalog section" id="catalogo">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">02 — EXPLORÁ EL CATÁLOGO</p>
@@ -352,7 +351,7 @@ export default function Home() {
                   onClick={() => setFilter(l)}
                   className={filter === l ? 'active' : ''}
                 >
-                  {l === 'Pegalo' ? <PegaloName /> : l}
+                  {l}
                 </button>
               ))}
             </div>
@@ -468,6 +467,7 @@ export default function Home() {
             </div>
           )}
         </section>
+        <CompanySection />
         <Downloads />
         <BusinessSections />
       </main>

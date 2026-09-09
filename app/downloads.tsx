@@ -49,7 +49,7 @@ export default function Downloads() {
           <span>Para descargar.</span>
         </h2>
         <p>
-          Consultá las últimas listas de precios y promociones publicadas por
+          Consultá las últimas listas de precios y promociones publicadas por{' '}
           <PegaloName />.
         </p>
       </div>

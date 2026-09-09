@@ -2,6 +2,11 @@ import type { Metadata } from 'next';
 import './globals.css';
 export const metadata: Metadata = {
   title: 'Pegalo | Adhesivos y selladores',
+  icons: {
+    icon: [{ url: '/favicon-artesanato.jpg', type: 'image/jpeg' }],
+    shortcut: '/favicon-artesanato.jpg',
+    apple: '/favicon-artesanato.jpg',
+  },
   description:
     'Pegalo: importación y comercialización mayorista de adhesivos y selladores en Argentina. Conocé Pegalo y Artesanato y encontrá la solución para tu proyecto.',
 };
