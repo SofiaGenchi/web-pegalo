@@ -5,6 +5,8 @@ import Image from 'next/image';
 import PegaloName from './pegalo-name';
 import CompanySection from './company-section';
 import BusinessSections from './business-sections';
+import BusinessStack from './business-stack';
+import './business-stack.css';
 import './business-sections.css';
 import {
   ArrowUpRight,
@@ -467,9 +469,11 @@ export default function Home() {
             </div>
           )}
         </section>
-        <CompanySection />
-        <Downloads />
-        <BusinessSections />
+        <BusinessStack>
+          <Downloads />
+          <CompanySection />
+          <BusinessSections />
+        </BusinessStack>
       </main>
       <footer className="company-footer">
         <div className="footer-main">

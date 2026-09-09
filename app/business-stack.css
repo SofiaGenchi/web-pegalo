@@ -1,0 +1,316 @@
+.business-stack {
+  position: relative;
+  isolation: isolate;
+  background: #102a83;
+  padding-top: 30px;
+}
+.business-stack > section {
+  position: sticky;
+  top: var(--stack-top, 88px);
+  min-height: calc(100svh - 68px);
+  border-radius: 42px 42px 0 0;
+  box-shadow: 0 -16px 45px #102a8315;
+  margin: 0;
+  padding-top: 70px;
+  padding-bottom: 75px;
+}
+.business-stack > .downloads-section {
+  z-index: 1;
+  background: #e8edf9;
+}
+.business-stack > .company-section {
+  z-index: 2;
+  background: #fff;
+}
+.business-stack > .coverage-section {
+  z-index: 3;
+  background: #b8c1e8;
+}
+.business-stack > .business-contact {
+  z-index: 4;
+  position: relative;
+  top: auto;
+  background: #102a83;
+  color: #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8%;
+  align-items: center;
+  min-height: calc(100svh - 68px);
+}
+.argentina-map {
+  min-width: 0;
+  width: 100%;
+  position: relative;
+}
+.argentina-canvas {
+  position: relative;
+  width: min(100%, 360px);
+  margin: auto;
+  aspect-ratio: 360/620;
+}
+.argentina-canvas > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 12px 10px #102a8318);
+}
+.map-location {
+  position: absolute;
+  z-index: 2;
+  width: 0;
+  height: 0;
+}
+.map-location-dot {
+  position: absolute;
+  left: -22px;
+  top: -22px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.map-location-dot span {
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 6px #ffffff30,
+    0 2px 8px #0003;
+  transition: box-shadow 0.2s;
+}
+.map-location-dot:hover span,
+.map-location-dot[aria-expanded='true'] span {
+  box-shadow:
+    0 0 0 10px #ffffff35,
+    0 2px 8px #0003;
+}
+.map-location-dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.map-location-info {
+  position: absolute;
+  bottom: 18px;
+  right: -35px;
+  width: 240px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #fff;
+  color: #102a83;
+  box-shadow: 0 15px 40px #102a8330;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.map-location-info strong,
+.map-location-info span {
+  display: block;
+}
+.map-location-info strong {
+  font-size: 16px;
+  margin-bottom: 7px;
+}
+.map-location-info:after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 29px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  transform: rotate(45deg);
+}
+.map-hint {
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #102a83;
+  margin-top: 14px;
+}
+.business-stack .business-contact h2 {
+  font-size: clamp(45px, 5.5vw, 82px);
+  line-height: 1.02;
+  letter-spacing: -0.06em;
+  margin: 25px 0;
+}
+.business-contact h2 em {
+  color: #b8c1e8;
+  font-style: normal;
+}
+.contact-heading > p:not(.section-kicker) {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #d6ddf5;
+  max-width: 380px;
+}
+.contact-main-action {
+  margin-top: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 400px;
+  background: #f1000e;
+  color: #fff;
+  padding: 22px 25px;
+  border-radius: 18px;
+  font-size: 16px;
+  font-weight: 600;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+.contact-main-action small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 5px;
+  opacity: 0.85;
+}
+.contact-main-action:hover {
+  transform: translateY(-4px);
+  background: #d9000d;
+}
+.contact-channel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 28px 0;
+  border-bottom: 1px solid #ffffff35;
+  font-size: clamp(17px, 2vw, 27px);
+  line-height: 1.6;
+  letter-spacing: -0.03em;
+}
+.contact-channel small {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: #b8c1e8;
+  margin-bottom: 7px;
+}
+.contact-channel span {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.contact-channel svg {
+  flex-shrink: 0;
+}
+.contact-network {
+  margin-top: 35px;
+}
+.contact-network > p {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  line-height: 1.8;
+}
+.contact-network > p span {
+  display: block;
+  color: #b8c1e8;
+  font-size: 14px;
+  letter-spacing: 0;
+  margin-top: 5px;
+}
+.contact-network > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.contact-network a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid #ffffff45;
+  border-radius: 30px;
+  font-size: 13px;
+  min-height: 44px;
+}
+.contact-network a:hover {
+  background: #ffffff15;
+}
+.business-contact a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 5px;
+}
+@media (max-width: 950px) {
+  .business-stack > section {
+    border-radius: 30px 30px 0 0;
+  }
+  .business-stack > .business-contact {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+  .contact-main-action {
+    max-width: none;
+  }
+  .contact-channel {
+    font-size: 25px;
+  }
+  .argentina-canvas {
+    width: min(100%, 310px);
+  }
+  .business-stack > .coverage-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 4%;
+  }
+  .coverage-section h2 {
+    font-size: 38px;
+  }
+}
+@media (max-width: 650px) {
+  .business-stack > section {
+    padding-top: 50px;
+    padding-bottom: 60px;
+    border-radius: 26px 26px 0 0;
+  }
+  .business-stack > .coverage-section {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .argentina-canvas {
+    width: 260px;
+  }
+  .map-location-info {
+    width: 220px;
+    right: -25px;
+  }
+  .contact-channel {
+    font-size: 21px;
+  }
+  .business-stack .business-contact h2 {
+    font-size: 53px;
+  }
+  .contact-network a {
+    padding: 12px;
+  }
+  .contact-heading > p:not(.section-kicker) {
+    font-size: 15px;
+  }
+}
+.simple-view .business-stack > section {
+  position: relative;
+  top: auto;
+  min-height: 0;
+  box-shadow: none;
+}
+.simple-view .business-stack {
+  padding-top: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .business-stack > section {
+    position: relative;
+    top: auto;
+    min-height: 0;
+    box-shadow: none;
+  }
+  .contact-main-action,
+  .map-location-dot span {
+    transition: none;
+  }
+}

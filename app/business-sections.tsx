@@ -1,9 +1,7 @@
 'use client';
-import { useState } from 'react';
-import { ArrowUpRight, MapPin, Phone, Mail } from 'lucide-react';
-const address = 'Asamblea 4355, Santos Lugares, Buenos Aires, Argentina';
+import ArgentinaMap from './argentina-map';
+import { ArrowUpRight, MapPin } from 'lucide-react';
 export default function BusinessSections() {
-  const [local, setLocal] = useState(false);
   return (
     <>
       <section className="coverage-section" id="donde-atendemos">
@@ -43,89 +41,84 @@ export default function BusinessSections() {
             <a href="mailto:ventas@pegalo.com.ar">ventas@pegalo.com.ar</a>
           </address>
         </div>
-        <div className="coverage-map">
-          <div className="map-controls" aria-label="Vista del mapa">
-            <button aria-pressed={!local} onClick={() => setLocal(false)}>
-              Argentina
-            </button>
-            <button aria-pressed={local} onClick={() => setLocal(true)}>
-              Nuestra dirección
-            </button>
-          </div>
-          <iframe
-            title={
-              local
-                ? 'Ubicación de PEGALO en Santos Lugares'
-                : 'Mapa de Argentina y ubicación de PEGALO'
-            }
-            src={`https://maps.google.com/maps?q=${encodeURIComponent(address)}&z=${local ? 16 : 3}&output=embed`}
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            allowFullScreen
-          />
-          <p>Ubicación indicada: Santos Lugares, Buenos Aires.</p>
+        <ArgentinaMap />
+      </section>
+      <section className="business-contact" id="contacto">
+        <div className="contact-heading">
+          <p className="section-kicker">CONTACTO / HABLEMOS</p>
+          <h2>
+            Estamos para
+            <br />
+            <em>ayudarte.</em>
+          </h2>
+          <p>
+            Para cualquier consulta comuníquese con nosotros por los siguientes
+            medios:
+          </p>
           <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+            className="contact-main-action"
+            href="https://wa.me/541164174036"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Abrir mapa y cómo llegar <ArrowUpRight size={16} />
+            <span>
+              Empezá una conversación<small>Escribinos por WhatsApp</small>
+            </span>
+            <ArrowUpRight size={32} />
           </a>
         </div>
-      </section>
-      <section className="business-contact" id="contacto">
-        <p className="section-kicker">CONTACTO</p>
-        <h2>Estamos para ayudarte.</h2>
-        <p>
-          Para cualquier consulta comuníquese con nosotros por los siguientes
-          medios:
-        </p>
-        <div className="contact-options">
-          <article>
-            <Phone size={26} />
-            <h3>Llamanos o escribinos</h3>
-            <a
-              href="https://wa.me/541164174036"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              +54 9 11 6417-4036 · WhatsApp
-            </a>
-            <a href="tel:08001220975">0800-122-0975</a>
-          </article>
-          <article>
-            <Mail size={26} />
-            <h3>Correo electrónico</h3>
-            <a href="mailto:ventas@pegalo.com.ar">ventas@pegalo.com.ar</a>
-          </article>
-          <article>
-            <ArrowUpRight size={26} />
-            <h3>Nuestras redes</h3>
-            <p>@adhesivospegalo</p>
-            <div className="contact-socials">
+        <div className="contact-channels">
+          <a
+            className="contact-channel"
+            href="https://wa.me/541164174036"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>
+              <small>01 / CELULAR Y WHATSAPP</small>+54 9 11 6417-4036
+            </span>
+            <ArrowUpRight />
+          </a>
+          <a className="contact-channel" href="tel:08001220975">
+            <span>
+              <small>02 / TELÉFONO</small>0800-122-0975
+            </span>
+            <ArrowUpRight />
+          </a>
+          <a className="contact-channel" href="mailto:ventas@pegalo.com.ar">
+            <span>
+              <small>03 / CORREO ELECTRÓNICO</small>ventas@pegalo.com.ar
+            </span>
+            <ArrowUpRight />
+          </a>
+          <div className="contact-network">
+            <p>
+              SEGUÍ CONECTADO <span>@adhesivospegalo</span>
+            </p>
+            <div>
               <a
                 href="https://www.instagram.com/adhesivospegalo/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Instagram
+                Instagram <ArrowUpRight size={16} />
               </a>
               <a
                 href="https://www.facebook.com/adhesivospegalo/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Facebook
+                Facebook <ArrowUpRight size={16} />
               </a>
               <a
                 href="https://www.tiktok.com/@adhesivospegalo"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                TikTok
+                TikTok <ArrowUpRight size={16} />
               </a>
             </div>
-          </article>
+          </div>
         </div>
       </section>
     </>

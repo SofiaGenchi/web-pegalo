@@ -79,3 +79,9 @@ El botón y las preferencias manuales se retiraron. La decisión se toma una vez
 La decisión queda estable mientras se navega; recargar vuelve a evaluar. Los antiguos parámetros ?vista y la preferencia guardada ya no fuerzan una vista. La vista simple conserva las fotografías con carga diferida. El movimiento reducido activado durante la visita sigue deteniendo animaciones mediante CSS y el listener propio del recorrido, sin cambiar la estructura de la página.
 
 Fuente oficial Stop incorporada desde STOP.ttf aportada por la usuaria. Se sirve en /fonts/stop.ttf y se aplica al texto del logo del menú, sin depender de fuentes instaladas en el dispositivo.
+
+## Tarjetas y cobertura gráfica
+
+Secciones ordenadas Descargas → Empresa → Cobertura → Contacto. Stack sticky con top calculado según altura para permitir leer secciones extensas antes de que queden cubiertas. En vista simple/movimiento reducido se usa flujo normal. Contacto tiene composición azul, llamada principal roja a WhatsApp y canales separados.
+
+Silueta cartográfica derivada de Natural Earth a través de https://github.com/datasets/geo-countries (dominio público), simplificada y proyectada para la vista nacional. Coordenadas de la localidad Santos Lugares: -34.6,-58.55, referencia https://www.coordenadas.com.es/argentina/santos-lugares-buenos-aires/555. El marcador representa la localidad a escala nacional, no un geocodificado exacto del domicilio. Dirección y provincia aportadas por la empresa. No se agregan distribuidores sin ubicaciones confirmadas. El mapa no descarga mosaicos externos y su ficha funciona con hover, foco, clic y Escape.
