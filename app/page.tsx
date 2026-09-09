@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import PegaloName from './pegalo-name';
 import Link from 'next/link';
 import {
   ArrowUpRight,
@@ -303,7 +304,9 @@ export default function Home() {
       <main id="contenido">
         {simple ? (
           <section className="simple-intro" id="inicio">
-            <h1>Adhesivos y selladores PEGALO</h1>
+            <h1>
+              Adhesivos y selladores <PegaloName />
+            </h1>
             <p id="empresa">
               Empresa argentina dedicada a la importación y comercialización
               mayorista de adhesivos y selladores desde 1998.
@@ -355,7 +358,7 @@ export default function Home() {
                   onClick={() => setFilter(l)}
                   className={filter === l ? 'active' : ''}
                 >
-                  {l}
+                  {l === 'Pegalo' ? <PegaloName /> : l}
                 </button>
               ))}
             </div>
@@ -412,7 +415,9 @@ export default function Home() {
                   aria-label={'Ver ' + p.name}
                 >
                   <div className="product-image">
-                    <span className="product-line">{p.line}</span>
+                    <span className="product-line">
+                      {p.line === 'Pegalo' ? <PegaloName /> : p.line}
+                    </span>
                     <Image
                       unoptimized
                       width={500}
@@ -475,14 +480,14 @@ export default function Home() {
         <Link href="/admin" className="admin-link">
           Administración
         </Link>
-        <a href="#inicio" className="logo">
-          <Image
-            unoptimized
-            src="/logo.png"
-            alt="Pegalo, volver al inicio"
-            width="178"
-            height="39"
-          />
+        <a
+          href="#inicio"
+          className="logo"
+          aria-label="Pegalo, volver al inicio"
+        >
+          <span className="pegalo-wordmark" aria-hidden="true">
+            PEGALO<sup className="pegalo-registered">®</sup>
+          </span>
         </a>
         <p>
           ADHESIVOS Y SELLADORES
@@ -525,7 +530,14 @@ export default function Home() {
                 />
               </div>
               <div className="detail-copy">
-                <p className="eyebrow">LÍNEA {selected.line.toUpperCase()}</p>
+                <p className="eyebrow">
+                  LÍNEA{' '}
+                  {selected.line === 'Pegalo' ? (
+                    <PegaloName />
+                  ) : (
+                    selected.line.toUpperCase()
+                  )}
+                </p>
                 <DialogTitle className="detail-title">
                   {selected.name}
                 </DialogTitle>
@@ -619,7 +631,7 @@ export default function Home() {
           </DialogTitle>
           <DialogDescription>
             Prepará tu consulta y continuá por WhatsApp para enviarla al equipo
-            de Pegalo.
+            de <PegaloName />.
           </DialogDescription>
           <div className="quote-items">
             {quote.length ? (

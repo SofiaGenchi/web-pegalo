@@ -343,18 +343,10 @@ body .product-dialog .detail-copy .button {
   }
 }
 
-/* Official Stop font supplied by the brand, served locally for every visitor. */
-@font-face {
-  font-family: 'Pegalo Stop';
-  src: url('/fonts/stop.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 .site .header .logo {
   flex-shrink: 0;
 }
-.site .header .pegalo-wordmark {
+.site .pegalo-wordmark {
   display: block;
   font-family: 'Pegalo Stop', 'Stop', Montserrat, sans-serif;
   font-size: 38px;
@@ -366,21 +358,21 @@ body .product-dialog .detail-copy .button {
   color: #fff;
 }
 @media (max-width: 700px) {
-  .site .header .pegalo-wordmark {
+  .site .pegalo-wordmark {
     font-size: 30px;
   }
 }
 @media (max-width: 380px) {
-  .site .header .pegalo-wordmark {
+  .site .pegalo-wordmark {
     font-size: 26px;
   }
 }
 
-.site .header .pegalo-wordmark {
+.site .pegalo-wordmark {
   position: relative;
   padding-right: 0.28em;
 }
-.site .header .pegalo-registered {
+.site .pegalo-registered {
   position: absolute;
   top: -0.05em;
   right: 0;

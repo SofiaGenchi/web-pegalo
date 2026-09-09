@@ -2761,3 +2761,21 @@ footer {
     transform: rotate(-10deg) !important;
   }
 }
+
+/* Official Stop font supplied by the brand, served locally for every visitor. */
+@font-face {
+  font-family: 'Pegalo Stop';
+  src: url('/fonts/stop.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.pegalo-name {
+  font-family: 'Pegalo Stop', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
+  letter-spacing: 0;
+  white-space: nowrap;
+}

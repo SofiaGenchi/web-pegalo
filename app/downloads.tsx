@@ -1,4 +1,5 @@
 'use client';
+import PegaloName from './pegalo-name';
 import { useEffect, useState } from 'react';
 import { Download, FileText, RefreshCw } from 'lucide-react';
 import {
@@ -49,7 +50,7 @@ export default function Downloads() {
         </h2>
         <p>
           Consultá las últimas listas de precios y promociones publicadas por
-          PEGALO.
+          <PegaloName />.
         </p>
       </div>
       <div className="download-cards">

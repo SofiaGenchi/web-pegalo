@@ -1,4 +1,5 @@
 /* oxlint-disable next/no-html-link-for-pages -- SIWC requires top-level, non-prefetched navigation. */
+import PegaloName from '../pegalo-name';
 import { headers } from 'next/headers';
 import { isAdmin, listDocuments } from '../document-store';
 import DocumentManager from './document-manager';
@@ -9,7 +10,9 @@ export default async function AdminPage() {
   if (!email)
     return (
       <main className="admin-page">
-        <a href="/">← Volver a PEGALO</a>
+        <a href="/">
+          ← Volver a <PegaloName />
+        </a>
         <h1>Administrar documentos</h1>
         <p>Ingresá con la cuenta autorizada de la empresa.</p>
         <a
@@ -29,7 +32,9 @@ export default async function AdminPage() {
         <a href="/signout-with-chatgpt?return_to=%2Fadmin" target="_top">
           Ingresar con otra cuenta
         </a>
-        <a href="/">Volver a PEGALO</a>
+        <a href="/">
+          Volver a <PegaloName />
+        </a>
       </main>
     );
   let documents;
@@ -43,7 +48,9 @@ export default async function AdminPage() {
           El almacenamiento aún no está disponible. Intentá nuevamente más
           tarde.
         </p>
-        <a href="/">Volver a PEGALO</a>
+        <a href="/">
+          Volver a <PegaloName />
+        </a>
       </main>
     );
   }

@@ -1,4 +1,5 @@
 'use client';
+import PegaloName from './pegalo-name';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { ArrowDown, ArrowUpRight, ArrowRight } from 'lucide-react';
@@ -299,7 +300,7 @@ export default function StoryJourney({
         <div>
           {[0, 1].map((i) => (
             <span key={i}>
-              CREÁ <b>✳</b> REPARÁ <b>✳</b> TRANSFORMÁ <b>✳</b> PEGALO{' '}
+              CREÁ <b>✳</b> REPARÁ <b>✳</b> TRANSFORMÁ <b>✳</b> <PegaloName />{' '}
               <b>✳</b>{' '}
             </span>
           ))}
@@ -366,7 +367,9 @@ export default function StoryJourney({
           <span className="photo-caption">10 g / 20 g / 100 g</span>
         </div>
         <div className="scene-copy" data-reveal>
-          <p className="story-eyebrow">01 / CIANOACRILATOS PEGALO</p>
+          <p className="story-eyebrow">
+            01 / CIANOACRILATOS <PegaloName />
+          </p>
           <h2>
             Una gota.
             <br />

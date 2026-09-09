@@ -1,5 +1,6 @@
 /* oxlint-disable next/no-html-link-for-pages -- SIWC requires top-level, non-prefetched navigation. */
 'use client';
+import PegaloName from '../pegalo-name';
 import { useState } from 'react';
 import {
   documentKinds,
@@ -63,7 +64,9 @@ export default function DocumentManager({
   return (
     <main className="admin-page">
       <a href="/#descargas">← Volver a la web</a>
-      <p>PEGALO / ADMINISTRACIÓN</p>
+      <p>
+        <PegaloName /> / ADMINISTRACIÓN
+      </p>
       <h1>Listas y promociones</h1>
       <p>
         Subí el PDF actualizado. Al publicarlo reemplazará la versión anterior
