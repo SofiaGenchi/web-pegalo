@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import PegaloName from './pegalo-name';
-import Link from 'next/link';
+import CompanySection from './company-section';
+import BusinessSections from './business-sections';
+import './business-sections.css';
 import {
   ArrowUpRight,
   ArrowRight,
@@ -29,6 +31,14 @@ import Downloads from './downloads';
 import './documents.css';
 import './simple-view.css';
 import { useSimpleView } from './use-simple-view';
+
+const navigation = [
+  ['Inicio', 'inicio'],
+  ['Empresa', 'empresa'],
+  ['Productos', 'catalogo'],
+  ['Dónde atendemos', 'donde-atendemos'],
+  ['Contacto', 'contacto'],
+];
 
 const whatsapp = (message: string) =>
   `https://wa.me/541164174036?text=${encodeURIComponent(message)}`;
@@ -98,7 +108,8 @@ export default function Home() {
     return () => window.removeEventListener('keydown', close);
   }, [menu]);
   useEffect(() => {
-    const sections = ['inicio', 'empresa', 'productos', 'catalogo', 'contacto']
+    const sections = navigation
+      .map(([, id]) => id)
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => !!el);
     const observer = new IntersectionObserver(
@@ -110,7 +121,7 @@ export default function Home() {
     );
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
+  }, [simple]);
   useEffect(() => {
     const el = root.current;
     if (!el) return;
@@ -241,27 +252,15 @@ export default function Home() {
           </span>
         </a>
         <nav aria-label="Navegación principal">
-          <a href="#descargas">Descargas</a>
-          <a
-            href="#productos"
-            aria-current={
-              activeSection === 'productos' ? 'location' : undefined
-            }
-          >
-            Soluciones
-          </a>
-          <a
-            href="#catalogo"
-            aria-current={activeSection === 'catalogo' ? 'location' : undefined}
-          >
-            Productos
-          </a>
-          <a
-            href="#empresa"
-            aria-current={activeSection === 'empresa' ? 'location' : undefined}
-          >
-            Empresa
-          </a>
+          {navigation.map(([label, id]) => (
+            <a
+              href={'#' + id}
+              key={id}
+              aria-current={activeSection === id ? 'location' : undefined}
+            >
+              {label}
+            </a>
+          ))}
         </nav>
         <button className="header-cta" onClick={() => setQuoteOpen(true)}>
           Consulta mayorista{' '}
@@ -287,13 +286,7 @@ export default function Home() {
           id="mobile-nav"
           aria-label="Navegación móvil"
         >
-          {[
-            ['Soluciones', 'productos'],
-            ['Productos', 'catalogo'],
-            ['Empresa', 'empresa'],
-            ['Descargas', 'descargas'],
-            ['Contacto', 'contacto'],
-          ].map(([label, id]) => (
+          {navigation.map(([label, id]) => (
             <a href={'#' + id} key={id} onClick={() => setMenu(false)}>
               {label}
               <ArrowUpRight />
@@ -307,7 +300,7 @@ export default function Home() {
             <h1>
               Adhesivos y selladores <PegaloName />
             </h1>
-            <p id="empresa">
+            <p>
               Empresa argentina dedicada a la importación y comercialización
               mayorista de adhesivos y selladores desde 1998.
             </p>
@@ -322,7 +315,7 @@ export default function Home() {
             >
               <a href="#catalogo">Consultar productos</a>
               <a href="#descargas">Precios y promociones</a>
-              <button id="contacto" onClick={() => setQuoteOpen(true)}>
+              <button onClick={() => setQuoteOpen(true)}>
                 Consulta mayorista
               </button>
             </nav>
@@ -336,6 +329,7 @@ export default function Home() {
             onBrowse={browse}
           />
         )}
+        {simple && <CompanySection />}
         <section className="catalog section" id="catalogo">
           <div className="section-heading" data-reveal>
             <p className="eyebrow">02 — EXPLORÁ EL CATÁLOGO</p>
@@ -475,6 +469,7 @@ export default function Home() {
           )}
         </section>
         <Downloads />
+        <BusinessSections />
       </main>
       <footer className="company-footer">
         <div className="footer-main">
@@ -553,7 +548,6 @@ export default function Home() {
             © 2026 <PegaloName />. Todos los derechos reservados.
           </p>
           <div>
-            <Link href="/admin">Administración</Link>
             <a href="#inicio">
               Volver arriba <ArrowUpRight size={16} />
             </a>

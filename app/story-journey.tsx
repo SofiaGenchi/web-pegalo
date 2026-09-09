@@ -1,5 +1,6 @@
 'use client';
 import PegaloName from './pegalo-name';
+import CompanySection from './company-section';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { ArrowDown, ArrowUpRight, ArrowRight } from 'lucide-react';
@@ -306,35 +307,7 @@ export default function StoryJourney({
           ))}
         </div>
       </div>
-      <section className="journey-intro" id="empresa" data-scene>
-        <span className="intro-graphic" aria-hidden="true">
-          +
-        </span>
-        <span className="intro-route-point" data-route-point />
-        <p className="story-eyebrow" data-reveal>
-          UNA MARCA QUE TE ACOMPAÑA
-        </p>
-        <h2 data-reveal>
-          Unimos materiales.
-          <br />
-          <span>Conectamos posibilidades.</span>
-        </h2>
-        <div className="intro-bottom" data-reveal>
-          <span className="intro-year">
-            Desde
-            <br />
-            <strong>1998.</strong>
-          </span>
-          <p>
-            Somos una empresa argentina dedicada a la importación y
-            comercialización mayorista de adhesivos y selladores.
-            <br />
-            <br />
-            Acercamos soluciones a comercios, profesionales y personas que
-            crean, reparan y transforman.
-          </p>
-        </div>
-      </section>
+      <CompanySection journey />
       <section
         className="journey-product ciano-scene"
         id="productos"
@@ -492,7 +465,7 @@ export default function StoryJourney({
           </button>
         </div>
       </section>
-      <section className="journey-finale" id="contacto" data-scene>
+      <section className="journey-finale" id="seguir" data-scene>
         <span className="final-graphic" aria-hidden="true">
           ↗
         </span>
