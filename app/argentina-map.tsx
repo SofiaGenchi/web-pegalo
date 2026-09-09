@@ -139,7 +139,7 @@ export default function ArgentinaMap() {
         ))}
       </div>
       <p className="map-hint">
-        Explorá el punto para conocer nuestra oficina y contactarnos.
+        Explora el punto para conocer nuestra oficina y distribuidores
       </p>
     </div>
   );
