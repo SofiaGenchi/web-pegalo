@@ -22,6 +22,7 @@ import { useQuote } from './use-quote';
 import './refinements.css';
 import StoryJourney from './story-journey';
 import Downloads from './downloads';
+import BackToTop from './back-to-top';
 import './documents.css';
 import './simple-view.css';
 import { useSimpleView } from './use-simple-view';
@@ -543,6 +544,10 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <BackToTop
+        raised={quote.length > 0}
+        hidden={menu || quoteOpen || !!selected}
+      />
       {quote.length > 0 && (
         <button className="quote-float" onClick={() => setQuoteOpen(true)}>
           Tu consulta <span>{quote.length}</span>

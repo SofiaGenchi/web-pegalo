@@ -633,3 +633,31 @@ body .quote-dialog > .button:hover {
     transform: none;
   }
 }
+
+.site .back-to-top {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 36;
+  min-height: 48px;
+  padding: 0 20px;
+  border: 1px solid #ffffff80;
+  border-radius: 999px;
+  background: #102a83;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 18px #102a832e;
+  cursor: pointer;
+}
+.site .back-to-top:hover {
+  background: #193baf;
+}
+.site .back-to-top:focus-visible {
+  outline: 3px solid #b8c1e8;
+  outline-offset: 4px;
+}
+.site .back-to-top-raised {
+  bottom: calc(88px + env(safe-area-inset-bottom));
+}
