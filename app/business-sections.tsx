@@ -1,6 +1,6 @@
 'use client';
 import ArgentinaMap from './argentina-map';
-import { ArrowUpRight, MapPin } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 export default function BusinessSections() {
   return (
     <>
@@ -12,40 +12,48 @@ export default function BusinessSections() {
             <br />
             todo el país.
           </h2>
-          <p>Consultar el distribuidor de su zona.</p>
-          <a
-            className="business-button"
-            href="https://wa.me/541164174036?text=Hola%2C%20quisiera%20consultar%20el%20distribuidor%20de%20mi%20zona."
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Consultar distribuidor <ArrowUpRight size={18} />
-          </a>
-          <address>
-            <p>
-              <MapPin size={19} />
-              <span>
-                Asamblea 4355, Santos Lugares
-                <br />
-                CP 1676, Buenos Aires
-              </span>
-            </p>
+          <div className="coverage-distribution">
+            <span className="coverage-label">DISTRIBUCIÓN NACIONAL</span>
+            <p>Consultar el distribuidor de su zona.</p>
             <a
-              href="https://wa.me/541164174036"
+              href="https://wa.me/541164174036?text=Hola%2C%20quisiera%20consultar%20el%20distribuidor%20de%20mi%20zona."
               target="_blank"
               rel="noopener noreferrer"
             >
-              +54 9 11 6417-4036 · WhatsApp
+              Encontrá tu distribuidor <ArrowUpRight size={18} />
             </a>
-            <a href="tel:08001220975">0800-122-0975</a>
-            <a href="mailto:ventas@pegalo.com.ar">ventas@pegalo.com.ar</a>
+          </div>
+          <address className="coverage-details">
+            <div className="coverage-location">
+              <span className="coverage-label">NUESTRA SEDE</span>
+              <p>
+                Asamblea 4355, Santos Lugares
+                <br />
+                CP 1676, Buenos Aires
+              </p>
+            </div>
+            <div className="coverage-phones">
+              <span className="coverage-label">TELÉFONOS</span>
+              <a
+                href="https://wa.me/541164174036"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                +54 9 11 6417-4036 <small>WhatsApp</small>
+              </a>
+              <a href="tel:08001220975">0800-122-0975</a>
+            </div>
+            <div className="coverage-email">
+              <span className="coverage-label">CORREO ELECTRÓNICO</span>
+              <a href="mailto:ventas@pegalo.com.ar">ventas@pegalo.com.ar</a>
+            </div>
           </address>
         </div>
         <ArgentinaMap />
       </section>
       <section className="business-contact" id="contacto">
         <div className="contact-heading">
-          <p className="section-kicker">CONTACTO / HABLEMOS</p>
+          <p className="section-kicker">CONTACTO</p>
           <h2>
             Estamos para
             <br />
@@ -55,17 +63,6 @@ export default function BusinessSections() {
             Para cualquier consulta comuníquese con nosotros por los siguientes
             medios:
           </p>
-          <a
-            className="contact-main-action"
-            href="https://wa.me/541164174036"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>
-              Empezá una conversación<small>Escribinos por WhatsApp</small>
-            </span>
-            <ArrowUpRight size={32} />
-          </a>
         </div>
         <div className="contact-channels">
           <a

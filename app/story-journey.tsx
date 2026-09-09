@@ -259,14 +259,6 @@ export default function StoryJourney({
             <br />
             Para todo lo que está por venir.
           </p>
-          <div className="journey-hero-actions">
-            <a className="story-button" href="#empresa">
-              Seguí la gota <ArrowDown size={18} />
-            </a>
-            <a className="journey-catalog-shortcut" href="#catalogo">
-              Ir al catálogo <ArrowUpRight size={16} />
-            </a>
-          </div>
         </div>
         <div className="nozzle-scene">
           <span className="nozzle-caption">
@@ -300,9 +292,8 @@ export default function StoryJourney({
         <div>
           {[0, 1].map((i) => (
             <span key={i}>
-              CREÁ <b>✳</b> REPARÁ <b>✳</b> TRANSFORMÁ <b>✳</b> <PegaloName />{' '}
-              <b>✳</b> <span className="ribbon-artesanato">ARTESANATO</span>{' '}
-              <b>✳</b>{' '}
+              CREÁ <b>✳</b> REPARÁ <b>✳</b> TRANSFORMÁ <b>✳</b> PEGALO <b>✳</b>{' '}
+              ARTESANATO <b>✳</b>{' '}
             </span>
           ))}
         </div>
