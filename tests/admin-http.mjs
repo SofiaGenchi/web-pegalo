@@ -1,0 +1,43 @@
+// Runs only against a disposable local preview database, never production.
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { randomBytes, randomUUID } from 'node:crypto';
+const base = 'http://localhost:3000';
+const token = (await readFile(new URL('../work/admin-activation.txt', import.meta.url), 'utf8')).trim();
+let cookie = '';
+async function call(path, method = 'GET', body, options = {}) {
+  return fetch(base + path, { method, headers: { ...(method !== 'GET' ? { Origin: base } : {}), ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(cookie ? { Cookie: cookie } : {}), ...options }, body: body === undefined ? undefined : JSON.stringify(body) });
+}
+const password = randomBytes(24).toString('hex');
+let r = await call('/api/admin/content'); assert.equal(r.status,401);
+r = await call('/api/admin/content','PUT',{}); assert.equal(r.status,401);
+r = await call('/api/admin/content','PUT',{}, {'oai-authenticated-user-email':'seedy@sites.test'}); assert.equal(r.status,401, 'legacy identity must not bypass password');
+r = await call('/api/admin/setup','POST',{token:'wrong',username:'local-security-test',password}); assert.equal(r.status,403);
+r = await call('/api/admin/setup','POST',{token,username:'local-security-test',password}); assert.equal(r.status,200, await r.text());
+r = await call('/api/admin/setup','POST',{token,username:'another-test',password}); assert.equal(r.status,409);
+r = await call('/api/admin/login','POST',{username:'local-security-test',password:'wrong'}); assert.equal(r.status,401);
+r = await call('/api/admin/login','POST',{username:'local-security-test',password}); assert.equal(r.status,200, await r.text());
+const setCookie = r.headers.get('set-cookie'); assert.match(setCookie,/HttpOnly/i); assert.match(setCookie,/SameSite=Strict/i); cookie = setCookie.split(';')[0];
+r = await call('/api/admin/content'); assert.equal(r.status,200); const original = await r.json();
+const changed = structuredClone(original.content); changed.products[0].name = 'Producto de prueba interna';
+changed.distributors.push({id:'test-distributor',name:'Distribuidor de prueba interna',address:'Prueba 123',locality:'Santos Lugares',province:'Buenos Aires',latitude:-34.6,longitude:-58.55,phone:'',email:'',active:true});
+r = await call('/api/admin/content','PUT',{content:changed,revision:original.revision},{Origin:'https://example.invalid'}); assert.equal(r.status,403);
+r = await call('/api/admin/content','PUT',{content:changed,revision:original.revision}); assert.equal(r.status,200,await r.text());
+r = await call('/'); const html = await r.text(); assert.ok(html.includes('Producto de prueba interna')); assert.ok(html.includes('Distribuidor de prueba interna'));
+r = await call('/api/admin/content','PUT',{content:changed,revision:original.revision}); assert.equal(r.status,409);
+const invalid=structuredClone(changed); invalid.products[0].image='javascript:alert(1)';
+r = await call('/api/admin/content','PUT',{content:invalid,revision:original.revision+1}); assert.equal(r.status,400);
+const filename = randomUUID()+'.pdf'; const pdf = '%PDF-1.7\nlocal security test';
+r = await fetch(base+'/api/admin/files/'+filename,{method:'PUT',headers:{Origin:base,Cookie:cookie,'Content-Type':'application/pdf'},body:'not a pdf'});assert.equal(r.status,415);
+r = await fetch(base+'/api/admin/files/'+filename,{method:'PUT',headers:{Origin:base,Cookie:cookie,'Content-Type':'application/pdf'},body:pdf});assert.equal(r.status,200,await r.text());
+r = await fetch(base+'/api/admin/files/'+filename);assert.equal(await r.text(),pdf);assert.equal(r.headers.get('x-content-type-options'),'nosniff');
+r = await call('/api/admin/content','PUT',{content:original.content,revision:original.revision+1});assert.equal(r.status,200);
+const stolenCookie = cookie;
+r = await call('/api/admin/logout','POST'); assert.equal(r.status,200);
+r = await call('/api/admin/content','GET',undefined,{Cookie:stolenCookie});assert.equal(r.status,401);
+cookie='';
+r = await fetch(base+'/api/documents/precios',{method:'PUT',headers:{Origin:base,'Content-Type':'application/pdf'},body:pdf});assert.equal(r.status,401);
+for(let i=0;i<9;i++) r=await call('/api/admin/login','POST',{username:'nonexistent-test-user',password:'wrong'});
+assert.equal(r.status,429);
+console.log('PASS: activation once, password login, anonymous/legacy denial, CSRF, public content, conflicts, file validation, logout revocation, rate limit.');
+console.log('Local test file:',filename);

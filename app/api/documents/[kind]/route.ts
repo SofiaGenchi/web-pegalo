@@ -1,4 +1,5 @@
-import { storage, isAdmin } from '@/app/document-store';
+import { requireAdmin, errorResponse } from '@/app/admin-auth';
+import { storage } from '@/app/document-store';
 import { isDocumentKind, isPdf, MAX_PDF_BYTES } from '@/app/document-policy';
 type Context = { params: Promise<{ kind: string }> };
 export async function GET(_request: Request, context: Context) {
@@ -25,13 +26,11 @@ export async function GET(_request: Request, context: Context) {
   }
 }
 export async function PUT(request: Request, context: Context) {
-  if (!isAdmin(request.headers.get('oai-authenticated-user-email')))
-    return Response.json(
-      { error: 'No tenés permiso para publicar documentos.' },
-      { status: 403 },
-    );
-  if (request.headers.get('origin') !== new URL(request.url).origin)
-    return Response.json({ error: 'Origen no permitido.' }, { status: 403 });
+  try {
+    await requireAdmin(request);
+  } catch (error) {
+    return errorResponse(error);
+  }
   const { kind } = await context.params;
   if (!isDocumentKind(kind))
     return Response.json({ error: 'Documento inválido.' }, { status: 400 });

@@ -11,8 +11,10 @@ import {
 import type { DocumentInfo } from '../downloads';
 export default function DocumentManager({
   initial,
+  onChange,
 }: {
   initial: DocumentInfo[];
+  onChange?: (documents: DocumentInfo[]) => void;
 }) {
   const [documents, setDocuments] = useState(initial);
   const [files, setFiles] = useState<Partial<Record<DocumentKind, File>>>({});
@@ -35,18 +37,18 @@ export default function DocumentManager({
       });
       const result = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(result.error);
-      setDocuments((previous) =>
-        previous.map((doc) =>
-          doc.kind === kind
-            ? {
-                ...doc,
-                available: true,
-                updatedAt: new Date().toISOString(),
-                size: file.size,
-              }
-            : doc,
-        ),
+      const updated = documents.map((doc) =>
+        doc.kind === kind
+          ? {
+              ...doc,
+              available: true,
+              updatedAt: new Date().toISOString(),
+              size: file.size,
+            }
+          : doc,
       );
+      setDocuments(updated);
+      onChange?.(updated);
       setFiles((previous) => ({ ...previous, [kind]: undefined }));
       setMessage(
         `${documentLabels[kind]} publicada. Los visitantes ya pueden descargar la nueva versión.`,
@@ -62,8 +64,7 @@ export default function DocumentManager({
     }
   }
   return (
-    <main className="admin-page">
-      <a href="/#descargas">Volver a la web</a>
+    <section className="admin-page">
       <p>
         <PegaloName /> / ADMINISTRACIÓN
       </p>
@@ -111,9 +112,6 @@ export default function DocumentManager({
         })}
       </div>
       <output aria-live="polite">{message}</output>
-      <a href="/signout-with-chatgpt?return_to=%2F" target="_top">
-        Cerrar sesión
-      </a>
-    </main>
+    </section>
   );
 }

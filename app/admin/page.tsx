@@ -1,58 +1,38 @@
-/* oxlint-disable next/no-html-link-for-pages -- SIWC requires top-level, non-prefetched navigation. */
-import PegaloName from '../pegalo-name';
+import Link from 'next/link';
 import { headers } from 'next/headers';
-import { isAdmin, listDocuments } from '../document-store';
-import DocumentManager from './document-manager';
-import '../documents.css';
+import { adminUser } from '../admin-auth';
+import { loadContent } from '../content-store';
+import { listDocuments } from '../document-store';
+import LoginForm from './login-form';
+import ContentManager from './content-manager';
+import './admin.css';
 export const dynamic = 'force-dynamic';
+export const metadata = {
+  title: 'Administración | Pegalo',
+  robots: { index: false, follow: false },
+};
 export default async function AdminPage() {
-  const email = (await headers()).get('oai-authenticated-user-email');
-  if (!email)
-    return (
-      <main className="admin-page">
-        <a href="/">
-          Volver a <PegaloName />
-        </a>
-        <h1>Administrar documentos</h1>
-        <p>Ingresá con la cuenta autorizada de la empresa.</p>
-        <a
-          className="admin-button"
-          href="/signin-with-chatgpt?return_to=%2Fadmin"
-          target="_top"
-        >
-          Ingresar con ChatGPT
-        </a>
-      </main>
-    );
-  if (!isAdmin(email))
-    return (
-      <main className="admin-page">
-        <h1>Acceso restringido</h1>
-        <p>Esta cuenta no tiene permiso para actualizar documentos.</p>
-        <a href="/signout-with-chatgpt?return_to=%2Fadmin" target="_top">
-          Ingresar con otra cuenta
-        </a>
-        <a href="/">
-          Volver a <PegaloName />
-        </a>
-      </main>
-    );
-  let documents;
+  let user, data, documents;
   try {
-    documents = await listDocuments();
+    user = await adminUser(await headers());
+    if (user)
+      [data, documents] = await Promise.all([loadContent(), listDocuments()]);
   } catch {
     return (
-      <main className="admin-page">
-        <h1>Documentos</h1>
-        <p>
-          El almacenamiento aún no está disponible. Intentá nuevamente más
-          tarde.
-        </p>
-        <a href="/">
-          Volver a <PegaloName />
-        </a>
+      <main className="admin-unavailable">
+        <h1>Administración no disponible</h1>
+        <p>No pudimos cargar el panel. Intentá nuevamente en unos minutos.</p>
+        <Link href="/admin">Reintentar</Link>
       </main>
     );
   }
-  return <DocumentManager initial={documents} />;
+  if (!user || !data || !documents) return <LoginForm />;
+  return (
+    <ContentManager
+      initial={data.content}
+      initialRevision={data.revision}
+      documents={documents}
+      username={user.username}
+    />
+  );
 }

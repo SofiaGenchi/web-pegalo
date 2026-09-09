@@ -1,10 +1,10 @@
 'use client';
 import { useMemo, useSyncExternalStore } from 'react';
-import { products } from './products';
+import type { Product } from './products';
 import { normalizeQuantity, readQuote, type QuoteItem } from './quote-data';
 const key = 'pegalo:quote:v1';
 const event = 'pegalo:quote-changed';
-const knownIds = new Set(products.map((p) => p.id));
+
 let memory = '[]';
 let storageUnavailable = false;
 function snapshot() {
@@ -41,9 +41,13 @@ function save(items: QuoteItem[]) {
   }
   window.dispatchEvent(new Event(event));
 }
-export function useQuote() {
+export function useQuote(products: Product[]) {
+  const knownIds = useMemo(
+    () => new Set(products.map((p) => p.id)),
+    [products],
+  );
   const raw = useSyncExternalStore(subscribe, snapshot, () => '[]');
-  const items = useMemo(() => readQuote(raw, knownIds), [raw]);
+  const items = useMemo(() => readQuote(raw, knownIds), [raw, knownIds]);
   return {
     ids: items.map((item) => item.id),
     quantities: Object.fromEntries(

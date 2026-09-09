@@ -1,6 +1,11 @@
 'use client';
+import type { Distributor } from './content-policy';
 import ArgentinaMap from './argentina-map';
-export default function BusinessSections() {
+export default function BusinessSections({
+  distributors,
+}: {
+  distributors: Distributor[];
+}) {
   return (
     <>
       <section className="coverage-section" id="donde-atendemos">
@@ -48,7 +53,7 @@ export default function BusinessSections() {
             </div>
           </address>
         </div>
-        <ArgentinaMap />
+        <ArgentinaMap distributors={distributors} />
       </section>
       <section className="business-contact" id="contacto">
         <div className="contact-heading">

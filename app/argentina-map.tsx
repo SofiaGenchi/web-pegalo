@@ -3,6 +3,7 @@ import { useRef, useState, type KeyboardEvent } from 'react';
 import geometry from './argentina-geometry.json';
 import territories from './argentina-territories.json';
 import { contactLocations, type ContactLocation } from './contact-locations';
+import type { Distributor } from './content-policy';
 import PegaloName from './pegalo-name';
 function LocationPoint({ location }: { location: ContactLocation }) {
   const [open, setOpen] = useState(false);
@@ -101,7 +102,30 @@ function LocationPoint({ location }: { location: ContactLocation }) {
     </div>
   );
 }
-export default function ArgentinaMap() {
+export default function ArgentinaMap({
+  distributors,
+}: {
+  distributors: Distributor[];
+}) {
+  const locations: ContactLocation[] = [
+    ...contactLocations,
+    ...distributors.map((d) => ({
+      id: d.id,
+      name: d.name,
+      type: 'distributor' as const,
+      address: d.address,
+      locality: d.locality,
+      province: d.province,
+      point: [
+        geometry.point[0] + (d.longitude + 58.55) * 15.23,
+        geometry.point[1] - (d.latitude + 34.6) * 17.43,
+      ],
+      phones: d.phone
+        ? [{ label: d.phone, href: 'tel:' + d.phone.replace(/[^+0-9]/g, '') }]
+        : [],
+      email: d.email,
+    })),
+  ];
   return (
     <div className="argentina-map">
       <div className="argentina-canvas">
@@ -134,7 +158,7 @@ export default function ArgentinaMap() {
             <path d={territories.antarctica} fill="#102a83" />
           </g>
         </svg>
-        {contactLocations.map((location) => (
+        {locations.map((location) => (
           <LocationPoint key={location.id} location={location} />
         ))}
       </div>
