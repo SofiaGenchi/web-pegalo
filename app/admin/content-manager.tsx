@@ -25,11 +25,13 @@ export default function ContentManager({
   initialRevision,
   documents,
   username,
+  storageAvailable = true,
 }: {
   initial: SiteContent;
   initialRevision: number;
   documents: DocumentInfo[];
   username: string;
+  storageAvailable?: boolean;
 }) {
   const [content, setContent] = useState(initial);
   const [documentList, setDocumentList] = useState(documents);
@@ -255,6 +257,12 @@ export default function ContentManager({
         </div>
       </aside>
       <main className="admin-workspace">
+        {!storageAvailable && (
+          <p className="admin-status">
+            Las imágenes y los PDF se actualizan desde el proyecto en esta
+            etapa. Podés editar los productos y distribuidores desde este panel.
+          </p>
+        )}
         <header className="admin-topbar">
           <div>
             <p className="admin-eyebrow">CONTENIDO DE LA WEB</p>
@@ -284,7 +292,11 @@ export default function ContentManager({
               : 'Todo al día. Los cambios se guardan al publicar.')}
         </output>
         {tab === 'documents' ? (
-          <DocumentManager initial={documentList} onChange={setDocumentList} />
+          <DocumentManager
+            initial={documentList}
+            uploadsEnabled={storageAvailable}
+            onChange={setDocumentList}
+          />
         ) : (
           <div className="admin-editor">
             <section className="admin-list">
@@ -454,6 +466,7 @@ export default function ContentManager({
                           Foto del producto
                           <input
                             type="file"
+                            disabled={!storageAvailable}
                             accept="image/png,image/jpeg,image/webp"
                             onChange={(e) => {
                               void upload(e.target.files?.[0], 'image');
@@ -469,6 +482,7 @@ export default function ContentManager({
                           Ficha técnica
                           <input
                             type="file"
+                            disabled={!storageAvailable}
                             accept="application/pdf"
                             onChange={(e) => {
                               void upload(e.target.files?.[0], 'technicalPdf');

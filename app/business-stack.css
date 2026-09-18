@@ -27,16 +27,17 @@
   background: #b8c1e8;
 }
 .business-stack > .business-contact {
-  z-index: 4;
-  position: relative;
-  top: auto;
+  position: sticky;
+  top: var(--stack-top, 88px);
+  z-index: 5;
+  min-height: calc(100svh - 68px);
+  border-radius: 42px 42px 0 0;
   background: #102a83;
   color: #fff;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8%;
   align-items: center;
-  min-height: calc(100svh - 68px);
 }
 .argentina-map {
   min-width: 0;
@@ -177,9 +178,9 @@
 }
 .contact-channel {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
   padding: 28px 0;
   border-bottom: 1px solid #ffffff35;
   font-size: clamp(17px, 2vw, 27px);
@@ -196,6 +197,10 @@
 .contact-channel span {
   overflow-wrap: anywhere;
   min-width: 0;
+}
+.contact-channel > a {
+  overflow-wrap: anywhere;
+  max-width: 100%;
 }
 .contact-channel svg {
   flex-shrink: 0;
@@ -232,7 +237,7 @@
   min-height: 44px;
 }
 .contact-network a:hover {
-  background: #ffffff15;
+  background: transparent;
 }
 .business-contact a:focus-visible {
   outline: 2px solid #fff;

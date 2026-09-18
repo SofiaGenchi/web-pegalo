@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { headers } from 'next/headers';
 import { adminUser } from '../admin-auth';
 import { loadContent } from '../content-store';
-import { listDocuments } from '../document-store';
+import { listDocuments, canUploadDocuments } from '../document-store';
 import LoginForm from './login-form';
 import ContentManager from './content-manager';
 import './admin.css';
@@ -13,10 +13,17 @@ export const metadata = {
 };
 export default async function AdminPage() {
   let user, data, documents;
+  let storageAvailable = canUploadDocuments();
   try {
     user = await adminUser(await headers());
     if (user)
-      [data, documents] = await Promise.all([loadContent(), listDocuments()]);
+      [data, documents] = await Promise.all([
+        loadContent(),
+        listDocuments().catch(() => {
+          storageAvailable = false;
+          return [];
+        }),
+      ]);
   } catch {
     return (
       <main className="admin-unavailable">
@@ -33,6 +40,7 @@ export default async function AdminPage() {
       initialRevision={data.revision}
       documents={documents}
       username={user.username}
+      storageAvailable={storageAvailable}
     />
   );
 }

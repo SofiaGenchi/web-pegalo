@@ -1,14 +1,20 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { siteOrigin } from './seo';
 export const metadata: Metadata = {
-  title: 'Pegalo | Adhesivos y selladores',
+  title: 'Adhesivos y selladores en Argentina | Pegalo',
+  ...(siteOrigin ? { metadataBase: new URL(siteOrigin) } : {}),
+  robots:
+    process.env.PEGALO_NOINDEX === '1'
+      ? { index: false, follow: true }
+      : undefined,
   icons: {
     icon: [{ url: '/favicon-artesanato-transparent.png', type: 'image/png' }],
     shortcut: '/favicon.ico',
     apple: '/apple-touch-icon.png',
   },
   description:
-    'Pegalo: importación y comercialización mayorista de adhesivos y selladores en Argentina. Conocé Pegalo y Artesanato y encontrá la solución para tu proyecto.',
+    'Somos fabricantes e importadores de una alta gama de productos  orientados a mercados como el  Automotor, Construcción, Hogar,  Artesanía, Zapatero o Carpintería.',
 };
 export default function RootLayout({
   children,

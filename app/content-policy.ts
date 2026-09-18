@@ -26,7 +26,7 @@ export const defaultContent: SiteContent = {
     ...p,
     active: true,
     image: `/productos/${p.id}.png`,
-    technicalPdf: p.id === 'acetica' ? '/fichas/silicona-acetica.pdf' : '',
+    technicalPdf: p.pdf || '',
     family: productFamilies.find((f) => f.ids.includes(p.id))?.name || '',
   })),
   distributors: [],
@@ -42,7 +42,7 @@ const file = (v: unknown, image = false) =>
   (v === '' ||
     (image
       ? /^\/productos\/[a-z0-9-]+\.png$/.test(v)
-      : v === '/fichas/silicona-acetica.pdf') ||
+      : (v === '/fichas/silicona-acetica.pdf' || products.some((p) => p.pdf === v))) ||
     new RegExp(
       '^/api/admin/files/[a-f0-9-]{36}\\.' +
         (image ? '(png|jpg|webp)' : 'pdf') +
@@ -78,7 +78,7 @@ export function validateContent(value: unknown): value is SiteContent {
         ) &&
         text(p.size, 150) &&
         text(p.use, 3000) &&
-        text(p.colors, 300) &&
+        text(p.colors, 300, false) &&
         typeof p.active === 'boolean' &&
         file(p.image, true) &&
         file(p.technicalPdf) &&

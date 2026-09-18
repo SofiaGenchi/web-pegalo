@@ -6,15 +6,18 @@
   scroll-margin-top: 95px;
   color: #102a83;
 }
+
 .company-section {
   background: #fff;
 }
+
 .section-kicker {
   font-size: 12px;
   letter-spacing: 2px;
   font-weight: 600;
   margin-bottom: 25px;
 }
+
 .company-section h2,
 .coverage-section h2,
 .business-contact h2 {
@@ -25,34 +28,61 @@
   letter-spacing: -0.05em;
   margin-bottom: 30px;
 }
+
 .company-section h2 .pegalo-name {
   font-family: 'Pegalo Stop', sans-serif;
 }
+
 .company-lead {
   font-size: clamp(20px, 2vw, 28px);
-  max-width: 950px;
   line-height: 1.5;
-  margin-bottom: 25px;
+  margin-bottom: 16px;
 }
+
 .company-markets {
   font-size: 17px;
-  line-height: 1.8;
-  max-width: 950px;
-  margin-bottom: 35px;
-}
-.company-story {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6%;
-  position: relative;
-  z-index: 6;
-}
-.company-story p {
-  font-size: 16px;
-  line-height: 1.85;
-  margin-bottom: 24px;
+  line-height: 1.75;
+  margin-bottom: 26px;
   color: #35405f;
 }
+
+.company-story-summary {
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.company-story-copy {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.78;
+  color: #35405f;
+  font-weight: 400;
+  text-wrap: pretty;
+}
+
+.company-story {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 1024px) {
+  .company-story {
+    grid-template-columns: 1.55fr 1fr;
+    gap: 8%;
+    align-items: start;
+  }
+
+  .company-story-copy {
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .company-story-summary {
+    max-width: 980px;
+  }
+}
+
 .company-route-point {
   position: absolute;
   left: 3%;
@@ -60,6 +90,7 @@
   width: 1px;
   height: 1px;
 }
+
 .company-gallery-placeholder {
   margin: 35px 0 20px;
   background: #eef1fb;
@@ -71,19 +102,23 @@
   flex-direction: column;
   justify-content: center;
 }
+
 .company-gallery-placeholder span {
   font-size: 12px;
   letter-spacing: 1.5px;
 }
+
 .company-gallery-placeholder h3 {
   font-size: clamp(23px, 3vw, 37px);
   margin: 20px 0 15px;
   font-weight: 500;
 }
+
 .company-gallery-placeholder p {
   font-size: 15px;
   line-height: 1.7;
 }
+
 .coverage-section {
   display: grid;
   grid-template-columns: 1fr 1.3fr;
@@ -91,11 +126,13 @@
   background: #eef1fb;
   align-items: center;
 }
+
 .coverage-copy > p:not(.section-kicker) {
   font-size: 20px;
   line-height: 1.6;
   margin: 20px 0;
 }
+
 .business-button {
   display: inline-flex;
   align-items: center;
@@ -107,27 +144,32 @@
   font-size: 14px;
   margin-bottom: 20px;
 }
+
 .coverage-copy address {
   font-style: normal;
   font-size: 15px;
   line-height: 1.8;
 }
+
 .coverage-copy address p {
   display: flex;
   align-items: start;
   gap: 12px;
   margin: 20px 0;
 }
+
 .coverage-copy address svg {
   flex-shrink: 0;
   margin-top: 5px;
 }
+
 .coverage-copy address a {
   display: block;
   width: fit-content;
   padding: 7px 0;
   overflow-wrap: anywhere;
 }
+
 .coverage-map {
   min-width: 0;
   background: #fff;
@@ -135,12 +177,14 @@
   padding: 18px;
   overflow: hidden;
 }
+
 .map-controls {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 18px;
 }
+
 .map-controls button {
   border: 1px solid #b8c1e8;
   border-radius: 30px;
@@ -148,10 +192,12 @@
   font-size: 14px;
   min-height: 44px;
 }
+
 .map-controls button[aria-pressed='true'] {
   color: #fff;
   background: #102a83;
 }
+
 .coverage-map iframe {
   display: block;
   width: 100%;
@@ -159,11 +205,13 @@
   border: 0;
   border-radius: 12px;
 }
+
 .coverage-map > p {
   font-size: 13px;
   line-height: 1.6;
   margin: 16px 0 8px;
 }
+
 .coverage-map > a {
   display: flex;
   gap: 12px;
@@ -171,31 +219,37 @@
   font-size: 14px;
   min-height: 44px;
 }
+
 .business-contact {
   background: #fff;
 }
+
 .business-contact > p:not(.section-kicker) {
   font-size: 17px;
   line-height: 1.7;
 }
+
 .contact-options {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
   margin-top: 40px;
 }
+
 .contact-options article {
   border: 1px solid #b8c1e8;
   border-radius: 20px;
   padding: 30px;
   min-width: 0;
 }
+
 .contact-options h3 {
   font-size: 19px;
   line-height: 1.5;
   font-weight: 600;
   margin: 20px 0 12px;
 }
+
 .contact-options a {
   display: block;
   font-size: 14px;
@@ -203,91 +257,272 @@
   padding: 10px 0;
   overflow-wrap: anywhere;
 }
+
 .contact-options p {
   font-size: 14px;
   color: #56648b;
 }
+
 .contact-socials {
   display: flex;
   flex-wrap: wrap;
   column-gap: 16px;
 }
+
 .business-contact a:hover,
 .coverage-section address a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  text-decoration: none;
 }
+
+.contact-value {
+  transition: opacity 180ms ease;
+}
+
+body a.contact-value {
+  text-decoration: none;
+}
+
+body a.contact-value:hover,
+body a.contact-value:focus-visible {
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-value {
+    transition: none;
+  }
+}
+
 .business-contact a:focus-visible,
 .coverage-section a:focus-visible,
 .coverage-section button:focus-visible {
   outline: 3px solid #f1000e;
   outline-offset: 4px;
 }
+
 .site .header nav {
   gap: 22px;
 }
+
 .site .header nav a {
   white-space: nowrap;
 }
+
 @media (max-width: 1150px) {
   .site .header nav {
     gap: 14px;
   }
+
   .site .header nav a {
     font-size: 12px;
   }
+
   .site .header-cta {
     font-size: 11px;
     padding: 10px 12px;
   }
+
   .contact-options {
     grid-template-columns: 1fr 1fr;
   }
+
   .contact-options article:last-child {
     grid-column: 1/-1;
   }
 }
+
 @media (max-width: 950px) {
   .site .header nav {
     display: none;
   }
+
   .site .mobile-toggle {
     display: flex;
   }
+
   .coverage-section {
     grid-template-columns: 1fr;
     gap: 35px;
   }
+
   .company-story {
-    grid-template-columns: 1fr;
-    gap: 0;
+    column-count: 2;
+    column-gap: 6%;
   }
+
 }
+
 @media (max-width: 600px) {
   .company-section,
   .coverage-section,
   .business-contact {
     padding: 65px 7%;
   }
+
   .company-gallery-placeholder {
     padding: 25px;
     min-height: 220px;
   }
+
   .contact-options {
     grid-template-columns: 1fr;
   }
+
   .contact-options article:last-child {
     grid-column: auto;
   }
+
   .coverage-map iframe {
     height: 400px;
   }
+
   .contact-options article {
     padding: 25px;
   }
+
   .company-section h2,
   .coverage-section h2,
   .business-contact h2 {
     font-size: 35px;
+  }
+
+  .company-story {
+    column-count: 1;
+  }
+
+}
+
+@media (max-width: 520px) {
+  .company-story p {
+    font-size: 14px;
+  }
+}
+
+body .location-dialog[data-slot='dialog-content'] {
+  background: #fff;
+  color: #102a83;
+  width: min(720px, calc(100vw - 32px));
+  max-width: 720px;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  padding: 0;
+  border-radius: 20px;
+  box-shadow: 0 24px 80px #102a8333;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.65fr);
+  gap: 0;
+}
+
+.location-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px;
+  background: #f3f5fc;
+  border-right: 1px solid #e1e6f3;
+  border-radius: 20px 0 0 20px;
+}
+
+.location-summary::before {
+  content: '';
+  width: 32px;
+  height: 3px;
+  background: #f1000e;
+  border-radius: 2px;
+}
+
+body:has(.location-dialog) [data-slot='dialog-overlay'] {
+  background: #102a832e;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.location-dialog .location-kind {
+  font-size: 14px;
+  color: #526286;
+  margin: 0;
+}
+
+.location-dialog .location-title {
+  font-size: 23px;
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.location-details {
+  margin: 0;
+  padding: 28px;
+  padding-top: 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: 22px;
+}
+
+.location-details > div:first-child {
+  grid-column: 1 / -1;
+  border-top: 0;
+  padding-top: 0;
+}
+
+.location-details > div {
+  padding-block: 10px;
+  border-top: 1px solid #e1e6f3;
+}
+
+.location-details dt {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.location-details dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.location-details a {
+  display: block;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding-block: 4px;
+}
+
+body .location-dialog .modal-close {
+  width: 40px;
+  height: 40px;
+  top: 10px;
+  right: 10px;
+}
+
+@media (max-width: 580px) {
+  body .location-dialog[data-slot='dialog-content'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .location-summary {
+    padding: 24px;
+    padding-right: 56px;
+    gap: 10px;
+    border-right: 0;
+    border-bottom: 1px solid #e1e6f3;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .location-dialog .location-title {
+    font-size: 21px;
+  }
+
+  .location-details {
+    padding: 20px 24px;
+    gap: 0 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .location-details {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

@@ -2,6 +2,7 @@ import { sites } from '@openai/sites-vite-plugin';
 import tailwindcss from '@tailwindcss/postcss';
 import vinext from 'vinext';
 import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
 import hostingConfig from './.openai/hosting.json';
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
@@ -42,20 +43,37 @@ export default defineConfig(async () => {
   process.env.MINIFLARE_REGISTRY_PATH ??= '.wrangler/registry';
 
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
-  const { cloudflare } = await import('@cloudflare/vite-plugin');
+  const nodeRuntime = process.env.PEGALO_RUNTIME === 'node';
+  const cloudflare = nodeRuntime
+    ? null
+    : (await import('@cloudflare/vite-plugin')).cloudflare;
 
   return {
+    resolve: {
+      alias: {
+        '#pegalo-repository': resolve(
+          nodeRuntime ? 'server/repository-mongo.ts' : 'server/repository-cloudflare.ts',
+        ),
+        '#pegalo-runtime': resolve(
+          nodeRuntime ? 'server/runtime-node.ts' : 'server/runtime-cloudflare.ts',
+        ),
+      },
+    },
     css: { postcss: { plugins: [tailwindcss()] } },
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
     plugins: [
       vinext(),
-      sites(),
-      cloudflare({
-        viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] },
-        config: localBindingConfig,
-      }),
+      ...(!nodeRuntime ? [sites()] : []),
+      ...(cloudflare
+        ? [
+            cloudflare({
+              viteEnvironment: { name: 'rsc', childEnvironments: ['ssr'] },
+              config: localBindingConfig,
+            }),
+          ]
+        : []),
     ],
   };
 });

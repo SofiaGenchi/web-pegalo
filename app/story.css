@@ -214,7 +214,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 470px 6% 110px;
+  padding: 340px 6% 90px;
   text-align: center;
 }
 .hero-halo {
@@ -246,7 +246,7 @@
   transform: translateY(calc(var(--scene-shift, 0px)*-0.25));
 }
 .journey-hero h1 {
-  font-size: clamp(60px, 7.8vw, 122px);
+  font-size: clamp(52px, 6.5vw, 96px);
   line-height: 1.02;
   margin: 0 0 27px;
 }
@@ -259,7 +259,10 @@
   color: #b8c1e8;
 }
 .journey-hero-copy > p:not(.story-eyebrow) {
-  font-size: 15px;
+  max-width: 48ch;
+  margin-inline: auto;
+  text-wrap: pretty;
+  font-size: 16px;
   line-height: 1.8;
   color: #e2e7ff;
   margin-bottom: 26px;
@@ -276,7 +279,8 @@
   color: #102a83;
 }
 .journey-hero .story-button:hover {
-  background: #b8c1e8;
+  background: #f1000e;
+  color: #fff;
 }
 .journey-catalog-shortcut {
   color: #fff !important;
@@ -298,22 +302,22 @@
   top: 74px;
   left: 0;
   width: 100%;
-  height: 395px;
+  height: 235px;
 }
 .nozzle-crop {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 380px;
-  height: 372px;
+  width: 240px;
+  height: 235px;
   transform: translateX(-50%);
 }
 .nozzle-crop img {
   position: absolute;
   top: 0;
   left: 0;
-  width: 380px;
-  height: 570px;
+  width: 240px;
+  height: 360px;
   max-width: none;
   clip-path: polygon(
     20% 0,
@@ -371,8 +375,8 @@
 }
 .drop-caption {
   position: absolute;
-  top: 325px;
-  right: 57%;
+  top: 190px;
+  right: 61%;
   font-size: 10px;
   line-height: 1.8;
   text-align: right;
@@ -450,7 +454,7 @@
 }
 .intro-route-point {
   position: absolute;
-  left: 6%;
+  left: 18%;
   top: 62%;
   width: 1px;
   height: 1px;
@@ -817,7 +821,7 @@
     height: auto;
     min-height: 0;
     max-height: none;
-    padding: 380px 6% 110px;
+    padding: 270px 6% 90px;
   }
   .journey-hero h1 {
     font-size: clamp(42px, 10.5vw, 72px);
@@ -825,12 +829,12 @@
     line-height: 1.1;
   }
   .journey-hero-copy .story-eyebrow {
-    font-size: 8px;
+    font-size: 12px;
     letter-spacing: 1.5px;
     margin-bottom: 20px;
   }
   .journey-hero-copy > p:not(.story-eyebrow) {
-    font-size: 13px;
+    font-size: 16px;
   }
   .journey-hero-actions {
     gap: 18px;
@@ -845,17 +849,18 @@
   }
   .nozzle-scene {
     top: 72px;
-    height: 290px;
+    height: 176px;
   }
   .nozzle-crop {
-    width: 280px;
-    height: 274px;
+    width: 180px;
+    height: 176px;
   }
   .nozzle-crop img {
-    width: 280px;
-    height: 420px;
+    width: 180px;
+    height: 270px;
   }
   .nozzle-caption {
+    display: none;
     left: auto;
     right: 5%;
     top: 100px;
@@ -863,6 +868,7 @@
     writing-mode: vertical-rl;
   }
   .drop-caption {
+    display: none;
     top: 240px;
     right: 65%;
     font-size: 8px;
@@ -954,11 +960,11 @@
     inset: 8% 0;
   }
   .scene-point {
-    left: 4%;
+    left: 16%;
     top: 55%;
   }
   .artesanato-scene .scene-point {
-    left: 96%;
+    left: 84%;
     top: 55%;
   }
   .artesanato-scene .scene-art {
@@ -1044,7 +1050,17 @@
     animation: hero-arrive 0.8s 0.1s both;
   }
   .journey-hero-actions {
-    animation: hero-arrive 0.8s 0.3s both;
+    animation: hero-actions-arrive 0.8s 0.3s both;
+  }
+}
+@keyframes hero-actions-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 @keyframes hero-arrive {
@@ -1093,4 +1109,73 @@
 
 .journey-ribbon b {
   color: inherit;
+}
+
+.journey-finale {
+  overflow: hidden;
+}
+.finale-liquid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+.liquid-front {
+  fill: none;
+  stroke: #ff655e;
+  stroke-width: 2;
+  stroke-opacity: 0.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.journey-finale .story-eyebrow,
+.journey-finale .final-foot {
+  position: relative;
+  z-index: 6;
+}
+.journey-finale.is-flooded h2 em {
+  color: #fff;
+}
+.journey-finale.is-flooded > p:not(.story-eyebrow) {
+  color: #fff;
+}
+.journey-finale.is-flooded .drop-destination .story-button {
+  background: #fff;
+  color: #102a83;
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .finale-liquid {
+    display: none;
+  }
+}
+
+/* The liquid owns the deformation; the CTA stays stable and readable. */
+.drop-destination .story-button {
+  transform-origin: center bottom;
+  box-shadow: none;
+  transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1), color 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .drop-destination .story-button { transform: none !important; }
+}
+/* Keep the keyboard focus indicator inside the CTA, not across the material. */
+.drop-destination .story-button:focus-visible {
+  outline-offset: -5px;
+}
+
+
+/* Tablet artwork keeps equal axes instead of inheriting a tall desktop box. */
+@media (min-width: 701px) and (max-width: 1366px) {
+  .journey-product .scene-art {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .journey-product .scene-orbit {
+    inset: 0;
+  }
 }

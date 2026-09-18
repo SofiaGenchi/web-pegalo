@@ -1,0 +1,111 @@
+@font-face {
+  font-family: 'Pegalo State';
+  src: url('/fonts/stop.ttf') format('truetype');
+  font-display: swap;
+}
+.route-state {
+  box-sizing: border-box;
+  min-height: 100svh;
+  padding: 48px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #102a83;
+  color: #fff;
+  font-family: Montserrat, Arial, sans-serif;
+  text-align: center;
+}
+.route-state-brand {
+  font-family: 'Pegalo State', sans-serif;
+  font-size: clamp(48px, 12vw, 100px);
+  line-height: 1.15;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  margin: 0 0 32px;
+}
+.route-state h1:not(.route-state-brand) {
+  font-size: clamp(26px, 5vw, 42px);
+  line-height: 1.2;
+  max-width: 650px;
+  margin: 0 0 18px;
+}
+.route-state-copy {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #e2e7ff;
+  max-width: 470px;
+  margin: 0;
+}
+.route-state-code {
+  font-size: 14px;
+  letter-spacing: 0.15em;
+  margin: 0 0 16px;
+  color: #b8c1e8;
+}
+.route-state-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 32px;
+}
+.route-state-actions a,
+.route-state-actions button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 1px solid #fff;
+  border-radius: 28px;
+  background: #fff;
+  color: #102a83;
+  font:
+    600 16px/1.4 Montserrat,
+    Arial,
+    sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+}
+.route-state-actions button {
+  background: transparent;
+  color: #fff;
+}
+.route-state-actions :is(a, button):focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 5px;
+}
+.route-state-actions :is(a, button):hover {
+  background: #b8c1e8;
+  color: #102a83;
+}
+.loading-word {
+  display: flex;
+  margin-bottom: 24px;
+}
+.loading-word span {
+  opacity: 0.18;
+  animation: pegalo-letter 400ms ease-out forwards;
+  animation-delay: calc(var(--letter-index) * 220ms);
+}
+.loading-caption {
+  font-size: 14px;
+  color: #e2e7ff;
+  letter-spacing: 0.08em;
+}
+@keyframes pegalo-letter {
+  0% {
+    opacity: 0.18;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-word span {
+    animation: none;
+    opacity: 1;
+  }
+}

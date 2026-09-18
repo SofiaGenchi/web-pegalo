@@ -2,6 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import {
+  presentationBadges,
+  presentationGroups,
+  quoteOptions,
+  quoteProductId,
+  quotePresentation,
+} from './product-presentations';
+import ProductOptionSelect from './product-option-select';
 import PegaloName from './pegalo-name';
 import CompanySection from './company-section';
 import BusinessSections from './business-sections';
@@ -24,6 +32,7 @@ import './refinements.css';
 import StoryJourney from './story-journey';
 import Downloads from './downloads';
 import BackToTop from './back-to-top';
+import FaqChat from './faq-chat';
 import './documents.css';
 import './simple-view.css';
 import { useSimpleView } from './use-simple-view';
@@ -31,6 +40,7 @@ import { useSimpleView } from './use-simple-view';
 const navigation = [
   ['Inicio', 'inicio'],
   ['Productos', 'catalogo'],
+  ['Descargas', 'descargas'],
   ['Empresa', 'empresa'],
   ['Dónde estamos', 'donde-atendemos'],
   ['Contacto', 'contacto'],
@@ -42,30 +52,68 @@ const whatsapp = (message: string) =>
 export default function Home({
   products,
   distributors,
+  catalogUnavailable = false,
 }: {
   products: Product[];
   distributors: Distributor[];
+  catalogUnavailable?: boolean;
 }) {
   const root = useRef<HTMLDivElement>(null);
   const { simple } = useSimpleView();
   const [menu, setMenu] = useState(false);
-  const [filter, setFilter] = useState('Todos');
-  const [query, setQuery] = useState('');
+  const [visibleCount, setVisibleCount] = useState(4);
+  const [filter, updateFilter] = useState('Todos');
+  const [query, updateQuery] = useState('');
+  const setFilter = (value: string) => {
+    updateFilter(value);
+    setVisibleCount(4);
+  };
+  const setQuery = (value: string) => {
+    updateQuery(value);
+    setVisibleCount(4);
+  };
   const [selected, setSelected] = useState<Product | null>(null);
-  const {
-    ids: quote,
-    setIds: setQuote,
-    quantities,
-    setQuantity,
-    total,
-  } = useQuote(products);
-  const [family, setFamily] = useState('Todos');
+  const [selectedOption, setSelectedOption] = useState('');
+  const selectedOptions = selected ? quoteOptions(selected) : [];
+  const selectedKey =
+    selectedOptions.find((option) => option.key === selectedOption)?.key ??
+    selectedOptions[0]?.key ??
+    '';
+  const { ids: quote, setIds: setQuote } = useQuote(products);
+  const [family, updateFamily] = useState('Todos');
+  const setFamily = (value: string) => {
+    updateFamily(value);
+    setVisibleCount(4);
+  };
   const [activeSection, setActiveSection] = useState('inicio');
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [name, setName] = useState('');
   const [locality, setLocality] = useState('');
   const [note, setNote] = useState('');
-  const visible = products.filter(
+  useEffect(() => {
+    if (!menu) return;
+    const closeMenu = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setMenu(false);
+      root.current?.querySelector<HTMLButtonElement>('.mobile-toggle')?.focus();
+    };
+    window.addEventListener('keydown', closeMenu);
+    return () => window.removeEventListener('keydown', closeMenu);
+  }, [menu]);
+  useEffect(() => {
+    const openLinkedProduct = () => {
+      const id = new URL(window.location.href).searchParams.get('producto');
+      if (id)
+        setSelected(products.find((product) => product.id === id) ?? null);
+    };
+    openLinkedProduct();
+    window.addEventListener('popstate', openLinkedProduct);
+    return () => window.removeEventListener('popstate', openLinkedProduct);
+  }, [products]);
+  const catalogProducts = products.filter(
+    (p) => !['ciano-20', 'ciano-100'].includes(p.id),
+  );
+  const visible = catalogProducts.filter(
     (p) =>
       (filter === 'Todos' || p.lines.includes(filter)) &&
       (family === 'Todos' || p.family === family) &&
@@ -80,11 +128,12 @@ export default function Home({
             .toLowerCase(),
         ),
   );
+  const shownProducts = visible.slice(0, visibleCount);
   const add = (id: string) =>
     setQuote((q) => (q.includes(id) ? q : [...q, id]));
-  const browse = (line: string) => {
+  const browse = (line: string, productFamily = 'Todos') => {
     setFilter(line);
-    setFamily('Todos');
+    setFamily(productFamily);
     setQuery('');
     document.getElementById('catalogo')?.scrollIntoView({
       behavior:
@@ -120,6 +169,109 @@ export default function Home({
     );
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
+  }, [simple]);
+  useEffect(() => {
+    if (simple) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduced.matches) return;
+
+    const empresa = document.getElementById('empresa');
+    const contacto = document.getElementById('contacto');
+    if (!empresa) return;
+
+    let raf = 0;
+    let locked = false;
+    let unlockTimeout: number | null = null;
+    let lastY = window.scrollY;
+    const headerOffset = 110;
+    const snapZones: Array<{
+      id: string;
+      zoneDown: number;
+      zoneUp: number;
+    }> = [
+      { id: 'empresa', zoneDown: 100, zoneUp: 100 },
+    ];
+    const lockMs = 900;
+
+    const getTop = (el: HTMLElement) =>
+      el.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+    const onScroll = () => {
+      if (locked || raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const y = window.scrollY;
+        const allSections = [
+          empresa
+            ? ({ section: empresa, id: 'empresa' as const } as const)
+            : null,
+          contacto
+            ? ({ section: contacto, id: 'contacto' as const } as const)
+            : null,
+        ]
+          .filter((item): item is { section: HTMLElement; id: 'empresa' | 'contacto' } =>
+            !!item
+          )
+          .map((item) => ({
+            section: item.section,
+            id: item.id,
+            top: getTop(item.section),
+            config: snapZones.find((c) => c.id === item.id),
+          }))
+          .filter((item) => Boolean(item.config)) as Array<{
+          section: HTMLElement;
+          id: 'empresa' | 'contacto';
+          top: number;
+          config: { id: string; zoneDown: number; zoneUp: number };
+        }>;
+
+        if (!allSections.length) {
+          lastY = y;
+          return;
+        }
+
+        const goingDown = y >= lastY;
+        const snapCandidates = allSections
+          .map((item) => {
+            const zone = goingDown ? item.config.zoneDown : item.config.zoneUp;
+            const shouldSnap =
+              zone > 0 &&
+              y >= item.top - zone &&
+              y <= item.top + 50 &&
+              (goingDown || item.config.zoneUp > 0);
+            return { ...item, shouldSnap };
+          })
+          .filter((item) => item.shouldSnap);
+
+        if (snapCandidates.length > 0) {
+          const target = snapCandidates.reduce((best, current) =>
+            Math.abs(y - current.top) < Math.abs(y - best.top) ? current : best,
+          );
+
+          locked = true;
+          window.scrollTo({
+            top: Math.max(0, target.top),
+            behavior: 'smooth',
+          });
+          if (unlockTimeout) clearTimeout(unlockTimeout);
+          unlockTimeout = window.setTimeout(() => {
+            locked = false;
+            unlockTimeout = null;
+          }, lockMs);
+        }
+
+        lastY = y;
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+      if (unlockTimeout) clearTimeout(unlockTimeout);
+      locked = false;
+    };
   }, [simple]);
   useEffect(() => {
     const el = root.current;
@@ -261,8 +413,11 @@ export default function Home({
             </a>
           ))}
         </nav>
-        <button className="header-cta" onClick={() => setQuoteOpen(true)}>
-          Contactanos{' '}
+        <button
+          className={'header-cta' + (quote.length > 0 ? ' has-products' : '')}
+          onClick={() => setQuoteOpen(true)}
+        >
+          {quote.length > 0 ? 'Tu consulta' : 'Armar consulta'}{' '}
           {quote.length > 0 && (
             <span className="nav-quote-count">{quote.length}</span>
           )}{' '}
@@ -301,17 +456,13 @@ export default function Home({
               Empresa argentina dedicada a la importación y comercialización
               mayorista de adhesivos y selladores desde 1998.
             </p>
-            <p>
-              Vista sin animaciones, con fotos y acceso directo a toda la
-              información.
-            </p>
             <nav
               className="simple-links"
               id="productos"
               aria-label="Accesos directos"
             >
               <a href="#catalogo">Consultar productos</a>
-              <a href="#descargas">Precios y promociones</a>
+              <a href="#descargas">Descargas</a>
               <button onClick={() => setQuoteOpen(true)}>
                 Consulta mayorista
               </button>
@@ -326,9 +477,9 @@ export default function Home({
             onBrowse={browse}
           />
         )}
-        <section className="catalog section" id="catalogo">
+        <section className="catalog section" id="catalogo" tabIndex={-1}>
           <div className="section-heading" data-reveal>
-            <p className="eyebrow">02 — EXPLORÁ EL CATÁLOGO</p>
+            <p className="eyebrow">EXPLORÁ EL CATÁLOGO</p>
             <h2>
               El producto justo.
               <br />
@@ -339,126 +490,185 @@ export default function Home({
               <br />y armá tu consulta.
             </p>
           </div>
-          <div className="catalog-tools">
-            <div className="filters" aria-label="Filtrar por línea">
-              {['Todos', 'Pegalo', 'Artesanato', 'Instalador'].map((l) => (
+          {catalogUnavailable ? (
+            <div className="catalog-unavailable" aria-live="polite">
+              <h3>No pudimos cargar los productos.</h3>
+              <p>
+                Podés consultar precios y promociones o escribirnos mientras
+                consultar disponibilidad y condiciones mientras
+                restablecemos el catálogo.
+              </p>
+              <div className="catalog-recovery-actions">
                 <button
-                  aria-pressed={filter === l}
-                  key={l}
-                  onClick={() => setFilter(l)}
-                  className={filter === l ? 'active' : ''}
+                  className="button"
+                  onClick={() => window.location.reload()}
                 >
-                  {l}
+                  Reintentar
                 </button>
-              ))}
+                <button className="button" onClick={() => setQuoteOpen(true)}>
+                  Consultar a ventas
+                </button>
+                <a href="#descargas">Descargas</a>
+              </div>
             </div>
-            <label className="search">
-              <Search size={18} />
-              <input
-                type="search"
-                aria-label="Buscar productos"
-                placeholder="¿Qué estás buscando?"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </label>
-          </div>
-          <div
-            className="family-filters"
-            aria-label="Filtrar por tipo de producto"
-          >
-            {['Todos', ...productFamilies.map((group) => group.name)].map(
-              (group) => (
-                <button
-                  key={group}
-                  aria-pressed={family === group}
-                  onClick={() => setFamily(group)}
-                >
-                  {group === 'Todos' ? 'Todos los tipos' : group}
-                </button>
-              ),
-            )}
-          </div>
-          <div className="catalog-summary">
-            <output className="result-count">
-              {visible.length} de {products.length} productos
-            </output>
-            {(family !== 'Todos' || filter !== 'Todos' || query) && (
-              <button
-                onClick={() => {
-                  setFamily('Todos');
-                  setFilter('Todos');
-                  setQuery('');
-                }}
+          ) : (
+            <>
+              <div className="catalog-tools">
+                <div className="filters" aria-label="Filtrar por línea">
+                  {['Todos', 'Pegalo', 'Artesanato', 'Instalador'].map((l) => (
+                    <button
+                      aria-pressed={filter === l}
+                      key={l}
+                      onClick={() => setFilter(l)}
+                      className={filter === l ? 'active' : ''}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </div>
+                <label className="search">
+                  <Search size={18} />
+                  <input
+                    type="search"
+                    aria-label="Buscar productos"
+                    placeholder="¿Qué estás buscando?"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                </label>
+              </div>
+              <div
+                className="family-filters"
+                aria-label="Filtrar por tipo de producto"
               >
-                Limpiar filtros <X size={14} />
-              </button>
-            )}
-            <span>Seleccioná productos y pedí tu cotización.</span>
-          </div>
-          <div className="product-grid">
-            {visible.map((p) => (
-              <article className="product-card" key={p.id}>
-                <button
-                  className="product-open"
-                  onClick={() => setSelected(p)}
-                  aria-label={'Ver ' + p.name}
-                >
-                  <div className="product-image">
-                    <span className="product-line">
-                      {p.line === 'Pegalo' ? <PegaloName /> : p.line}
-                    </span>
-                    <Image
-                      unoptimized
-                      width={500}
-                      height={500}
-                      src={p.image || '/product-placeholder.svg'}
-                      alt={p.name}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div className="product-info">
-                    <h3>{p.name}</h3>
-                    <p>{p.size}</p>
-                    <span className="product-application">{p.use}</span>
-                  </div>
-                </button>
-                <button
-                  className={
-                    'add-product ' + (quote.includes(p.id) ? 'added' : '')
-                  }
-                  onClick={() => add(p.id)}
-                  disabled={quote.includes(p.id)}
-                >
-                  {quote.includes(p.id) ? (
-                    <>
-                      <Check size={16} /> Agregado a tu consulta
-                    </>
-                  ) : (
-                    <>
-                      <Plus size={16} /> Agregar a consulta
-                    </>
-                  )}
-                </button>
-              </article>
-            ))}
-          </div>
-          {!visible.length && (
-            <div className="no-results">
-              <h3>No encontramos ese producto.</h3>
-              <p>Probá con otro nombre o consultanos por lo que necesitás.</p>
-              <button
-                className="button"
-                onClick={() => {
-                  setQuery('');
-                  setFilter('Todos');
-                  setFamily('Todos');
-                }}
-              >
-                Ver todos los productos
-              </button>
-            </div>
+                {['Todos', ...productFamilies.map((group) => group.name)].map(
+                  (group) => (
+                    <button
+                      key={group}
+                      aria-pressed={family === group}
+                      onClick={() => setFamily(group)}
+                    >
+                      {group === 'Todos' ? 'Todos los tipos' : group}
+                    </button>
+                  ),
+                )}
+              </div>
+              <div className="catalog-summary">
+                <output className="result-count">
+                  Mostrando {shownProducts.length} de {visible.length} productos
+                </output>
+                {(family !== 'Todos' || filter !== 'Todos' || query) && (
+                  <button
+                    onClick={() => {
+                      setFamily('Todos');
+                      setFilter('Todos');
+                      setQuery('');
+                    }}
+                  >
+                    Limpiar filtros <X size={14} />
+                  </button>
+                )}
+                <span>
+                  Seleccioná los productos sobre los que querés consultar.
+                </span>
+              </div>
+              <div className="product-grid" id="catalog-product-grid">
+                {shownProducts.map((p) => (
+                  <article className="product-card" key={p.id}>
+                    <button
+                      className="product-open"
+                      onClick={() => setSelected(p)}
+                      aria-label={'Ver ' + p.name}
+                    >
+                      <div className="product-image">
+                        <span className="product-line">
+                          {p.line === 'Pegalo' ? <PegaloName /> : p.line}
+                        </span>
+                        <Image
+                          unoptimized
+                          width={500}
+                          height={500}
+                          src={p.image || '/product-placeholder.svg'}
+                          alt={p.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                      <div className="product-info">
+                        <h3>{p.name}</h3>
+                        <span className="product-application">{p.use}</span>
+                        <div
+                          className="presentation-badges"
+                          aria-label="Presentaciones disponibles"
+                        >
+                          {presentationBadges(p).map((presentation) => (
+                            <span key={presentation}>{presentation}</span>
+                          ))}
+                        </div>
+                      </div>
+                    </button>
+                    <button
+                      className={'add-product'}
+                      onClick={() => setSelected(p)}
+                    >
+                      <Plus size={16} /> Elegir y agregar
+                    </button>
+                  </article>
+                ))}
+              </div>
+              {visible.length > 4 && (
+                <div className="catalog-more">
+                  <button
+                    type="button"
+                    className="story-button"
+                    aria-controls="catalog-product-grid"
+                    onClick={() => {
+                      if (shownProducts.length < visible.length) {
+                        setVisibleCount((count) =>
+                          Math.min(count + 4, visible.length),
+                        );
+                      } else {
+                        setVisibleCount(4);
+                        requestAnimationFrame(() => {
+                          const catalog = document.getElementById('catalogo');
+                          catalog?.focus({ preventScroll: true });
+                          catalog?.scrollIntoView({
+                            block: 'start',
+                            behavior: window.matchMedia(
+                              '(prefers-reduced-motion: reduce)',
+                            ).matches
+                              ? 'instant'
+                              : 'smooth',
+                          });
+                        });
+                      }
+                    }}
+                  >
+                    {shownProducts.length < visible.length
+                      ? 'Ver más productos'
+                      : 'Ver menos'}
+                  </button>
+                </div>
+              )}
+              {!visible.length && (
+                <div className="no-results">
+                  <h3>No encontramos ese producto.</h3>
+                  <p>
+                    Probá con otro nombre o consultanos por lo que necesitás.
+                  </p>
+                  <button
+                    className="button"
+                    onClick={() => {
+                      setQuery('');
+                      setFilter('Todos');
+                      setFamily('Todos');
+                    }}
+                  >
+                    Ver todos los productos
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
         <BusinessStack>
@@ -480,43 +690,56 @@ export default function Home({
               </span>
             </a>
             <p>
-              A lo largo de más de 18 años, <PegaloName /> ha mostrado claros
-              signos de liderazgo. Desarrollando ideas al servicio de las
-              empresas del sector, aportando soluciones concretas a los
-              obstáculos que se interponen en el camino.
+              Desde 1998, importamos y comercializamos adhesivos y selladores
+              para comercios y profesionales de Argentina.
             </p>
           </div>
           <div className="footer-contact">
             <h2>Contactanos</h2>
             <address>
-              <a
-                href="https://wa.me/541164174036"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span>Celular / WhatsApp</span>+54 9 11 6417-4036
-              </a>
-              <a href="tel:08001220975">
-                <span>Teléfono</span>0800-122-0975
-              </a>
-              <a href="mailto:ventas@pegalo.com.ar">
-                <span>Correo electrónico</span>ventas@pegalo.com.ar
-              </a>
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Asamblea%204355%2C%20Santos%20Lugares%2C%20Buenos%20Aires"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span>Encontranos</span>Asamblea 4355, Santos Lugares
-                <br />
-                CP 1676, Buenos Aires
-              </a>
+              <div>
+                <span>WhatsApp</span>
+                <a
+                  className="contact-value"
+                  href="https://wa.me/541164174036"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  +54 9 11 6417-4036
+                </a>
+              </div>
+              <div>
+                <span>Teléfono</span>
+                <a className="contact-value" href="tel:08001220975">
+                  0800-122-0975
+                </a>
+              </div>
+              <div>
+                <span>Correo electrónico</span>
+                <a className="contact-value" href="mailto:ventas@pegalo.com.ar">
+                  ventas@pegalo.com.ar
+                </a>
+              </div>
+              <div>
+                <span>Encontranos</span>
+                <a
+                  className="contact-value"
+                  href="https://www.google.com/maps/search/?api=1&query=Asamblea%204355%2C%20Santos%20Lugares%2C%20Buenos%20Aires"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Asamblea 4355, Santos Lugares
+                  <br />
+                  CP 1676, Buenos Aires
+                </a>
+              </div>
             </address>
           </div>
           <nav className="footer-social" aria-label="Redes sociales">
             <h2>Seguinos</h2>
             <p>@adhesivospegalo</p>
             <a
+              className="contact-value"
               href="https://www.instagram.com/adhesivospegalo/"
               target="_blank"
               rel="noopener noreferrer"
@@ -524,6 +747,7 @@ export default function Home({
               Instagram
             </a>
             <a
+              className="contact-value"
               href="https://www.facebook.com/adhesivospegalo/"
               target="_blank"
               rel="noopener noreferrer"
@@ -531,6 +755,7 @@ export default function Home({
               Facebook
             </a>
             <a
+              className="contact-value"
               href="https://www.tiktok.com/@adhesivospegalo"
               target="_blank"
               rel="noopener noreferrer"
@@ -548,16 +773,8 @@ export default function Home({
           </div>
         </div>
       </footer>
-      <BackToTop
-        raised={quote.length > 0}
-        hidden={menu || quoteOpen || !!selected}
-      />
-      {quote.length > 0 && (
-        <button className="quote-float" onClick={() => setQuoteOpen(true)}>
-          Tu consulta <span>{quote.length}</span>
-          <small>{total} unidades</small>
-        </button>
-      )}
+      <BackToTop raised={false} hidden={menu || quoteOpen || !!selected} />
+      <FaqChat hidden={menu || quoteOpen || !!selected} />
       <Dialog
         open={!!selected}
         onOpenChange={(open) => {
@@ -612,33 +829,61 @@ export default function Home({
                               )
                             }
                           >
-                            {size} g
+                            {size} G
                           </button>
                         ))}
                     </div>
                   </div>
                 )}
-                <dl>
-                  <dt>Presentación</dt>
-                  <dd>{selected.size}</dd>
-                  <dt>Colores</dt>
-                  <dd>{selected.colors}</dd>
-                </dl>
+                <div className="presentation-groups">
+                  {presentationGroups(selected).map((group, index) => (
+                    <dl className="presentation-group" key={index}>
+                      {group.color && (
+                        <>
+                          <dt>Color:</dt>
+                          <dd>{group.color}</dd>
+                        </>
+                      )}
+                      <dt>
+                        {selected.id === 'teflon'
+                          ? 'Presentación (medidas en pulgadas):'
+                          : 'Presentación:'}
+                      </dt>
+                      <dd>{group.presentation}</dd>
+                    </dl>
+                  ))}
+                </div>
+                <label className="field variant-field">
+                  {selected.id === 'teflon'
+                    ? 'Presentación (pulgadas)'
+                    : 'Presentación y color'}
+                  <ProductOptionSelect
+                    value={selectedKey}
+                    options={selectedOptions}
+                    onChange={setSelectedOption}
+                    label={selected.id === 'teflon' ? 'Presentación (pulgadas)' : 'Presentación y color'}
+                  />
+                </label>
+                <output className="selection-feedback">
+                  {quote.includes(selectedKey)
+                    ? 'Esta presentación ya está en tu consulta. Podés elegir otra o continuar con tu consulta.'
+                    : ''}
+                </output>
                 <button
                   className="button"
-                  disabled={quote.includes(selected.id)}
-                  onClick={() => add(selected.id)}
+                  disabled={quote.includes(selectedKey)}
+                  onClick={() => add(selectedKey)}
                 >
-                  {quote.includes(selected.id)
+                  {quote.includes(selectedKey)
                     ? 'Agregado a tu consulta'
                     : 'Agregar a consulta'}
-                  {quote.includes(selected.id) ? (
+                  {quote.includes(selectedKey) ? (
                     <Check size={18} />
                   ) : (
                     <Plus size={18} />
                   )}
                 </button>
-                {quote.includes(selected.id) && (
+                {quote.includes(selectedKey) && (
                   <button
                     className="detail-quote-link"
                     onClick={() => {
@@ -649,26 +894,18 @@ export default function Home({
                     Continuar con mi consulta
                   </button>
                 )}
-                <details className="technical-info">
-                  <summary>Información técnica</summary>
-                  <p>{selected.use}</p>
-                  <dl>
-                    <dt>Presentación</dt>
-                    <dd>{selected.size}</dd>
-                    <dt>Colores disponibles</dt>
-                    <dd>{selected.colors}</dd>
-                  </dl>
-                  {selected.technicalPdf ? (
-                    <a href={selected.technicalPdf} download>
-                      Descargar ficha técnica PDF
+                {selected.technicalPdf && (
+                  <div className="technical-info">
+                    <a
+                      href={selected.technicalPdf}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Información técnica (PDF, se abre en una nueva pestaña)"
+                    >
+                      Información técnica
                     </a>
-                  ) : (
-                    <p className="technical-pending">
-                      La ficha técnica completa de este producto todavía no está
-                      publicada.
-                    </p>
-                  )}
-                </details>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -690,7 +927,7 @@ export default function Home({
           <div className="quote-items">
             {quote.length ? (
               quote.map((id) => {
-                const p = products.find((x) => x.id === id)!;
+                const p = products.find((x) => x.id === quoteProductId(id))!;
                 return (
                   <div key={id} className="quote-row">
                     <Image
@@ -702,40 +939,7 @@ export default function Home({
                     />
                     <div className="quote-row-info">
                       <strong>{p.name}</strong>
-                      <span>{p.size}</span>
-                      <div className="quantity-control">
-                        <button
-                          aria-label={'Restar una unidad de ' + p.name}
-                          disabled={(quantities[id] ?? 1) <= 1}
-                          onClick={() =>
-                            setQuantity(id, (quantities[id] ?? 1) - 1)
-                          }
-                        >
-                          −
-                        </button>
-                        <input
-                          type="number"
-                          min="1"
-                          max="9999"
-                          step="1"
-                          inputMode="numeric"
-                          aria-label={'Cantidad de ' + p.name}
-                          value={quantities[id] ?? 1}
-                          onChange={(e) =>
-                            setQuantity(id, Number(e.target.value))
-                          }
-                        />
-                        <button
-                          aria-label={'Sumar una unidad de ' + p.name}
-                          disabled={(quantities[id] ?? 1) >= 9999}
-                          onClick={() =>
-                            setQuantity(id, (quantities[id] ?? 1) + 1)
-                          }
-                        >
-                          +
-                        </button>
-                        <span>unidades</span>
-                      </div>
+                      <span>{quotePresentation(p, id)}</span>
                     </div>
                     <button
                       aria-label={'Quitar ' + p.name}
@@ -753,16 +957,6 @@ export default function Home({
               </p>
             )}
           </div>
-          {quote.length > 0 && (
-            <div className="quote-total">
-              <span>{quote.length} productos seleccionados</span>
-              <strong>{total} unidades</strong>
-            </div>
-          )}
-          <p className="quote-storage-note">
-            Tu selección se conserva en este navegador. Las cantidades están
-            sujetas a la presentación comercial disponible.
-          </p>
           <label className="field">
             Nombre o comercio
             <input
@@ -786,7 +980,7 @@ export default function Home({
               rows={3}
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              placeholder="Contanos qué necesitás, presentaciones y cantidades…"
+              placeholder="Contanos qué te gustaría saber sobre los productos…"
             />
           </label>
           <a
@@ -804,11 +998,13 @@ export default function Home({
                       .map(
                         (id) =>
                           '• ' +
-                          (quantities[id] ?? 1) +
-                          ' unidades — ' +
-                          products.find((p) => p.id === id)!.name +
+                          products.find((p) => p.id === quoteProductId(id))!
+                            .name +
                           ' (' +
-                          products.find((p) => p.id === id)!.size +
+                          quotePresentation(
+                            products.find((p) => p.id === quoteProductId(id))!,
+                            id,
+                          ) +
                           ')',
                       )
                       .join('\n'),

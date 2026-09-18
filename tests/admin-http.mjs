@@ -1,3 +1,6 @@
+if (process.env.PEGALO_ALLOW_DISPOSABLE_D1_TESTS !== '1') {
+  throw new Error('Esta prueba crea una cuenta y modifica datos. Sólo se habilita con PEGALO_ALLOW_DISPOSABLE_D1_TESTS=1 contra una vista D1 desechable. Nunca contra Atlas.');
+}
 // Runs only against a disposable local preview database, never production.
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';

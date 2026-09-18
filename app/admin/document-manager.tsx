@@ -12,8 +12,10 @@ import type { DocumentInfo } from '../downloads';
 export default function DocumentManager({
   initial,
   onChange,
+  uploadsEnabled = true,
 }: {
   initial: DocumentInfo[];
+  uploadsEnabled?: boolean;
   onChange?: (documents: DocumentInfo[]) => void;
 }) {
   const [documents, setDocuments] = useState(initial);
@@ -70,8 +72,9 @@ export default function DocumentManager({
       </p>
       <h1>Listas y promociones</h1>
       <p>
-        Subí el PDF actualizado. Al publicarlo reemplazará la versión anterior
-        para todos los visitantes. Máximo 12 MB por archivo.
+        {uploadsEnabled
+          ? 'Subí el PDF actualizado. Máximo 12 MB por archivo.'
+          : 'Los PDF están incluidos en el proyecto. Para reemplazarlos, solicitá la actualización a quien mantiene la web.'}
       </p>
       <div className="admin-documents">
         {documentKinds.map((kind) => {
@@ -92,7 +95,7 @@ export default function DocumentManager({
                 id={kind}
                 type="file"
                 accept="application/pdf,.pdf"
-                disabled={!!busy}
+                disabled={!uploadsEnabled || !!busy}
                 onChange={(event) =>
                   setFiles((previous) => ({
                     ...previous,
@@ -102,7 +105,7 @@ export default function DocumentManager({
               />
               <button
                 className="admin-button"
-                disabled={!files[kind] || !!busy}
+                disabled={!uploadsEnabled || !files[kind] || !!busy}
                 onClick={() => upload(kind)}
               >
                 {busy === kind ? 'Publicando…' : 'Publicar PDF'}

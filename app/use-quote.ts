@@ -1,7 +1,8 @@
 'use client';
 import { useMemo, useSyncExternalStore } from 'react';
 import type { Product } from './products';
-import { normalizeQuantity, readQuote, type QuoteItem } from './quote-data';
+import { readQuote, type QuoteItem } from './quote-data';
+import { quoteOptions } from './product-presentations';
 const key = 'pegalo:quote:v1';
 const event = 'pegalo:quote-changed';
 
@@ -43,17 +44,19 @@ function save(items: QuoteItem[]) {
 }
 export function useQuote(products: Product[]) {
   const knownIds = useMemo(
-    () => new Set(products.map((p) => p.id)),
+    () =>
+      new Set(
+        products.flatMap((p) => [
+          p.id,
+          ...quoteOptions(p).map((option) => option.key),
+        ]),
+      ),
     [products],
   );
   const raw = useSyncExternalStore(subscribe, snapshot, () => '[]');
   const items = useMemo(() => readQuote(raw, knownIds), [raw, knownIds]);
   return {
     ids: items.map((item) => item.id),
-    quantities: Object.fromEntries(
-      items.map((item) => [item.id, item.quantity]),
-    ),
-    total: items.reduce((sum, item) => sum + item.quantity, 0),
     setIds: (update: (ids: string[]) => string[]) => {
       const current = readQuote(snapshot(), knownIds);
       const ids = [...new Set(update(current.map((item) => item.id)))].filter(
@@ -62,17 +65,9 @@ export function useQuote(products: Product[]) {
       save(
         ids.map((id) => ({
           id,
-          quantity: current.find((item) => item.id === id)?.quantity ?? 1,
+          // Keep the old storage shape readable; consultations have no quantities.
+          quantity: 1,
         })),
-      );
-    },
-    setQuantity: (id: string, quantity: number) => {
-      save(
-        readQuote(snapshot(), knownIds).map((item) =>
-          item.id === id
-            ? { ...item, quantity: normalizeQuantity(quantity) }
-            : item,
-        ),
       );
     },
   };

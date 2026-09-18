@@ -1,14 +1,15 @@
 .downloads-section {
-  padding: 100px 7%;
+  padding: 18px 7% 22px;
   background: #eef1fb;
   color: #102a83;
   display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 7%;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
   scroll-margin-top: 100px;
+  align-items: center;
 }
 .downloads-section h2 {
-  font-size: clamp(36px, 4vw, 60px);
+  font-size: clamp(32px, 3.2vw, 46px);
   font-weight: 600;
   letter-spacing: -0.055em;
   line-height: 1.1;
@@ -18,45 +19,106 @@
   color: #7385bd;
 }
 .downloads-section p {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.7;
 }
 .download-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 14px;
   align-content: center;
+  width: 100%;
 }
 .download-cards article {
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
   background: #fff;
-  padding: 30px;
+  padding: 18px 20px;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 15px;
+  gap: 12px;
+  border: 1px solid #dce4fb;
+  min-height: 0;
+}
+.download-cards article:has(a:hover),
+.download-cards article:has(a:focus-visible) {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px #102a8326;
+}
+.download-cards article:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px #102a8326;
+}
+@media (prefers-reduced-motion: reduce) {
+  .download-cards article {
+    transition: none;
+  }
+  .download-cards article:has(a:hover),
+  .download-cards article:has(a:focus-visible) {
+    transform: none;
+    box-shadow: none;
+  }
+  .download-cards article:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }
 .download-cards h3 {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
 }
 .download-cards article p {
-  font-size: 14px;
+  font-size: 13px;
   flex: 1;
+  margin: 0;
 }
 .download-cards a,
 .download-retry {
   display: inline-flex;
   align-items: center;
   gap: 15px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  min-height: 44px;
+  min-height: 36px;
 }
 .download-unavailable {
-  font-size: 13px;
+  font-size: 12px;
   color: #596681;
-  padding: 12px 0;
+  padding: 8px 0;
+}
+
+@media (max-width: 1020px) {
+  .downloads-section {
+    grid-template-columns: 1fr;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    gap: 26px;
+    width: 100%;
+    margin: 0;
+  }
+  .download-cards {
+    max-width: none;
+    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .downloads-section {
+    padding: 12px 5% 14px;
+    gap: 18px;
+  }
+  .downloads-section h2 {
+    font-size: clamp(30px, 10vw, 38px);
+    margin: 10px 0 12px;
+  }
+  .download-cards {
+    gap: 12px;
+    grid-template-columns: 1fr;
+  }
 }
 .admin-page {
   max-width: 1050px;
@@ -145,11 +207,13 @@
   margin: 15px 0;
 }
 .technical-info a {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  text-decoration: underline;
+  display: list-item;
+  list-style: disclosure-closed inside;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  color: #102a83;
+  text-decoration: none;
   min-height: 44px;
 }
 .technical-pending {
@@ -425,7 +489,7 @@ body .product-dialog .detail-copy .button {
   line-height: 1.7;
   overflow-wrap: anywhere;
 }
-.company-footer address a span {
+.company-footer address > div > span {
   display: block;
   color: #b8c1e8;
   font-size: 12px;
@@ -449,8 +513,7 @@ body .product-dialog .detail-copy .button {
   font-size: 14px;
 }
 .company-footer a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  text-decoration: none;
 }
 .company-footer a:focus-visible {
   outline: 2px solid #fff;

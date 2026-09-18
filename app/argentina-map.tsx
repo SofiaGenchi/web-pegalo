@@ -1,24 +1,28 @@
 'use client';
-import { useRef, useState, type KeyboardEvent } from 'react';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { X } from 'lucide-react';
 import geometry from './argentina-geometry.json';
+import provinceBoundaries from './argentina-province-boundaries.json';
 import territories from './argentina-territories.json';
 import { contactLocations, type ContactLocation } from './contact-locations';
 import type { Distributor } from './content-policy';
 import PegaloName from './pegalo-name';
 function LocationPoint({ location }: { location: ContactLocation }) {
-  const [open, setOpen] = useState(false);
-  const [hover, setHover] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const button = useRef<HTMLButtonElement>(null);
-  const shown = open || hover || focused;
-  const dismiss = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      button.current?.focus();
-      setOpen(false);
-      setHover(false);
-      setFocused(false);
-    }
-  };
+  const whatsapp =
+    location.phones?.filter((phone) =>
+      phone.href.startsWith('https://wa.me/'),
+    ) ?? [];
+  const phones =
+    location.phones?.filter(
+      (phone) => !phone.href.startsWith('https://wa.me/'),
+    ) ?? [];
   return (
     <div
       className="map-location"
@@ -26,79 +30,110 @@ function LocationPoint({ location }: { location: ContactLocation }) {
         left: `${(location.point[0] / 360) * 100}%`,
         top: `${(location.point[1] / 620) * 100}%`,
       }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onFocusCapture={() => setFocused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget)) {
-          setFocused(false);
-          setOpen(false);
-        }
-      }}
     >
-      <button
-        ref={button}
-        className="map-location-dot"
-        aria-label={`Ver ${location.name}, ${location.locality}`}
-        aria-expanded={shown}
-        aria-controls={location.id + '-info'}
-        onKeyDown={dismiss}
-        onClick={() => {
-          setHover(false);
-          setFocused(false);
-          setOpen(!open);
-        }}
-      >
-        <span />
-      </button>
-      <div
-        className="map-location-info"
-        id={location.id + '-info'}
-        hidden={!shown}
-      >
-        <small className="map-location-type">
-          {location.type === 'office' ? 'Oficina oficial' : 'Distribuidor'}
-        </small>
-        <strong>
-          {location.name
-            .split(/(Pegalo)/i)
-            .map((part, index) =>
-              part.toLowerCase() === 'pegalo' ? (
-                <PegaloName key={index} />
-              ) : (
-                part
-              ),
-            )}
-        </strong>
-        <span>{location.address}</span>
-        <span>
-          {location.locality} · {location.province}
-        </span>
-        {location.phones?.length || location.email ? (
-          <div className="map-location-contacts">
-            {location.phones?.map((phone) => (
-              <a
-                key={phone.href}
-                href={phone.href}
-                target={phone.href.startsWith('https:') ? '_blank' : undefined}
-                rel={
-                  phone.href.startsWith('https:')
-                    ? 'noopener noreferrer'
-                    : undefined
-                }
-                onKeyDown={dismiss}
-              >
-                {phone.label}
-              </a>
-            ))}
-            {location.email && (
-              <a href={`mailto:${location.email}`} onKeyDown={dismiss}>
-                {location.email}
-              </a>
-            )}
+      <Dialog>
+        <DialogTrigger
+          className="map-location-dot"
+          aria-label={`Ver ${location.name}, ${location.locality}`}
+        >
+          <span />
+        </DialogTrigger>
+        <DialogContent className="location-dialog" showCloseButton={false}>
+          <DialogClose
+            className="modal-close"
+            aria-label="Cerrar información de contacto"
+          >
+            <X />
+          </DialogClose>
+          <div className="location-summary">
+            <DialogDescription className="location-kind">
+              {location.type === 'office' ? 'Oficina oficial' : 'Distribuidor'}
+            </DialogDescription>
+            <DialogTitle className="location-title">
+              {location.name
+                .split(/(Pegalo)/i)
+                .map((part, index) =>
+                  part.toLowerCase() === 'pegalo' ? (
+                    <PegaloName key={index} />
+                  ) : (
+                    part
+                  ),
+                )}
+            </DialogTitle>
           </div>
-        ) : null}
-      </div>
+          <dl className="location-details">
+            <div>
+              <dt>Dirección</dt>
+              <dd>{location.address?.trim() || '-'}</dd>
+            </div>
+            <div>
+              <dt>Localidad</dt>
+              <dd>{location.locality?.trim() || '-'}</dd>
+            </div>
+            <div>
+              <dt>Provincia</dt>
+              <dd>{location.province?.trim() || '-'}</dd>
+            </div>
+            <div>
+              <dt>WhatsApp</dt>
+              <dd>
+                {whatsapp.length
+                  ? whatsapp.map((phone) => (
+                      <a
+                        className="contact-value"
+                        key={phone.href}
+                        href={phone.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {phone.label.replace(/\s*·\s*WhatsApp/i, '')}
+                      </a>
+                    ))
+                  : '-'}
+              </dd>
+            </div>
+            <div>
+              <dt>Número de teléfono</dt>
+              <dd>
+                {phones.length
+                  ? phones.map((phone) => (
+                      <a
+                        className="contact-value"
+                        key={phone.href}
+                        href={phone.href}
+                        target={
+                          phone.href.startsWith('https:') ? '_blank' : undefined
+                        }
+                        rel={
+                          phone.href.startsWith('https:')
+                            ? 'noopener noreferrer'
+                            : undefined
+                        }
+                      >
+                        {phone.label}
+                      </a>
+                    ))
+                  : '-'}
+              </dd>
+            </div>
+            <div>
+              <dt>Correo electrónico</dt>
+              <dd>
+                {location.email?.trim() ? (
+                  <a
+                    className="contact-value"
+                    href={`mailto:${location.email}`}
+                  >
+                    {location.email}
+                  </a>
+                ) : (
+                  '-'
+                )}
+              </dd>
+            </div>
+          </dl>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -117,8 +152,10 @@ export default function ArgentinaMap({
       locality: d.locality,
       province: d.province,
       point: [
-        geometry.point[0] + (d.longitude + 58.55) * 15.23,
-        geometry.point[1] - (d.latitude + 34.6) * 17.43,
+        geometry.projection.x +
+          (d.longitude - geometry.projection.west) * geometry.projection.scaleX,
+        geometry.projection.y +
+          (geometry.projection.north - d.latitude) * geometry.projection.scaleY,
       ],
       phones: d.phone
         ? [{ label: d.phone, href: 'tel:' + d.phone.replace(/[^+0-9]/g, '') }]
@@ -137,7 +174,23 @@ export default function ArgentinaMap({
           <title id="argentina-map-title">
             Argentina, Islas Malvinas y Sector Antártico Argentino en recuadro
           </title>
+          <defs>
+            <clipPath id="argentina-province-clip">
+              <path d={geometry.path} />
+            </clipPath>
+          </defs>
           <path d={geometry.path} fill="#102a83" />
+          <path
+            d={provinceBoundaries.path}
+            fill="none"
+            stroke="#fff"
+            strokeWidth="0.65"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+            clipPath="url(#argentina-province-clip)"
+            pointerEvents="none"
+          />
           <path d={territories.malvinas} fill="#102a83" />
           <g transform="translate(274 498) scale(0.52)">
             <rect
@@ -163,7 +216,7 @@ export default function ArgentinaMap({
         ))}
       </div>
       <p className="map-hint">
-        Explora el punto para conocer nuestra oficina y distribuidores
+        Hacé clic en un punto para ver la información de contacto
       </p>
     </div>
   );

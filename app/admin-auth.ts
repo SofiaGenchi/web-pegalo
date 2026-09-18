@@ -1,4 +1,4 @@
-import { database } from './admin-db';
+import { findSession, countAttempt } from '#pegalo-repository';
 import { digest } from './password';
 export const cookieName = 'pegalo_admin';
 export const sessionSeconds = 8 * 60 * 60;
@@ -22,12 +22,7 @@ export function sessionToken(headers: Headers) {
 export async function adminUser(headers: Headers) {
   const token = sessionToken(headers);
   if (!/^[a-f0-9]{64}$/.test(token)) return null;
-  return database()
-    .prepare(
-      'SELECT u.id, u.username FROM admin_sessions s JOIN admin_users u ON u.id = s.user_id WHERE s.token = ? AND s.expires > ? AND u.active = 1',
-    )
-    .bind(digest(token), Date.now())
-    .first<{ id: string; username: string }>();
+  return findSession(digest(token));
 }
 export function sameOrigin(request: Request) {
   return request.headers.get('origin') === new URL(request.url).origin;
@@ -50,7 +45,7 @@ export function errorResponse(error: unknown) {
   if (!(error instanceof ApiError))
     console.error(
       'Admin operation failed',
-      error instanceof Error ? error.message : 'unknown',
+      error instanceof Error ? error.name : 'unknown',
     );
   return Response.json(
     {
@@ -102,14 +97,8 @@ export async function readJson(request: Request) {
   }
 }
 export async function limitAttempts(key: string, max: number) {
-  const now = Date.now();
-  const result = await database()
-    .prepare(
-      'INSERT INTO admin_attempts (key, count, expires) VALUES (?, 1, ?) ON CONFLICT(key) DO UPDATE SET count = CASE WHEN expires <= ? THEN 1 ELSE count + 1 END, expires = CASE WHEN expires <= ? THEN excluded.expires ELSE expires END RETURNING count',
-    )
-    .bind(digest(key), now + 15 * 60000, now, now)
-    .first<{ count: number }>();
-  if (!result || result.count > max)
+  const count = await countAttempt(digest(key));
+  if (count > max)
     throw new ApiError(
       'Demasiados intentos. Esperá 15 minutos antes de volver a ingresar.',
       429,

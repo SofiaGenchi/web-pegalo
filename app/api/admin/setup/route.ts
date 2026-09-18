@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers';
+import { setupSecret, rateLimitSource } from '#pegalo-runtime';
 import { timingSafeEqual } from 'node:crypto';
 import {
   ApiError,
@@ -7,18 +7,14 @@ import {
   readJson,
   sameOrigin,
 } from '@/app/admin-auth';
-import { database } from '@/app/admin-db';
+import { createInitialUser } from '#pegalo-repository';
 import { digest, hashPassword } from '@/app/password';
 export async function POST(request: Request) {
   try {
     if (!sameOrigin(request)) throw new ApiError('Origen no permitido.', 403);
-    await limitAttempts(
-      'setup:' + (request.headers.get('cf-connecting-ip') || 'unknown'),
-      5,
-    );
+    await limitAttempts('setup:' + rateLimitSource(request), 5);
     const { token, username, password } = await readJson(request);
-    const expected = (env as unknown as { ADMIN_SETUP_TOKEN?: string })
-      .ADMIN_SETUP_TOKEN;
+    const expected = setupSecret();
     if (
       !expected ||
       expected.length < 32 ||
@@ -39,14 +35,11 @@ export async function POST(request: Request) {
       throw new ApiError(
         'Usá un usuario válido y una contraseña de entre 15 y 256 caracteres.',
       );
-    const result = await database()
-      .prepare(
-        "INSERT INTO admin_users (id, username, password, active) SELECT 'initial-admin', ?, ?, 1 WHERE NOT EXISTS (SELECT 1 FROM admin_users)",
-      )
-      .bind(username.toLowerCase(), await hashPassword(password))
-      .run();
-    if (!result.meta.changes)
-      throw new ApiError('El panel ya fue activado.', 409);
+    const created = await createInitialUser(
+      username.toLowerCase(),
+      await hashPassword(password),
+    );
+    if (!created) throw new ApiError('El panel ya fue activado.', 409);
     return Response.json(
       { ok: true },
       { headers: { 'Cache-Control': 'no-store' } },

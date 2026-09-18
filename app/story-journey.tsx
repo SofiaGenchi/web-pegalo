@@ -1,5 +1,6 @@
 'use client';
 import PegaloName from './pegalo-name';
+import { liquidSurface } from './liquid-surface';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import './story.css';
@@ -12,7 +13,7 @@ export default function StoryJourney({
 }: {
   onProduct: (id: string) => void;
   onContact: () => void;
-  onBrowse: (line: string) => void;
+  onBrowse: (line: string, productFamily?: string) => void;
 }) {
   const root = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
@@ -22,6 +23,10 @@ export default function StoryJourney({
   const neck = useRef<SVGPathElement>(null);
   const silicone = useRef<SVGPathElement>(null);
   const foam = useRef<SVGPathElement>(null);
+  const finale = useRef<HTMLElement>(null);
+  const liquid = useRef<SVGSVGElement>(null);
+  const liquidBody = useRef<SVGPathElement>(null);
+  const liquidEdge = useRef<SVGPathElement>(null);
   const foamTexture = useRef<SVGPathElement>(null);
   useEffect(() => {
     const container = root.current,
@@ -32,6 +37,17 @@ export default function StoryJourney({
     if (!container || !path || !base || !ball || !surface) return;
     const reduce = matchMedia('(prefers-reduced-motion: reduce)');
     let samples: PathSample[] = [];
+    let liquidSize = { width: 1, height: 1, x: 0, y: 0, sourceWidth: 1, sourceHeight: 58 };
+    let expansionDistance = 1;
+    const renderLiquid = (progress: number) => {
+      const { width, height, x, y, sourceWidth, sourceHeight } = liquidSize;
+      const shapes = liquidSurface(width, height, x, y, sourceWidth, progress, 0, sourceHeight);
+      liquidBody.current?.setAttribute('d', shapes.body);
+      liquidEdge.current?.setAttribute('d', shapes.edge);
+      if (liquid.current) liquid.current.style.opacity = progress > 0 ? '1' : '0';
+      finale.current?.classList.toggle('is-flooded', progress > 0);
+    };
+
     let siliconeY = 0,
       foamY = 0,
       siliconeStart = 0,
@@ -68,15 +84,21 @@ export default function StoryJourney({
       });
       const first = points[0],
         last = points[points.length - 1];
-      const target = clamp(
-        first.y + Math.max(0, scroll - 180),
-        first.y,
-        last.y,
-      );
+      // Keep the moving tip in the middle of the viewport after it leaves the nozzle.
+      const viewingLine = window.innerHeight * 0.54;
+      const arrival =
+        scroll + first.y * (1 - formation) + viewingLine * formation;
+      const target = clamp(arrival, first.y, last.y);
       const distance = distanceAtY(samples, target);
       const point = path.getPointAtLength(distance);
       const land = clamp((target - last.y + 70) / 70);
       surface.style.opacity = '1';
+      if (finale.current) {
+        // The foam's rounded end reaches the CTA exactly at the last waypoint.
+        // Paint both the foam and expansion in this same scroll frame: no timer,
+        // damping or second animation frame between contact and spreading.
+        renderLiquid(reduce.matches ? 0 : clamp((arrival - last.y) / expansionDistance));
+      }
       if (reduce.matches) {
         base.style.opacity = '.28';
         path.style.strokeDashoffset = '0';
@@ -145,6 +167,14 @@ export default function StoryJourney({
         };
       });
       if (points.length < 2) return;
+      const button = container.querySelector<HTMLButtonElement>('.drop-destination button');
+      if (button) {
+        const rect = button.getBoundingClientRect();
+        const capRadius = foam.current ? parseFloat(getComputedStyle(foam.current).strokeWidth) / 2 : 0;
+        points[points.length - 1] = { x: rect.left - box.left + rect.width / 2, y: rect.top - box.top - capRadius };
+        const header = document.querySelector('header')?.getBoundingClientRect().height ?? 0;
+        expansionDistance = Math.max(1, window.innerHeight * 0.54 - header);
+      }
       const d = points.reduce((s, p, i) => {
         if (!i) return `M ${p.x} ${p.y}`;
         const prev = points[i - 1],
@@ -156,6 +186,22 @@ export default function StoryJourney({
       surface.setAttribute('viewBox', `0 0 ${box.width} ${box.height}`);
       path.setAttribute('d', d);
       base.setAttribute('d', d);
+      if (button && finale.current) {
+        const rect = button.getBoundingClientRect();
+        const section = finale.current.getBoundingClientRect();
+        liquidSize = {
+          width: section.width,
+          height: section.height,
+          x: rect.left - section.left + rect.width / 2,
+          y: rect.top - section.top + rect.height / 2,
+          sourceWidth: rect.width,
+          sourceHeight: rect.height,
+        };
+        liquid.current?.setAttribute(
+          'viewBox',
+          `0 0 ${section.width} ${section.height}`,
+        );
+      }
       total = path.getTotalLength();
       samples = Array.from({ length: 513 }, (_, i) => {
         const distance = (total * i) / 512;
@@ -183,6 +229,7 @@ export default function StoryJourney({
     resize.observe(container);
     window.addEventListener('scroll', request, { passive: true });
     window.addEventListener('resize', measure);
+    document.addEventListener('visibilitychange', request);
     reduce.addEventListener('change', request);
     measure();
     return () => {
@@ -190,6 +237,7 @@ export default function StoryJourney({
       resize.disconnect();
       window.removeEventListener('scroll', request);
       window.removeEventListener('resize', measure);
+      document.removeEventListener('visibilitychange', request);
       reduce.removeEventListener('change', request);
     };
   }, []);
@@ -245,8 +293,6 @@ export default function StoryJourney({
         </g>
       </svg>
       <section className="journey-hero" id="inicio" data-scene>
-        <div className="hero-halo" aria-hidden="true" />
-        <span className="hero-side-note">UN MUNDO DE POSIBILIDADES</span>
         <div className="journey-hero-copy">
           <p className="story-eyebrow">ADHESIVOS QUE CONECTAN TU MUNDO</p>
           <h1>
@@ -254,17 +300,18 @@ export default function StoryJourney({
             <em>Gran conexión.</em>
           </h1>
           <p>
-            Para lo que creás. Para lo que reparás.
-            <br />
-            Para todo lo que está por venir.
+            Fabricamos e importamos adhesivos y selladores para la industria, el comercio y el hogar.
           </p>
+          <div className="journey-hero-actions">
+            <a className="story-button" href="#catalogo">
+              Ver catálogo
+            </a>
+            <button className="journey-catalog-shortcut" onClick={onContact}>
+              Consultar venta mayorista
+            </button>
+          </div>
         </div>
         <div className="nozzle-scene">
-          <span className="nozzle-caption">
-            PEQUEÑOS DETALLES.
-            <br />
-            GRANDES SOLUCIONES.
-          </span>
           <div className="nozzle-crop">
             <Image
               unoptimized
@@ -276,31 +323,23 @@ export default function StoryJourney({
             />
             <span className="nozzle-origin" data-route-point />
           </div>
-          <span className="drop-caption">
-            Hacé scroll.
-            <br />
-            Lo que sigue nos une.
-          </span>
         </div>
         <div className="journey-hero-foot">
-          <span>IMPORTACIÓN Y VENTA MAYORISTA</span>
-          <span>ADHESIVOS + SELLADORES + SOLUCIONES</span>
+          <span>VENTA MAYORISTA A TODO EL PAÍS</span>
+          <span>ADHESIVOS &amp; SELLADORES</span>
         </div>
       </section>
       <div className="journey-ribbon" aria-hidden="true">
         <div>
           {[0, 1].map((i) => (
             <span key={i}>
-              CREÁ <b>✳</b> REPARÁ <b>✳</b> TRANSFORMÁ <b>✳</b> PEGALO <b>✳</b>{' '}
-              ARTESANATO <b>✳</b>{' '}
+              CREÁ <b>-</b> REPARÁ <b>-</b> TRANSFORMÁ <b>-</b> PEGÁ{' '}
+              <b>-</b>{' '}
             </span>
           ))}
         </div>
       </div>
       <section className="journey-intro" data-scene>
-        <span className="intro-graphic" aria-hidden="true">
-          +
-        </span>
         <span className="intro-route-point" data-route-point />
         <p className="story-eyebrow" data-reveal>
           UNA MARCA QUE TE ACOMPAÑA
@@ -317,12 +356,10 @@ export default function StoryJourney({
             <strong>1998.</strong>
           </span>
           <p>
-            Somos una empresa argentina dedicada a la importación y
-            comercialización mayorista de adhesivos y selladores.
+            Siempre dedicados a fabricar, importar y distribuir una amplia gama de adhesivos y selladores.
             <br />
             <br />
-            Acercamos soluciones a comercios, profesionales y personas que
-            crean, reparan y transforman.
+            A lo largo de más de 18 años, Pegalo ha mostrado claros signos de liderazgo, desarrollando ideas al servicio de las empresas del sector y aportando soluciones concretas a los obstáculos que se interponen en el camino.
           </p>
         </div>
       </section>
@@ -333,12 +370,10 @@ export default function StoryJourney({
       >
         <div className="chapter-label">
           <span>EL PODER DE LO PEQUEÑO</span>
-          <span>01 — 03</span>
         </div>
         <span className="scene-point" data-route-point />
         <div className="scene-art" data-reveal>
           <span className="scene-orbit" />
-          <span className="scene-index">01</span>
           <Image
             unoptimized
             width={500}
@@ -359,7 +394,7 @@ export default function StoryJourney({
         </div>
         <div className="scene-copy" data-reveal>
           <p className="story-eyebrow">
-            01 / CIANOACRILATOS <PegaloName />
+            CIANOACRILATOS <PegaloName />
           </p>
           <h2>
             Una gota.
@@ -387,14 +422,13 @@ export default function StoryJourney({
       <section className="journey-product artesanato-scene" data-scene>
         <div className="chapter-label">
           <span>EL DETALLE HACE LA DIFERENCIA</span>
-          <span>02 — 03</span>
         </div>
         <span className="scene-point" data-route-point />
         <div className="scene-copy" data-reveal>
           <p className="artesanato-logo">
             ARTESANATO<span>®</span>
           </p>
-          <p className="story-eyebrow">02 / SILICONAS</p>
+          <p className="story-eyebrow">SILICONAS</p>
           <h2>
             Sellá el detalle.
             <br />
@@ -411,14 +445,13 @@ export default function StoryJourney({
           </div>
           <button
             className="story-button"
-            onClick={() => onProduct('artesanato')}
+            onClick={() => onBrowse('Todos', 'Siliconas y selladores')}
           >
             Explorá las siliconas
           </button>
         </div>
         <div className="scene-art" data-reveal>
           <span className="scene-orbit" />
-          <span className="scene-index">02</span>
           <Image
             unoptimized
             width={500}
@@ -433,12 +466,10 @@ export default function StoryJourney({
       <section className="journey-product solutions-scene" data-scene>
         <div className="chapter-label">
           <span>SEGUÍ DÁNDOLE FORMA A TUS IDEAS</span>
-          <span>03 — 03</span>
         </div>
         <span className="scene-point" data-route-point />
         <div className="scene-art" data-reveal>
           <span className="scene-orbit" />
-          <span className="scene-index">03</span>
           <Image
             unoptimized
             width={500}
@@ -457,7 +488,7 @@ export default function StoryJourney({
           />
         </div>
         <div className="scene-copy" data-reveal>
-          <p className="story-eyebrow">03 / MÁS FORMAS DE UNIR</p>
+          <p className="story-eyebrow">MÁS FORMAS DE UNIR</p>
           <h2>
             Para cada idea,
             <br />
@@ -468,9 +499,9 @@ export default function StoryJourney({
             catálogo para acompañarte de principio a fin.
           </p>
           <div className="solution-links">
-            <button onClick={() => onProduct('acrilico')}>Selladores</button>
-            <button onClick={() => onProduct('espuma')}>Poliuretanos</button>
-            <button onClick={() => onProduct('barras')}>
+            <button onClick={() => onBrowse('Todos', 'Siliconas y selladores')}>Selladores</button>
+            <button onClick={() => onBrowse('Todos', 'Poliuretanos')}>Poliuretanos</button>
+            <button onClick={() => onBrowse('Todos', 'Hot melt y aplicadores')}>
               Hot melt y aplicadores
             </button>
           </div>
@@ -479,7 +510,16 @@ export default function StoryJourney({
           </button>
         </div>
       </section>
-      <section className="journey-finale" id="seguir" data-scene>
+      <section className="journey-finale" id="seguir" data-scene ref={finale}>
+        <svg
+          ref={liquid}
+          className="finale-liquid"
+          aria-hidden="true"
+          preserveAspectRatio="none"
+        >
+          <path ref={liquidBody} fill="#f1000e" />
+          <path ref={liquidEdge} className="liquid-front" />
+        </svg>
         <p className="story-eyebrow" data-reveal>
           EL RECORRIDO SIGUE CON VOS
         </p>

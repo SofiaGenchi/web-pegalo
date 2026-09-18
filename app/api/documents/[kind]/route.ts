@@ -1,11 +1,20 @@
 import { requireAdmin, errorResponse } from '@/app/admin-auth';
-import { storage } from '@/app/document-store';
+import bundledDocuments from '@/app/bundled-documents.json';
+import { storage, canUploadDocuments } from '@/app/document-store';
 import { isDocumentKind, isPdf, MAX_PDF_BYTES } from '@/app/document-policy';
 type Context = { params: Promise<{ kind: string }> };
 export async function GET(_request: Request, context: Context) {
   const { kind } = await context.params;
   if (!isDocumentKind(kind))
     return new Response('Documento no encontrado', { status: 404 });
+  if (!canUploadDocuments())
+    return new Response(null, {
+      status: 307,
+      headers: {
+        Location: bundledDocuments[kind].url,
+        'Cache-Control': 'no-store',
+      },
+    });
   try {
     const object = await storage().get(`downloads/${kind}.pdf`);
     if (!object)
@@ -31,6 +40,11 @@ export async function PUT(request: Request, context: Context) {
   } catch (error) {
     return errorResponse(error);
   }
+  if (!canUploadDocuments())
+    return Response.json(
+      { error: 'Los PDF se actualizan desde el proyecto en esta etapa.' },
+      { status: 409 },
+    );
   const { kind } = await context.params;
   if (!isDocumentKind(kind))
     return Response.json({ error: 'Documento inválido.' }, { status: 400 });

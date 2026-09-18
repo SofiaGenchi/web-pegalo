@@ -1,4 +1,4 @@
-export const documentKinds = ['precios', 'promociones'] as const;
+export const documentKinds = [] as const;
 export type DocumentKind = (typeof documentKinds)[number];
 export const documentLabels = {
   precios: 'Lista de precios',
