@@ -2,21 +2,23 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { productPath, uniqueProducts } from './product-links';
 import {
   presentationBadges,
-  presentationGroups,
-  quoteOptions,
   quoteProductId,
   quotePresentation,
 } from './product-presentations';
-import ProductOptionSelect from './product-option-select';
 import PegaloName from './pegalo-name';
 import CompanySection from './company-section';
 import BusinessSections from './business-sections';
 import BusinessStack from './business-stack';
 import './business-stack.css';
 import './business-sections.css';
-import { Menu, X, Plus, Check, Search } from 'lucide-react';
+import { X, Plus, Search } from 'lucide-react';
+import SiteHeader, { navigation } from './site-header';
+import SiteFooter from './site-footer';
 import {
   Dialog,
   DialogContent,
@@ -37,15 +39,6 @@ import './documents.css';
 import './simple-view.css';
 import { useSimpleView } from './use-simple-view';
 
-const navigation = [
-  ['Inicio', 'inicio'],
-  ['Productos', 'catalogo'],
-  ['Descargas', 'descargas'],
-  ['Empresa', 'empresa'],
-  ['Dónde estamos', 'donde-atendemos'],
-  ['Contacto', 'contacto'],
-];
-
 const whatsapp = (message: string) =>
   `https://wa.me/541164174036?text=${encodeURIComponent(message)}`;
 
@@ -59,6 +52,7 @@ export default function Home({
   catalogUnavailable?: boolean;
 }) {
   const root = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const { simple } = useSimpleView();
   const [menu, setMenu] = useState(false);
   const [visibleCount, setVisibleCount] = useState(4);
@@ -72,13 +66,6 @@ export default function Home({
     updateQuery(value);
     setVisibleCount(4);
   };
-  const [selected, setSelected] = useState<Product | null>(null);
-  const [selectedOption, setSelectedOption] = useState('');
-  const selectedOptions = selected ? quoteOptions(selected) : [];
-  const selectedKey =
-    selectedOptions.find((option) => option.key === selectedOption)?.key ??
-    selectedOptions[0]?.key ??
-    '';
   const { ids: quote, setIds: setQuote } = useQuote(products);
   const [family, updateFamily] = useState('Todos');
   const setFamily = (value: string) => {
@@ -91,28 +78,17 @@ export default function Home({
   const [locality, setLocality] = useState('');
   const [note, setNote] = useState('');
   useEffect(() => {
-    if (!menu) return;
-    const closeMenu = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape') return;
-      setMenu(false);
-      root.current?.querySelector<HTMLButtonElement>('.mobile-toggle')?.focus();
-    };
-    window.addEventListener('keydown', closeMenu);
-    return () => window.removeEventListener('keydown', closeMenu);
-  }, [menu]);
-  useEffect(() => {
     const openLinkedProduct = () => {
+      if (new URL(window.location.href).searchParams.get('consulta') === '1') setQuoteOpen(true);
       const id = new URL(window.location.href).searchParams.get('producto');
-      if (id)
-        setSelected(products.find((product) => product.id === id) ?? null);
+      const product = products.find((product) => product.id === id);
+      if (product) router.replace(productPath(product));
     };
     openLinkedProduct();
     window.addEventListener('popstate', openLinkedProduct);
     return () => window.removeEventListener('popstate', openLinkedProduct);
-  }, [products]);
-  const catalogProducts = products.filter(
-    (p) => !['ciano-20', 'ciano-100'].includes(p.id),
-  );
+  }, [products, router]);
+  const catalogProducts = uniqueProducts(products);
   const visible = catalogProducts.filter(
     (p) =>
       (filter === 'Todos' || p.lines.includes(filter)) &&
@@ -129,8 +105,6 @@ export default function Home({
         ),
   );
   const shownProducts = visible.slice(0, visibleCount);
-  const add = (id: string) =>
-    setQuote((q) => (q.includes(id) ? q : [...q, id]));
   const browse = (line: string, productFamily = 'Todos') => {
     setFilter(line);
     setFamily(productFamily);
@@ -396,56 +370,7 @@ export default function Home({
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>
-      <header className="header">
-        <a href="#inicio" className="logo" aria-label="Pegalo, inicio">
-          <span className="pegalo-wordmark" aria-hidden="true">
-            PEGALO<sup className="pegalo-registered">®</sup>
-          </span>
-        </a>
-        <nav aria-label="Navegación principal">
-          {navigation.map(([label, id]) => (
-            <a
-              href={'#' + id}
-              key={id}
-              aria-current={activeSection === id ? 'location' : undefined}
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
-        <button
-          className={'header-cta' + (quote.length > 0 ? ' has-products' : '')}
-          onClick={() => setQuoteOpen(true)}
-        >
-          {quote.length > 0 ? 'Tu consulta' : 'Armar consulta'}{' '}
-          {quote.length > 0 && (
-            <span className="nav-quote-count">{quote.length}</span>
-          )}{' '}
-        </button>
-        <button
-          className="mobile-toggle"
-          aria-label={menu ? 'Cerrar menú' : 'Abrir menú'}
-          aria-expanded={menu}
-          aria-controls="mobile-nav"
-          onClick={() => setMenu(!menu)}
-        >
-          {menu ? <X /> : <Menu />}
-        </button>
-        <div className="scroll-progress" />
-      </header>
-      {menu && (
-        <nav
-          className="mobile-nav"
-          id="mobile-nav"
-          aria-label="Navegación móvil"
-        >
-          {navigation.map(([label, id]) => (
-            <a href={'#' + id} key={id} onClick={() => setMenu(false)}>
-              {label}
-            </a>
-          ))}
-        </nav>
-      )}
+      <SiteHeader home quoteCount={quote.length} onQuote={() => setQuoteOpen(true)} menu={menu} onMenuChange={setMenu} activeSection={activeSection} />
       <main id="contenido">
         {simple ? (
           <section className="simple-intro" id="inicio">
@@ -470,9 +395,10 @@ export default function Home({
           </section>
         ) : (
           <StoryJourney
-            onProduct={(id) =>
-              setSelected(products.find((p) => p.id === id) ?? null)
-            }
+            onProduct={(id) => {
+              const product = products.find((p) => p.id === id);
+              if (product) router.push(productPath(product));
+            }}
             onContact={() => setQuoteOpen(true)}
             onBrowse={browse}
           />
@@ -573,11 +499,11 @@ export default function Home({
                 </span>
               </div>
               <div className="product-grid" id="catalog-product-grid">
-                {shownProducts.map((p) => (
-                  <article className="product-card" key={p.id}>
-                    <button
+                {visible.map((p, index) => (
+                  <article className="product-card" key={p.id} style={index >= visibleCount ? { display: 'none' } : undefined}>
+                    <Link
                       className="product-open"
-                      onClick={() => setSelected(p)}
+                      href={productPath(p)}
                       aria-label={'Ver ' + p.name}
                     >
                       <div className="product-image">
@@ -606,13 +532,13 @@ export default function Home({
                           ))}
                         </div>
                       </div>
-                    </button>
-                    <button
+                    </Link>
+                    <Link
                       className={'add-product'}
-                      onClick={() => setSelected(p)}
+                      href={productPath(p)}
                     >
                       <Plus size={16} /> Elegir y agregar
-                    </button>
+                    </Link>
                   </article>
                 ))}
               </div>
@@ -677,240 +603,9 @@ export default function Home({
           <BusinessSections distributors={distributors} />
         </BusinessStack>
       </main>
-      <footer className="company-footer">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <a
-              href="#inicio"
-              className="logo"
-              aria-label="Pegalo, volver al inicio"
-            >
-              <span className="pegalo-wordmark" aria-hidden="true">
-                PEGALO<sup className="pegalo-registered">®</sup>
-              </span>
-            </a>
-            <p>
-              Desde 1998, importamos y comercializamos adhesivos y selladores
-              para comercios y profesionales de Argentina.
-            </p>
-          </div>
-          <div className="footer-contact">
-            <h2>Contactanos</h2>
-            <address>
-              <div>
-                <span>WhatsApp</span>
-                <a
-                  className="contact-value"
-                  href="https://wa.me/541164174036"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  +54 9 11 6417-4036
-                </a>
-              </div>
-              <div>
-                <span>Teléfono</span>
-                <a className="contact-value" href="tel:08001220975">
-                  0800-122-0975
-                </a>
-              </div>
-              <div>
-                <span>Correo electrónico</span>
-                <a className="contact-value" href="mailto:ventas@pegalo.com.ar">
-                  ventas@pegalo.com.ar
-                </a>
-              </div>
-              <div>
-                <span>Encontranos</span>
-                <a
-                  className="contact-value"
-                  href="https://www.google.com/maps/search/?api=1&query=Asamblea%204355%2C%20Santos%20Lugares%2C%20Buenos%20Aires"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Asamblea 4355, Santos Lugares
-                  <br />
-                  CP 1676, Buenos Aires
-                </a>
-              </div>
-            </address>
-          </div>
-          <nav className="footer-social" aria-label="Redes sociales">
-            <h2>Seguinos</h2>
-            <p>@adhesivospegalo</p>
-            <a
-              className="contact-value"
-              href="https://www.instagram.com/adhesivospegalo/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Instagram
-            </a>
-            <a
-              className="contact-value"
-              href="https://www.facebook.com/adhesivospegalo/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Facebook
-            </a>
-            <a
-              className="contact-value"
-              href="https://www.tiktok.com/@adhesivospegalo"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              TikTok
-            </a>
-          </nav>
-        </div>
-        <div className="footer-bottom">
-          <p>
-            © 2026 <PegaloName />. Todos los derechos reservados.
-          </p>
-          <div>
-            <a href="#inicio">Volver arriba</a>
-          </div>
-        </div>
-      </footer>
-      <BackToTop raised={false} hidden={menu || quoteOpen || !!selected} />
-      <FaqChat hidden={menu || quoteOpen || !!selected} />
-      <Dialog
-        open={!!selected}
-        onOpenChange={(open) => {
-          if (!open) setSelected(null);
-        }}
-      >
-        <DialogContent className="product-dialog" showCloseButton={false}>
-          <DialogClose className="modal-close" aria-label="Cerrar ficha">
-            <X />
-          </DialogClose>
-          {selected && (
-            <>
-              <div className="detail-image">
-                <Image
-                  unoptimized
-                  width={500}
-                  height={500}
-                  src={selected.image || '/product-placeholder.svg'}
-                  alt={selected.name}
-                />
-              </div>
-              <div className="detail-copy">
-                <p className="eyebrow">
-                  LÍNEA{' '}
-                  {selected.line === 'Pegalo' ? (
-                    <PegaloName />
-                  ) : (
-                    selected.line.toUpperCase()
-                  )}
-                </p>
-                <DialogTitle className="detail-title">
-                  {selected.name}
-                </DialogTitle>
-                <DialogDescription className="detail-description">
-                  {selected.use}
-                </DialogDescription>
-                {selected.id.startsWith('ciano-') && (
-                  <div className="variant-picker">
-                    <span>Elegí la presentación</span>
-                    <div>
-                      {[10, 20, 100]
-                        .filter((size) =>
-                          products.some((p) => p.id === 'ciano-' + size),
-                        )
-                        .map((size) => (
-                          <button
-                            key={size}
-                            aria-pressed={selected.id === 'ciano-' + size}
-                            onClick={() =>
-                              setSelected(
-                                products.find((p) => p.id === 'ciano-' + size)!,
-                              )
-                            }
-                          >
-                            {size} G
-                          </button>
-                        ))}
-                    </div>
-                  </div>
-                )}
-                <div className="presentation-groups">
-                  {presentationGroups(selected).map((group, index) => (
-                    <dl className="presentation-group" key={index}>
-                      {group.color && (
-                        <>
-                          <dt>Color:</dt>
-                          <dd>{group.color}</dd>
-                        </>
-                      )}
-                      <dt>
-                        {selected.id === 'teflon'
-                          ? 'Presentación (medidas en pulgadas):'
-                          : 'Presentación:'}
-                      </dt>
-                      <dd>{group.presentation}</dd>
-                    </dl>
-                  ))}
-                </div>
-                <label className="field variant-field">
-                  {selected.id === 'teflon'
-                    ? 'Presentación (pulgadas)'
-                    : 'Presentación y color'}
-                  <ProductOptionSelect
-                    value={selectedKey}
-                    options={selectedOptions}
-                    onChange={setSelectedOption}
-                    label={selected.id === 'teflon' ? 'Presentación (pulgadas)' : 'Presentación y color'}
-                  />
-                </label>
-                <output className="selection-feedback">
-                  {quote.includes(selectedKey)
-                    ? 'Esta presentación ya está en tu consulta. Podés elegir otra o continuar con tu consulta.'
-                    : ''}
-                </output>
-                <button
-                  className="button"
-                  disabled={quote.includes(selectedKey)}
-                  onClick={() => add(selectedKey)}
-                >
-                  {quote.includes(selectedKey)
-                    ? 'Agregado a tu consulta'
-                    : 'Agregar a consulta'}
-                  {quote.includes(selectedKey) ? (
-                    <Check size={18} />
-                  ) : (
-                    <Plus size={18} />
-                  )}
-                </button>
-                {quote.includes(selectedKey) && (
-                  <button
-                    className="detail-quote-link"
-                    onClick={() => {
-                      setSelected(null);
-                      setQuoteOpen(true);
-                    }}
-                  >
-                    Continuar con mi consulta
-                  </button>
-                )}
-                {selected.technicalPdf && (
-                  <div className="technical-info">
-                    <a
-                      href={selected.technicalPdf}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Información técnica (PDF, se abre en una nueva pestaña)"
-                    >
-                      Información técnica
-                    </a>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      <SiteFooter />
+      <BackToTop raised={false} hidden={menu || quoteOpen} />
+      <FaqChat hidden={menu || quoteOpen} />
       <Dialog open={quoteOpen} onOpenChange={setQuoteOpen}>
         <DialogContent className="quote-dialog" showCloseButton={false}>
           <DialogClose className="modal-close" aria-label="Cerrar consulta">

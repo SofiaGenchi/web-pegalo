@@ -1,8 +1,12 @@
 import type { MetadataRoute } from 'next';
 import { absoluteUrl } from './seo';
+import { loadActiveProducts } from './product-catalog';
+import { productPath, uniqueProducts } from './product-links';
 
-// Only the existing public page: sections and product dialogs are not routes.
-export default function sitemap(): MetadataRoute.Sitemap {
-  const url = absoluteUrl('/');
-  return url ? [{ url }] : [];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const products = await loadActiveProducts();
+  return ['/', ...uniqueProducts(products).map(productPath)].flatMap((path) => {
+    const url = absoluteUrl(path);
+    return url ? [{ url }] : [];
+  });
 }

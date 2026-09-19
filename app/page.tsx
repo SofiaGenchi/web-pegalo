@@ -2,13 +2,17 @@ import Home from './home';
 import { loadContent } from './content-store';
 import { absoluteUrl, jsonLd, pageMetadata } from './seo';
 import { faqStructuredData } from './faq-data';
+import { productPath, uniqueProducts } from './product-links';
+import { redirect } from 'next/navigation';
 export const metadata = pageMetadata(
   'Adhesivos Pegalo | Venta mayorista de adhesivos y selladores',
   'Somos fabricantes e importadores de una alta gama de productos  orientados a mercados como el  Automotor, Construcción, Hogar,  Artesanía, Zapatero o Carpintería.',
   '/',
 );
 export const dynamic = 'force-dynamic';
-export default async function Page() {
+export default async function Page({ searchParams }: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   // Preserve the approved brand loading animation and its original timing.
   const [data] = await Promise.all([
     loadContent().catch(() => null),
@@ -17,6 +21,11 @@ export default async function Page() {
   if (!data) {
     return <Home products={[]} distributors={[]} catalogUnavailable />;
   }
+  const { producto } = await searchParams;
+  const linkedProduct = data.content.products.find(
+    (product) => product.active && product.id === producto,
+  );
+  if (linkedProduct) redirect(productPath(linkedProduct));
   return (
     <>
       <script
@@ -70,28 +79,27 @@ export default async function Page() {
             '@context': 'https://schema.org',
             '@type': 'ItemList',
             name: 'Catálogo mayorista de adhesivos y selladores Pegalo',
-            itemListElement: data.content.products
-              .filter((product) => product.active)
-              .map((product, index) => ({
-                '@type': 'ListItem',
-                position: index + 1,
-                item: {
-                  '@type': 'Product',
-                  name: product.name,
-                  brand: {
-                    '@type': 'Brand',
-                    name: product.line,
-                  },
-                  description: product.use,
-                  category: product.family,
-                  ...(product.image
-                    ? { image: absoluteUrl(product.image) }
-                    : {}),
-                  ...(product.technicalPdf
-                    ? { subjectOf: absoluteUrl(product.technicalPdf) }
-                    : {}),
+            itemListElement: uniqueProducts(
+              data.content.products.filter((product) => product.active),
+            ).map((product, index) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              item: {
+                '@type': 'Product',
+                url: absoluteUrl(productPath(product)),
+                name: product.name,
+                brand: {
+                  '@type': 'Brand',
+                  name: product.line,
                 },
-              })),
+                description: product.use,
+                category: product.family,
+                ...(product.image ? { image: absoluteUrl(product.image) } : {}),
+                ...(product.technicalPdf
+                  ? { subjectOf: absoluteUrl(product.technicalPdf) }
+                  : {}),
+              },
+            })),
           }),
         }}
       />

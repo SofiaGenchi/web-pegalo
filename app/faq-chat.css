@@ -362,3 +362,54 @@
   font-size: 11px;
   text-align: center;
 }
+
+@media (max-width: 430px) {
+  .faq-chat {
+    right: max(10px, env(safe-area-inset-right));
+    bottom: max(10px, env(safe-area-inset-bottom));
+    max-width: calc(100vw - 20px);
+  }
+  .faq-chat-panel {
+    width: calc(100vw - 20px);
+    height: min(560px, calc(100dvh - 92px - env(safe-area-inset-bottom)));
+    border-radius: 16px;
+  }
+  .faq-chat-header {
+    padding: 15px 14px;
+  }
+  .faq-chat-messages {
+    padding: 16px 12px;
+  }
+  .faq-chat-topics {
+    gap: 6px;
+    padding-inline: 12px;
+  }
+  .faq-chat-topics button {
+    min-height: 40px;
+  }
+  .faq-chat-launcher.faq-chat-launcher-mascot {
+    width: 84px;
+    height: 84px;
+  }
+}
+
+@media (max-width: 360px) {
+  .faq-chat-panel {
+    width: calc(100vw - 16px);
+    height: min(540px, calc(100dvh - 84px - env(safe-area-inset-bottom)));
+  }
+  .faq-chat-invitation {
+    width: min(204px, calc(100vw - 96px));
+    padding: 12px 8px 12px 14px;
+  }
+  .faq-chat-invite-copy .faq-chat-greeting {
+    font-size: 16px;
+  }
+  .faq-chat-invite-copy strong {
+    font-size: 11px;
+  }
+  .faq-chat-launcher.faq-chat-launcher-mascot {
+    width: 76px;
+    height: 76px;
+  }
+}

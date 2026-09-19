@@ -1159,6 +1159,202 @@
   box-shadow: none;
   transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1), color 160ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+
+/* Responsive pass for the narrative landing: content-first on phones, composed on tablets. */
+.brand-journey {
+  container-type: inline-size;
+}
+.brand-journey .story-button,
+.brand-journey .journey-catalog-shortcut,
+.brand-journey .final-catalog-link,
+.solution-links button {
+  min-height: 44px;
+}
+.journey-hero-copy,
+.scene-copy,
+.intro-bottom,
+.journey-finale > p:not(.story-eyebrow) {
+  min-width: 0;
+}
+.journey-hero h1,
+.scene-copy h2,
+.journey-intro h2,
+.journey-finale h2 {
+  text-wrap: balance;
+  overflow-wrap: normal;
+}
+.journey-hero-copy > p:not(.story-eyebrow),
+.scene-copy > p:not(.story-eyebrow):not(.artesanato-logo),
+.intro-bottom > p,
+.journey-finale > p:not(.story-eyebrow) {
+  text-wrap: pretty;
+}
+
+@media (width <= 1024px) and (width > 700px) {
+  .journey-hero {
+    padding-top: 300px;
+    padding-bottom: 82px;
+  }
+  .journey-hero h1 {
+    font-size: clamp(64px, 8vw, 82px);
+  }
+  .journey-product {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 6%;
+    min-height: 780px;
+  }
+  .scene-art {
+    height: clamp(430px, 50vw, 520px);
+  }
+  .scene-copy h2 {
+    font-size: clamp(48px, 6vw, 62px);
+  }
+  .artesanato-scene .scene-copy h2 {
+    font-size: clamp(44px, 5.5vw, 56px);
+  }
+  .journey-finale {
+    min-height: 720px;
+  }
+}
+
+@media (width <= 700px) {
+  .brand-journey h1,
+  .brand-journey h2 {
+    letter-spacing: -0.04em;
+  }
+  .journey-hero {
+    padding-inline: var(--page-gutter, 6%);
+    padding-top: clamp(228px, 64vw, 270px);
+  }
+  .journey-hero h1 {
+    font-size: clamp(40px, 12vw, 58px);
+    letter-spacing: -0.045em;
+  }
+  .journey-hero-copy > p:not(.story-eyebrow) {
+    font-size: 15px;
+    line-height: 1.72;
+  }
+  .journey-hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+  .journey-hero-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+  .story-button,
+  .journey-catalog-shortcut,
+  .final-catalog-link {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding-inline: 18px;
+  }
+  .journey-intro {
+    min-height: 0;
+    padding-inline: var(--page-gutter, 7%);
+  }
+  .journey-product {
+    padding-inline: var(--page-gutter, 7%);
+    gap: 34px;
+  }
+  .scene-art {
+    height: clamp(300px, 88vw, 390px);
+  }
+  .scene-bottle {
+    width: 112%;
+  }
+  .scene-copy h2 {
+    font-size: clamp(38px, 11vw, 56px);
+    letter-spacing: -0.045em;
+  }
+  .scene-copy > p:not(.story-eyebrow):not(.artesanato-logo) {
+    max-width: 48ch;
+  }
+  .solution-links button {
+    font-size: 14px;
+  }
+  .journey-finale {
+    min-height: 0;
+    padding-inline: var(--page-gutter, 7%);
+  }
+  .journey-finale h2 {
+    font-size: clamp(48px, 14vw, 76px);
+    letter-spacing: -0.045em;
+  }
+  .drop-destination {
+    display: block;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+  .final-catalog-link {
+    max-width: 360px;
+    margin-inline: auto;
+  }
+}
+
+@media (width <= 430px) {
+  .journey-hero {
+    padding-bottom: 78px;
+  }
+  .hero-halo {
+    width: min(420px, 115vw);
+    height: min(420px, 115vw);
+  }
+  .nozzle-scene {
+    height: 164px;
+  }
+  .journey-hero-foot {
+    left: var(--page-gutter, 6%);
+    right: var(--page-gutter, 6%);
+  }
+  .journey-ribbon span {
+    font-size: clamp(23px, 7vw, 28px);
+  }
+  .journey-product {
+    padding-top: 88px;
+    padding-bottom: 92px;
+  }
+  .scene-art {
+    height: clamp(275px, 82vw, 345px);
+  }
+  .scene-orbit {
+    inset: 10% 1%;
+  }
+  .scene-index {
+    font-size: 58px;
+    letter-spacing: -4px;
+  }
+  .material-tags span {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .artesanato-logo {
+    font-size: clamp(24px, 8vw, 29px);
+    max-width: 100%;
+  }
+}
+
+@media (width <= 360px) {
+  .journey-hero h1 {
+    font-size: clamp(37px, 11.5vw, 44px);
+  }
+  .journey-hero-copy > p:not(.story-eyebrow),
+  .scene-copy > p:not(.story-eyebrow):not(.artesanato-logo),
+  .intro-bottom > p {
+    font-size: 14px;
+  }
+  .scene-copy h2 {
+    font-size: clamp(35px, 10.5vw, 44px);
+  }
+  .journey-finale h2 {
+    font-size: clamp(43px, 13vw, 56px);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   .drop-destination .story-button { transform: none !important; }
 }
