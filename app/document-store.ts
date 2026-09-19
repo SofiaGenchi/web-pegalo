@@ -1,6 +1,18 @@
 import bundledDocuments from './bundled-documents.json';
 import { bucket } from '#pegalo-runtime';
-import { documentKinds, documentLabels } from './document-policy';
+import {
+  documentKinds,
+  documentLabels,
+  type DocumentKind,
+} from './document-policy';
+type BundledDocument = {
+  url: string;
+  updatedAt: string | null;
+  size: number | null;
+};
+const bundledDocumentMap = bundledDocuments as Partial<
+  Record<DocumentKind, BundledDocument>
+>;
 export function storage() {
   const result = bucket();
   if (!result) throw new Error('Almacenamiento de documentos no disponible.');
@@ -11,13 +23,16 @@ export function canUploadDocuments() {
 }
 export async function listDocuments() {
   if (!canUploadDocuments())
-    return documentKinds.map((kind) => ({
-      kind,
-      title: documentLabels[kind],
-      available: true,
-      updatedAt: bundledDocuments[kind].updatedAt,
-      size: bundledDocuments[kind].size,
-    }));
+    return documentKinds.map((kind) => {
+      const document = bundledDocumentMap[kind];
+      return {
+        kind,
+        title: documentLabels[kind],
+        available: !!document,
+        updatedAt: document?.updatedAt ?? null,
+        size: document?.size ?? null,
+      };
+    });
   return Promise.all(
     documentKinds.map(async (kind) => {
       const object = await storage().head(`downloads/${kind}.pdf`);

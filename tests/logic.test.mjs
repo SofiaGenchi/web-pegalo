@@ -145,9 +145,10 @@ test('document management denies anonymous, empty configuration and unlisted acc
   assert.equal(canManage('other@example.com', 'admin@example.com'), false);
   assert.equal(canManage('ADMIN@example.com', ' admin@example.com '), true);
 });
-test('document slots and PDF signatures reject arbitrary files', () => {
+test('disabled document slots and PDF signatures reject arbitrary files', () => {
   assert.equal(isDocumentKind('../other'), false);
-  assert.equal(isDocumentKind('precios'), true);
+  assert.equal(isDocumentKind('precios'), false);
+  assert.equal(isDocumentKind('promociones'), false);
   assert.equal(
     isPdf(new TextEncoder().encode('<script>not a pdf</script>')),
     false,

@@ -1,6 +1,7 @@
 'use client';
 import PegaloName from './pegalo-name';
 import { FileText } from 'lucide-react';
+import type { DocumentKind } from './document-policy';
 export type DocumentInfo = {
   kind: DocumentKind;
   available: boolean;

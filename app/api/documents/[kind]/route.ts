@@ -1,20 +1,33 @@
 import { requireAdmin, errorResponse } from '@/app/admin-auth';
 import bundledDocuments from '@/app/bundled-documents.json';
 import { storage, canUploadDocuments } from '@/app/document-store';
-import { isDocumentKind, isPdf, MAX_PDF_BYTES } from '@/app/document-policy';
+import {
+  isDocumentKind,
+  isPdf,
+  MAX_PDF_BYTES,
+  type DocumentKind,
+} from '@/app/document-policy';
+type BundledDocument = { url: string };
+const bundledDocumentMap = bundledDocuments as Partial<
+  Record<DocumentKind, BundledDocument>
+>;
 type Context = { params: Promise<{ kind: string }> };
 export async function GET(_request: Request, context: Context) {
   const { kind } = await context.params;
   if (!isDocumentKind(kind))
     return new Response('Documento no encontrado', { status: 404 });
-  if (!canUploadDocuments())
+  if (!canUploadDocuments()) {
+    const document = bundledDocumentMap[kind];
+    if (!document)
+      return new Response('Documento no encontrado', { status: 404 });
     return new Response(null, {
       status: 307,
       headers: {
-        Location: bundledDocuments[kind].url,
+        Location: document.url,
         'Cache-Control': 'no-store',
       },
     });
+  }
   try {
     const object = await storage().get(`downloads/${kind}.pdf`);
     if (!object)

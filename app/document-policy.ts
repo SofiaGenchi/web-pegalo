@@ -1,9 +1,9 @@
-export const documentKinds = [] as const;
-export type DocumentKind = (typeof documentKinds)[number];
 export const documentLabels = {
   precios: 'Lista de precios',
   promociones: 'Promociones',
-};
+} as const;
+export type DocumentKind = keyof typeof documentLabels;
+export const documentKinds: readonly DocumentKind[] = [];
 export const MAX_PDF_BYTES = 12 * 1024 * 1024;
 export function isDocumentKind(value: string): value is DocumentKind {
   return documentKinds.some((kind) => kind === value);
