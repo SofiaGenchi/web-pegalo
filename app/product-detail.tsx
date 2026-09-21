@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check, Plus } from 'lucide-react';
@@ -17,6 +18,13 @@ export default function ProductDetail({
   products: ManagedProduct[];
   variants: ManagedProduct[];
 }) {
+  const pathname = usePathname();
+  useLayoutEffect(() => {
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, [pathname]);
+
   const [selectedId, setSelectedId] = useState(variants[0].id);
   const selected =
     variants.find((product) => product.id === selectedId) ?? variants[0];
