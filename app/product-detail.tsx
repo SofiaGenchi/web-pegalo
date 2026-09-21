@@ -20,9 +20,12 @@ export default function ProductDetail({
 }) {
   const pathname = usePathname();
   useLayoutEffect(() => {
-    if (!window.location.hash) {
+    const resetScroll = () => {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }
+    };
+    resetScroll();
+    const frame = window.requestAnimationFrame(resetScroll);
+    return () => window.cancelAnimationFrame(frame);
   }, [pathname]);
 
   const [selectedId, setSelectedId] = useState(variants[0].id);
