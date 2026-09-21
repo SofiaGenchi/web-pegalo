@@ -76,6 +76,12 @@ export default function FaqChat({ hidden }: { hidden: boolean }) {
   }, []);
 
   useEffect(() => {
+    if (!invitation || hidden || open) return;
+    const timer = window.setTimeout(() => setInvitation(false), 5000);
+    return () => window.clearTimeout(timer);
+  }, [invitation, hidden, open]);
+
+  useEffect(() => {
     if (open && !hidden) closeButton.current?.focus({ preventScroll: true });
   }, [open, hidden]);
   useEffect(() => {

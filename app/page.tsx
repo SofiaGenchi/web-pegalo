@@ -10,14 +10,12 @@ export const metadata = pageMetadata(
   '/',
 );
 export const dynamic = 'force-dynamic';
-export default async function Page({ searchParams }: {
+export default async function Page({
+  searchParams,
+}: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  // Preserve the approved brand loading animation and its original timing.
-  const [data] = await Promise.all([
-    loadContent().catch(() => null),
-    new Promise<void>((resolve) => setTimeout(resolve, 2400)),
-  ]);
+  const data = await loadContent().catch(() => null);
   if (!data) {
     return <Home products={[]} distributors={[]} catalogUnavailable />;
   }
