@@ -7,12 +7,12 @@ export default function FrequentlyAsked() {
       id="preguntas-frecuentes"
       aria-labelledby="faq-title"
     >
-      <p className="section-kicker">ANTES DE ELEGIR</p>
+      <p className="section-kicker">TE AYUDAMOS A ELEGIR</p>
       <h2 id="faq-title">Preguntas frecuentes.</h2>
 
       <div className="faq-list" id="preguntas-frecuentes-lista">
         <details>
-          <summary>¿Qué diferencia hay entre silicona neutra y acética?</summary>
+          <summary>¿Silicona neutra o acética, cuál elegir?</summary>
           <div className="faq-answer">
             <p>
               Se diferencian por su sistema de curado. La silicona neutra Pegalo se
@@ -39,7 +39,7 @@ export default function FrequentlyAsked() {
         </details>
 
         <details>
-          <summary>¿Qué sellador usar para canaletas y zinguería?</summary>
+          <summary>¿Con qué sellar chapas, canaletas y zinguería?</summary>
           <div className="faq-answer">
             <p>
               El sellador de zinguería Artesanato está formulado para pegar y
@@ -60,7 +60,7 @@ export default function FrequentlyAsked() {
         </details>
 
         <details>
-          <summary>¿Con qué pegar una bacha a la mesada?</summary>
+          <summary>¿Cuál es el adhesivo para instalar una bacha?</summary>
           <div className="faq-answer">
             <p>
               La crema epoxi para bachas Pegalo está indicada para unir bachas a
@@ -82,13 +82,52 @@ export default function FrequentlyAsked() {
         </details>
 
         <details>
-          <summary>¿Cómo comprar productos Pegalo por mayor?</summary>
+          <summary>¿Cómo comprar PEGALO por mayor?</summary>
           <div className="faq-answer">
             <p>
               Elegí los productos y sus presentaciones en el{' '}
               <a href="#catalogo">catálogo</a> y armá tu consulta. Indicanos las
               cantidades y tu localidad; el equipo comercial te confirmará
               precios, disponibilidad, condiciones de compra y opciones de entrega.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>¿Qué diferencia hay entre un sellador acrílico y uno de silicona?</summary>
+          <div className="faq-answer">
+            <p>
+              El sellador acrílico permite ser pintado fácilmente, por lo que es
+              la mejor opción para tapar grietas en paredes y techos interiores
+              antes de pintar. La silicona, en cambio, repele la pintura pero es
+              100% impermeable, lo que la hace indispensable para evitar
+              filtraciones en baños, cocinas y exteriores.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>¿Para qué sirve y cuándo se debe usar un sellador de poliuretano?</summary>
+          <div className="faq-answer">
+            <p>
+              Se utiliza para pegar y sellar materiales que van a soportar peso,
+              vibraciones o tránsito, como juntas en pisos, chapas de techo,
+              placas de cemento o carrocerías. Es extremadamente resistente,
+              elástico y, a diferencia de la silicona, sí permite que lo pinten
+              encima.
+            </p>
+          </div>
+        </details>
+
+        <details>
+          <summary>¿Cuánto tiempo tarda en secar la silicona y el poliuretano?</summary>
+          <div className="faq-answer">
+            <p>
+              Al tacto parecen secar muy rápido, ya que forman una capa
+              superficial en unos 10 a 20 minutos. Sin embargo, para que se
+              sequen (o curen) por completo en su interior, es necesario esperar
+              entre 24 y 48 horas, tiempo en el cual no deben mojarse ni
+              someterse a fuerza.
             </p>
           </div>
         </details>

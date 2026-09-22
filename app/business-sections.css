@@ -33,6 +33,10 @@
   font-family: 'Pegalo Stop', sans-serif;
 }
 
+.company-section h2 span {
+  color: #7385bd;
+}
+
 .company-lead {
   font-size: clamp(20px, 2vw, 28px);
   line-height: 1.5;

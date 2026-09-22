@@ -25,28 +25,20 @@ const topics = [
     href: '#catalogo',
     link: 'Ver catálogo de productos',
   },
+  {
+    label: '¿Hacen venta minorista?',
+    answer:
+      'No realizamos ventas minoristas, pero podemos ayudarte a encontrar dónde comprar nuestros productos. Contactanos y te indicaremos el distribuidor PEGALO más cercano a tu zona.',
+  },
 ];
-type Message = {
-  id: number;
-  role: 'user' | 'assistant';
-  text: string;
-  href?: string;
-  link?: string;
-};
-const greeting: Message = {
-  id: 0,
-  role: 'assistant',
-  text: '¡Hola! 👋 Soy Pegui, el asistente de PEGALO. Elegí una opción y te ayudo.',
-};
 
 export default function FaqChat({ hidden }: { hidden: boolean }) {
   const [open, setOpen] = useState(false);
   const [visible, setVisible] = useState(false);
   const [invitation, setInvitation] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([greeting]);
+  const [activeTopic, setActiveTopic] = useState<(typeof topics)[number] | null>(null);
   const launcher = useRef<HTMLButtonElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
-  const conversation = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let elapsed = false;
@@ -84,10 +76,6 @@ export default function FaqChat({ hidden }: { hidden: boolean }) {
   useEffect(() => {
     if (open && !hidden) closeButton.current?.focus({ preventScroll: true });
   }, [open, hidden]);
-  useEffect(() => {
-    if (open && conversation.current)
-      conversation.current.scrollTop = conversation.current.scrollHeight;
-  }, [messages, open]);
 
   function dismissInvitation() {
     setInvitation(false);
@@ -96,23 +84,9 @@ export default function FaqChat({ hidden }: { hidden: boolean }) {
     setOpen(false);
     launcher.current?.focus({ preventScroll: true });
   }
-  function ask(topic: (typeof topics)[number]) {
-    setMessages((previous) => [
-      ...previous,
-      { id: previous.length, role: 'user', text: topic.label },
-      {
-        id: previous.length + 1,
-        role: 'assistant',
-        text: topic.answer,
-        href: topic.href,
-        link: topic.link,
-      },
-    ]);
-  }
-  const lastQuestion = [...messages]
-    .reverse()
-    .find((message) => message.role === 'user')?.text;
-  const whatsapp = `https://wa.me/541164174036?text=${encodeURIComponent(`Hola, vengo de la web de Pégalo. ${lastQuestion || 'Quisiera hacer una consulta.'}`)}`;
+
+  const lastQuestion = activeTopic?.label;
+  const whatsapp = `https://wa.me/541164174036?text=${encodeURIComponent(`Hola, vengo de la web de Pégalo. ${lastQuestion ? `Consulta sobre: ${lastQuestion}.` : 'Quisiera hacer una consulta.'}`)}`;
 
   return (
     <aside
@@ -162,13 +136,17 @@ export default function FaqChat({ hidden }: { hidden: boolean }) {
             }
           }}
         >
+          {/* Header */}
           <header className="faq-chat-header">
             <span className="faq-chat-avatar">
               <Image src="/mascota-chat-3d.png" alt="" width={44} height={44} />
             </span>
             <div>
               <h2 id="faq-chat-title">PEGUI</h2>
-              <p>El asistente de PEGALO.</p>
+              <p>
+                <span className="faq-chat-online-dot" aria-hidden="true" />
+                Asistente de PEGALO.
+              </p>
             </div>
             <button
               ref={closeButton}
@@ -180,44 +158,46 @@ export default function FaqChat({ hidden }: { hidden: boolean }) {
               <X size={21} />
             </button>
           </header>
-          <div
-            ref={conversation}
-            className="faq-chat-messages"
-            role="log"
-            aria-label="Conversación"
-            aria-live="polite"
-            aria-relevant="additions"
-          >
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`faq-chat-message faq-chat-message-${message.role}`}
-              >
-                <span className="sr-only">
-                  {message.role === 'user' ? 'Vos: ' : 'Asistente: '}
-                </span>
-                <p>{message.text}</p>
-                {message.href && (
-                  <a href={message.href} onClick={close}>
-                    {message.link}
+
+          {/* Greeting */}
+          <div className="faq-chat-greeting-block" aria-live="polite">
+            <p className="faq-chat-hello-primary">¡Hola! Soy Pegui.</p>
+            <p className="faq-chat-hello-secondary">Elegí una opción y te ayudo con tu consulta.</p>
+          </div>
+
+          {/* Topics */}
+          <div className="faq-chat-topics-section">
+            <p className="faq-chat-topics-title">¿Qué necesitás?</p>
+            <div className="faq-chat-topics" aria-label="Preguntas sugeridas">
+              {topics.map((topic) => (
+                <button
+                  key={topic.label}
+                  type="button"
+                  aria-pressed={activeTopic?.label === topic.label}
+                  onClick={() =>
+                    setActiveTopic((prev) =>
+                      prev?.label === topic.label ? null : topic,
+                    )
+                  }
+                >
+                  {topic.label}
+                </button>
+              ))}
+            </div>
+            {activeTopic && (
+              <div className="faq-chat-answer-box" role="region" aria-live="polite">
+                <p>{activeTopic.answer}</p>
+                {activeTopic.href && (
+                  <a href={activeTopic.href} onClick={close}>
+                    {activeTopic.link}
                   </a>
                 )}
               </div>
-            ))}
+            )}
           </div>
-          <div className="faq-chat-topics" aria-label="Preguntas sugeridas">
-            {topics.map((topic) => (
-              <button
-                key={topic.label}
-                type="button"
-                onClick={() => ask(topic)}
-              >
-                {topic.label}
-              </button>
-            ))}
-          </div>
+
+          {/* Footer */}
           <div className="faq-chat-footer">
-            <p className="faq-chat-other">¿Tu consulta es sobre otro tema?</p>
             <a
               className="faq-chat-whatsapp"
               href={whatsapp}
@@ -227,6 +207,7 @@ export default function FaqChat({ hidden }: { hidden: boolean }) {
               <MessageCircle size={18} />
               Hablar por WhatsApp
             </a>
+            <p className="faq-chat-direct">Atención directa del equipo PEGALO.</p>
           </div>
         </dialog>
       )}

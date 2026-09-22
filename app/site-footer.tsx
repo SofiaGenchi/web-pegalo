@@ -15,8 +15,8 @@ export default function SiteFooter({ home = true }: { home?: boolean }) {
             </span>
           </a>
           <p>
-            Desde 1998, importamos y comercializamos adhesivos y selladores para
-            comercios y profesionales de Argentina.
+            Desde 1998 comercializamos adhesivos y selladores para comercios,
+            distribuidores y profesionales de todo Argentina.
           </p>
         </div>
         <div className="footer-contact">

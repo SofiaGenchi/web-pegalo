@@ -15,13 +15,13 @@ export default function CompanySection({
       {journey && <span className="company-route-point" data-route-point />}
       <p className="section-kicker">EMPRESA</p>
       <h2 id="empresa-title">
-        <PegaloName /> una empresa
+        Más de 25 años
         <br />
-        en constante crecimiento.
+        <span>de experiencia.</span>
       </h2>
       <p className="company-lead">
-        Creada en 1998 siempre dedicados a fabricar importar y distribuir una
-        amplia gama de adhesivos y selladores.
+        Desde 1998 desarrollamos, importamos y comercializamos adhesivos y
+        selladores para distintos mercados e industrias.
       </p>
       <p className="company-markets">
         Somos fabricantes e importadores de una alta gama de productos orientados a

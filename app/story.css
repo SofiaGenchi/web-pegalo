@@ -253,6 +253,7 @@
 .journey-hero h1 span,
 .journey-hero h1 em {
   display: block;
+  overflow: visible;
 }
 .journey-hero h1 em {
   font-style: normal;
@@ -1067,12 +1068,10 @@
   from {
     opacity: 0;
     transform: translateY(25px);
-    clip-path: inset(100% 0 0);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    clip-path: inset(0);
   }
 }
 

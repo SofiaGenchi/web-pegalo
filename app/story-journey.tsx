@@ -294,10 +294,9 @@ export default function StoryJourney({
       </svg>
       <section className="journey-hero" id="inicio" data-scene>
         <div className="journey-hero-copy">
-          <p className="story-eyebrow">ADHESIVOS QUE CONECTAN TU MUNDO</p>
           <h1>
-            <span>Pequeña gota.</span>
-            <em>Gran conexión.</em>
+            <span>Donde hay unión,</span>
+            <em>hay PEGALO.</em>
           </h1>
           <p>
             Fabricamos e importamos adhesivos y selladores para la industria, el comercio y el hogar.

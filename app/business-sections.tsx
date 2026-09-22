@@ -13,17 +13,17 @@ export default function BusinessSections({
         <div className="coverage-copy">
           <p className="section-kicker">DÓNDE ESTAMOS</p>
           <h2>
-            Atendemos en
+            Distribución en
             <br />
-            todo el país.
+            todo Argentina.
           </h2>
           <div className="coverage-distribution">
             <span className="coverage-label">DISTRIBUCIÓN NACIONAL</span>
-            <p>Consultar el distribuidor de su zona.</p>
+            <p>Trabajamos con distribuidores y comercios de todo el país. Consultá por el distribuidor de tu zona.</p>
           </div>
           <address className="coverage-details">
             <div className="coverage-location">
-              <span className="coverage-label">NUESTRA SEDE</span>
+              <span className="coverage-label">DÓNDE ENCONTRARNOS</span>
               <p>
                 <a
                   className="contact-value"
@@ -69,13 +69,13 @@ export default function BusinessSections({
         <div className="contact-heading">
           <p className="section-kicker">CONTACTO</p>
           <h2>
-            Estamos para
+            Hablemos de
             <br />
-            <em>ayudarte.</em>
+            <em>tu negocio.</em>
           </h2>
           <p>
-            Para cualquier consulta comuníquese con nosotros por los siguientes
-            medios:
+            Consultanos por productos, precios, disponibilidad y condiciones de
+            compra mayorista.
           </p>
         </div>
         <div className="contact-channels">

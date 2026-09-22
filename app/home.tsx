@@ -407,13 +407,13 @@ export default function Home({
           <div className="section-heading" data-reveal>
             <p className="eyebrow">EXPLORÁ EL CATÁLOGO</p>
             <h2>
-              El producto justo.
+              Soluciones
               <br />
-              <span>Para tu trabajo.</span>
+              <span>para cada aplicación.</span>
             </h2>
             <p>
-              Conocé sus aplicaciones
-              <br />y armá tu consulta.
+              Encontrá los productos que mejor se adaptan
+              <br />a tu negocio y armá tu consulta.
             </p>
           </div>
           {catalogUnavailable ? (
@@ -557,9 +557,14 @@ export default function Home({
                         setVisibleCount(4);
                         requestAnimationFrame(() => {
                           const catalog = document.getElementById('catalogo');
-                          catalog?.focus({ preventScroll: true });
-                          catalog?.scrollIntoView({
-                            block: 'start',
+                          if (!catalog) return;
+                          catalog.focus({ preventScroll: true });
+                          const top =
+                            catalog.getBoundingClientRect().top +
+                            window.scrollY -
+                            100;
+                          window.scrollTo({
+                            top: Math.max(0, top),
                             behavior: window.matchMedia(
                               '(prefers-reduced-motion: reduce)',
                             ).matches

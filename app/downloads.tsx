@@ -1,5 +1,4 @@
 'use client';
-import PegaloName from './pegalo-name';
 import { FileText } from 'lucide-react';
 import type { DocumentKind } from './document-policy';
 export type DocumentInfo = {
@@ -12,14 +11,12 @@ export default function Downloads() {
   return (
     <section className="downloads-section" id="descargas">
       <div>
-        <p className="eyebrow">INFORMACIÓN PARA TU COMERCIO</p>
+        <p className="eyebrow">          RECURSOS PARA TU NEGOCIO</p>
         <h2>
-          Todo listo.
-          <br />
-          <span>Para descargar.</span>
+          Información para tu negocio.
         </h2>
         <p>
-          Descubrí el catálogo y el folleto de <PegaloName />.
+          Descargá nuestros catálogos y materiales comerciales.
         </p>
       </div>
       <div className="download-cards">
