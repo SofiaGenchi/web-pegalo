@@ -39,7 +39,7 @@ for await (const file of files(output)) {
     }
   }
   if (html !== original) await writeFile(file, html);
-  for (const match of html.matchAll(/<(?:script|link)\b[^>]*\b(?:src|href)="(\/_next\/[^"?#]+)[^\"]*"/g)) {
+  for (const match of html.matchAll(/<(?:script|link)\b[^>]*\b(?:src|href)="(\/_next\/[^"?#]+)[^"]*"/g)) {
     const asset = new URL(`.${match[1]}`, output);
     try { await stat(asset); }
     catch (error) {
