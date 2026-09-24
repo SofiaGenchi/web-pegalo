@@ -9,6 +9,7 @@ declare module '#pegalo-repository' {
   export const writeContent: typeof import('./repository-cloudflare').writeContent;
 }
 declare module '#pegalo-runtime' {
+  export const adminEnabled: boolean;
   export const setupSecret: typeof import('./runtime-cloudflare').setupSecret;
   export const bucket: typeof import('./runtime-cloudflare').bucket;
   export const rateLimitSource: typeof import('./runtime-cloudflare').rateLimitSource;

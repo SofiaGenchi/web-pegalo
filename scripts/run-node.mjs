@@ -1,7 +1,7 @@
 import { loadEnvFile } from 'node:process';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-for (const file of ['../.env.mongodb.local', '../.env.node.local']) {
+for (const file of ['../.env.node.local']) {
   try { loadEnvFile(new URL(file, import.meta.url)); }
   catch (error) { if(error.code !== 'ENOENT') throw error; }
 }

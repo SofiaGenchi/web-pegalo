@@ -1,4 +1,5 @@
 import { findSession, countAttempt } from '#pegalo-repository';
+import { adminEnabled } from '#pegalo-runtime';
 import { digest } from './password';
 export const cookieName = 'pegalo_admin';
 export const sessionSeconds = 8 * 60 * 60;
@@ -20,6 +21,7 @@ export function sessionToken(headers: Headers) {
   );
 }
 export async function adminUser(headers: Headers) {
+  if (!adminEnabled) return null;
   const token = sessionToken(headers);
   if (!/^[a-f0-9]{64}$/.test(token)) return null;
   return findSession(digest(token));
@@ -28,6 +30,8 @@ export function sameOrigin(request: Request) {
   return request.headers.get('origin') === new URL(request.url).origin;
 }
 export async function requireAdmin(request: Request) {
+  if (!adminEnabled)
+    throw new ApiError('El panel de administración está desactivado.', 404);
   if (!sameOrigin(request)) throw new ApiError('Origen no permitido.', 403);
   const user = await adminUser(request.headers);
   if (!user) throw new ApiError('Tu sesión venció. Volvé a ingresar.', 401);
@@ -97,6 +101,8 @@ export async function readJson(request: Request) {
   }
 }
 export async function limitAttempts(key: string, max: number) {
+  if (!adminEnabled)
+    throw new ApiError('El panel de administración está desactivado.', 404);
   const count = await countAttempt(digest(key));
   if (count > max)
     throw new ApiError(

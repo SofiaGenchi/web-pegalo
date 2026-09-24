@@ -1,4 +1,5 @@
 import { env } from 'cloudflare:workers';
+export const adminEnabled = true;
 export function setupSecret() {
   return (env as unknown as { ADMIN_SETUP_TOKEN?: string }).ADMIN_SETUP_TOKEN;
 }

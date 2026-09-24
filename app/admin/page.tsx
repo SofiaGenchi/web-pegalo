@@ -5,6 +5,7 @@ import { loadContent } from '../content-store';
 import { listDocuments, canUploadDocuments } from '../document-store';
 import LoginForm from './login-form';
 import ContentManager from './content-manager';
+import { adminEnabled } from '#pegalo-runtime';
 import './admin.css';
 export const dynamic = 'force-dynamic';
 export const metadata = {
@@ -12,6 +13,14 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 export default async function AdminPage() {
+  if (!adminEnabled)
+    return (
+      <main className="admin-unavailable">
+        <h1>Panel de administración desactivado</h1>
+        <p>El catálogo se gestiona desde los archivos del proyecto.</p>
+        <Link href="/">Volver a la web</Link>
+      </main>
+    );
   let user, data, documents;
   let storageAvailable = canUploadDocuments();
   try {

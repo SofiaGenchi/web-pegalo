@@ -52,7 +52,7 @@ export default defineConfig(async () => {
     resolve: {
       alias: {
         '#pegalo-repository': resolve(
-          nodeRuntime ? 'server/repository-mongo.ts' : 'server/repository-cloudflare.ts',
+          nodeRuntime ? 'server/repository-static.ts' : 'server/repository-cloudflare.ts',
         ),
         '#pegalo-runtime': resolve(
           nodeRuntime ? 'server/runtime-node.ts' : 'server/runtime-cloudflare.ts',
