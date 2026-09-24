@@ -57,9 +57,8 @@ export default function CatalogSection({
         <div className="catalog-unavailable" aria-live="polite">
           <h3>No pudimos cargar los productos.</h3>
           <p>
-            Podés consultar precios y promociones o escribirnos mientras
-            consultar disponibilidad y condiciones mientras restablecemos el
-            catálogo.
+            Reintentá cargar el catálogo o escribinos para consultar
+            disponibilidad y condiciones.
           </p>
           <div className="catalog-recovery-actions">
             <button className="button" onClick={() => window.location.reload()}>
@@ -68,7 +67,7 @@ export default function CatalogSection({
             <button className="button" onClick={() => onQuoteOpen()}>
               Consultar a ventas
             </button>
-            <a href="#descargas">Descargas</a>
+            <a href="#descargas">Ver folleto</a>
           </div>
         </div>
       ) : (

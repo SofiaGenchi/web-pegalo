@@ -15,7 +15,10 @@ export default async function Page({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const data = await loadContent().catch(() => null);
+  const data = await loadContent().catch((error: unknown) => {
+    console.error('No se pudo cargar el catálogo público', error);
+    return null;
+  });
   if (!data) {
     return <Home products={[]} distributors={[]} catalogUnavailable />;
   }

@@ -3,9 +3,11 @@ import './route-states.css';
 
 export default function RouteError({
   missing = false,
+  product = false,
   reset,
 }: {
   missing?: boolean;
+  product?: boolean;
   reset?: () => void;
 }) {
   return (
@@ -17,15 +19,21 @@ export default function RouteError({
       <h1>
         {missing
           ? 'No encontramos esta página.'
-          : 'No pudimos abrir esta página.'}
+          : product
+            ? 'No pudimos abrir este producto.'
+            : 'No pudimos abrir esta página.'}
       </h1>
       <p className="route-state-copy">
         {missing
           ? 'El enlace puede haber cambiado o ya no estar disponible. Volvé al inicio para explorar nuestros productos.'
-          : 'Ocurrió un problema al cargar el contenido. Podés volver a intentarlo o ir al inicio.'}
+          : product
+            ? 'Ocurrió un problema al cargar la información. Podés volver a intentarlo o explorar el catálogo.'
+            : 'Ocurrió un problema al cargar el contenido. Podés volver a intentarlo o ir al inicio.'}
       </p>
       <div className="route-state-actions">
-        <Link href="/">Volver al inicio</Link>
+        <Link href={product ? '/#catalogo' : '/'}>
+          {product ? 'Ver catálogo' : 'Volver al inicio'}
+        </Link>
         {reset && (
           <button type="button" onClick={reset}>
             Volver a intentar
