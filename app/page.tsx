@@ -3,18 +3,12 @@ import { loadContent } from './content-store';
 import { absoluteUrl, jsonLd, pageMetadata } from './seo';
 import { faqStructuredData } from './faq-data';
 import { productPath, uniqueProducts } from './product-links';
-import { redirect } from 'next/navigation';
 export const metadata = pageMetadata(
   'Adhesivos Pegalo | Venta mayorista de adhesivos y selladores',
   'Somos fabricantes e importadores de una alta gama de productos  orientados a mercados como el  Automotor, Construcción, Hogar,  Artesanía, Zapatero o Carpintería.',
   '/',
 );
-export const dynamic = 'force-dynamic';
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
+export default async function Page() {
   const data = await loadContent().catch((error: unknown) => {
     console.error('No se pudo cargar el catálogo público', error);
     return null;
@@ -22,11 +16,6 @@ export default async function Page({
   if (!data) {
     return <Home products={[]} distributors={[]} catalogUnavailable />;
   }
-  const { producto } = await searchParams;
-  const linkedProduct = data.content.products.find(
-    (product) => product.active && product.id === producto,
-  );
-  if (linkedProduct) redirect(productPath(linkedProduct));
   return (
     <>
       <script

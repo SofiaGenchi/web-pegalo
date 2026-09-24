@@ -12,8 +12,13 @@ import '../../story.css';
 import '../../documents.css';
 import './product-page.css';
 
-export const dynamic = 'force-dynamic';
+export const dynamicParams = false;
 type Props = { params: Promise<{ slug: string }> };
+
+export async function generateStaticParams() {
+  const products = await loadActiveProducts();
+  return uniqueProducts(products).map((product) => ({ slug: productSlug(product) }));
+}
 
 async function productData(params: Props['params']) {
   const { slug } = await params;
