@@ -5,11 +5,11 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Check, Plus } from 'lucide-react';
-import PegaloName from './pegalo-name';
+import PegaloName from '../ui/pegalo-name';
 import type { ManagedProduct } from './content-policy';
 import ProductOptionSelect from './product-option-select';
 import { presentationGroups, quoteOptions } from './product-presentations';
-import { useQuote } from './use-quote';
+import { useQuote } from '../quote/use-quote';
 
 export default function ProductDetail({
   products,

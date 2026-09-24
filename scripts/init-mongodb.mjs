@@ -12,8 +12,8 @@ try {
   await db.collection('admin_users').createIndex({username:1},{unique:true,name:'unique_username'});
   await db.collection('admin_sessions').createIndex({expiresAt:1},{expireAfterSeconds:0,name:'session_expiration'});
   await db.collection('admin_attempts').createIndex({expiresAt:1},{expireAfterSeconds:0,name:'attempt_expiration'});
-  const productsUrl=moduleUrl(await readFile(new URL('../app/products.ts',import.meta.url),'utf8'));
-  const source=(await readFile(new URL('../app/content-policy.ts',import.meta.url),'utf8')).replace("from './products'",`from '${productsUrl}'`);
+  const productsUrl=moduleUrl(await readFile(new URL('../app/catalog/products.ts',import.meta.url),'utf8'));
+  const source=(await readFile(new URL('../app/catalog/content-policy.ts',import.meta.url),'utf8')).replace("from './products'",`from '${productsUrl}'`);
   const {defaultContent,validateContent}=await import(moduleUrl(source));
   if(!validateContent(defaultContent)) throw new Error('INVALID_INITIAL_CONTENT');
   const result=await db.collection('site_content').updateOne({_id:'main'},{$setOnInsert:{content:defaultContent,revision:0,updatedBy:'initialization',updatedAt:new Date(),history:[]}},{upsert:true});

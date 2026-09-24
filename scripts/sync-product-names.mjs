@@ -8,8 +8,8 @@ const config=mongoConfiguration(process.env);
 const client=new MongoClient(config.uri,config.options);
 const moduleUrl = source => 'data:text/javascript;base64,' + Buffer.from(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');
 try {
-  const productsUrl=moduleUrl(await readFile(new URL('../app/products.ts',import.meta.url),'utf8'));
-  const source=(await readFile(new URL('../app/content-policy.ts',import.meta.url),'utf8')).replace("from './products'",`from '${productsUrl}'`);
+  const productsUrl=moduleUrl(await readFile(new URL('../app/catalog/products.ts',import.meta.url),'utf8'));
+  const source=(await readFile(new URL('../app/catalog/content-policy.ts',import.meta.url),'utf8')).replace("from './products'",`from '${productsUrl}'`);
   const {defaultContent,validateContent}=await import(moduleUrl(source));
   await client.connect();
   const collection=client.db(config.databaseName).collection('site_content');

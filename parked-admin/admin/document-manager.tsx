@@ -8,7 +8,7 @@ import {
   MAX_PDF_BYTES,
   type DocumentKind,
 } from '../document-policy';
-import type { DocumentInfo } from '../downloads';
+import type { DocumentInfo } from '../document-policy';
 export default function DocumentManager({
   initial,
   onChange,

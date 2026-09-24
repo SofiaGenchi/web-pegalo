@@ -15,7 +15,7 @@ import {
   type Distributor,
 } from '../content-policy';
 import { productFamilies } from '../products';
-import type { DocumentInfo } from '../downloads';
+import type { DocumentInfo } from '../document-policy';
 import DocumentManager from './document-manager';
 import '../documents.css';
 import ProductEditor from './product-editor';

@@ -15,13 +15,13 @@ async function moduleFrom(path) {
   );
 }
 const { readQuote, normalizeQuantity } = await moduleFrom(
-  '../app/quote-data.ts',
+  '../app/quote/quote-data.ts',
 );
-const { distanceAtY } = await moduleFrom('../app/scroll-path.ts');
-const { products, productFamilies } = await moduleFrom('../app/products.ts');
+const { distanceAtY } = await moduleFrom('../app/sections/scroll-path.ts');
+const { products, productFamilies } = await moduleFrom('../app/catalog/products.ts');
 const known = new Set(products.map((p) => p.id));
 const { quoteOptions, quotePresentation, quoteProductId } = await moduleFrom(
-  '../app/product-presentations.ts',
+  '../app/catalog/product-presentations.ts',
 );
 await test('quotes keep only the color and size combinations listed for each product', () => {
   const acetica = products.find((p) => p.id === 'acetica');
@@ -137,7 +137,7 @@ await test('scroll tracking is bounded, reversible and interpolated between samp
 });
 
 const { canManage, isPdf, isDocumentKind } = await moduleFrom(
-  '../app/document-policy.ts',
+  '../parked-admin/document-policy.ts',
 );
 await test('document management denies anonymous, empty configuration and unlisted accounts', () => {
   assert.equal(canManage(null, 'admin@example.com'), false);
@@ -157,7 +157,7 @@ await test('disabled document slots and PDF signatures reject arbitrary files', 
 });
 
 const { shouldUseSimpleView, createViewDecision } = await moduleFrom(
-  '../app/view-policy.ts',
+  '../app/ui/view-policy.ts',
 );
 await test('automatic view honors reduced data, reduced motion and slow estimated networks', () => {
   for (const signals of [

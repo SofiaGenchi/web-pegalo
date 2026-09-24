@@ -1,8 +1,8 @@
 import Home from './home';
-import { loadContent } from './content-store';
+import { loadContent } from './catalog/content-store';
 import { absoluteUrl, jsonLd, pageMetadata } from './seo';
-import { faqStructuredData } from './faq-data';
-import { productPath, uniqueProducts } from './product-links';
+import { faqStructuredData } from './sections/faq-data';
+import { productPath, uniqueProducts } from './catalog/product-links';
 export const metadata = pageMetadata(
   'Adhesivos Pegalo | Venta mayorista de adhesivos y selladores',
   'Somos fabricantes e importadores de una alta gama de productos  orientados a mercados como el  Automotor, Construcción, Hogar,  Artesanía, Zapatero o Carpintería.',

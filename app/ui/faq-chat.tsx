@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { MessageCircle, X } from 'lucide-react';
-import './faq-chat.css';
+import '../styles/faq-chat.css';
 
 const topics = [
   {

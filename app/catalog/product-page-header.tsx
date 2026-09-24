@@ -1,8 +1,8 @@
 'use client';
 
 import type { ManagedProduct } from './content-policy';
-import SiteHeader from './site-header';
-import { useQuote } from './use-quote';
+import SiteHeader from '../ui/site-header';
+import { useQuote } from '../quote/use-quote';
 
 export default function ProductPageHeader({
   products,

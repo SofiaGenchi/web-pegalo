@@ -1,5 +1,5 @@
-import { defaultContent } from '../app/content-policy';
-import type { SiteContent } from '../app/content-policy';
+import { defaultContent } from '../app/catalog/content-policy';
+import type { SiteContent } from '../app/catalog/content-policy';
 
 // Node hosting serves the catalog from the project files while the admin panel
 // is not in use. This repository deliberately has no database connection.

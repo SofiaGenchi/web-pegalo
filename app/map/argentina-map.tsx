@@ -12,8 +12,8 @@ import geometry from './argentina-geometry.json';
 import provinceBoundaries from './argentina-province-boundaries.json';
 import territories from './argentina-territories.json';
 import { contactLocations, type ContactLocation } from './contact-locations';
-import type { Distributor } from './content-policy';
-import PegaloName from './pegalo-name';
+import type { Distributor } from '../catalog/content-policy';
+import PegaloName from '../ui/pegalo-name';
 function LocationPoint({ location }: { location: ContactLocation }) {
   const whatsapp =
     location.phones?.filter((phone) =>

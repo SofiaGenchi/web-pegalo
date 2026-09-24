@@ -1,4 +1,4 @@
-import './frequently-asked.css';
+import '../styles/frequently-asked.css';
 import Link from 'next/link';
 
 export default function FrequentlyAsked() {

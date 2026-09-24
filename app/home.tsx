@@ -2,26 +2,26 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { productPath, uniqueProducts } from './product-links';
-import CatalogSection from './catalog-section';
-import QuoteDialog from './quote-dialog';
-import PegaloName from './pegalo-name';
-import CompanySection from './company-section';
-import BusinessSections from './business-sections';
-import BusinessStack from './business-stack';
-import './business-stack.css';
-import './business-sections.css';
-import SiteHeader, { navigation } from './site-header';
-import SiteFooter from './site-footer';
-import type { ManagedProduct as Product, Distributor } from './content-policy';
-import { useQuote } from './use-quote';
-import StoryJourney from './story-journey';
-import Downloads from './downloads';
-import BackToTop from './back-to-top';
-import FaqChat from './faq-chat';
-import './documents.css';
-import './simple-view.css';
-import { useSimpleView } from './use-simple-view';
+import { productPath, uniqueProducts } from './catalog/product-links';
+import CatalogSection from './catalog/catalog-section';
+import QuoteDialog from './quote/quote-dialog';
+import PegaloName from './ui/pegalo-name';
+import CompanySection from './sections/company-section';
+import BusinessSections from './sections/business-sections';
+import BusinessStack from './sections/business-stack';
+import './styles/business-stack.css';
+import './styles/business-sections.css';
+import SiteHeader, { navigation } from './ui/site-header';
+import SiteFooter from './ui/site-footer';
+import type { ManagedProduct as Product, Distributor } from './catalog/content-policy';
+import { useQuote } from './quote/use-quote';
+import StoryJourney from './sections/story-journey';
+import Downloads from './sections/downloads';
+import BackToTop from './ui/back-to-top';
+import FaqChat from './ui/faq-chat';
+import './styles/documents.css';
+import './styles/simple-view.css';
+import { useSimpleView } from './ui/use-simple-view';
 
 export default function Home({
   products,

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
-const { outputText } = ts.transpileModule(await readFile(new URL('../app/liquid-surface.ts', import.meta.url), 'utf8'), {compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}});
+const { outputText } = ts.transpileModule(await readFile(new URL('../app/sections/liquid-surface.ts', import.meta.url), 'utf8'), {compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}});
 const { liquidSurface } = await import('data:text/javascript;base64,' + Buffer.from(outputText).toString('base64'));
 await test('liquid stays finite through descent and reverse on desktop and mobile',()=>{
   for (const [w,h,y,source] of [[1280,760,470,220],[390,680,450,200]]) {

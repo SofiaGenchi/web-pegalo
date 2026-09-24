@@ -1,6 +1,6 @@
 'use client';
-import type { Distributor } from './content-policy';
-import ArgentinaMap from './argentina-map';
+import type { Distributor } from '../catalog/content-policy';
+import ArgentinaMap from '../map/argentina-map';
 import FrequentlyAsked from './frequently-asked';
 export default function BusinessSections({
   distributors,

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useSyncExternalStore, type CSSProperties } from 'react';
-import './route-states.css';
+import './styles/route-states.css';
 
 const sessionKey = 'pegalo:visited';
 function hasNotVisited() {

@@ -1,15 +1,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { loadActiveProducts } from '../../product-catalog';
-import { productPath, productSlug, uniqueProducts } from '../../product-links';
+import { loadActiveProducts } from '../../catalog/product-catalog';
+import { productPath, productSlug, uniqueProducts } from '../../catalog/product-links';
 import { absoluteUrl, jsonLd, pageMetadata } from '../../seo';
-import ProductDetail from '../../product-detail';
-import ProductPageHeader from '../../product-page-header';
-import SiteFooter from '../../site-footer';
-import '../../refinements.css';
-import '../../story.css';
-import '../../documents.css';
+import ProductDetail from '../../catalog/product-detail';
+import ProductPageHeader from '../../catalog/product-page-header';
+import SiteFooter from '../../ui/site-footer';
+import '../../styles/refinements.css';
+import '../../styles/story.css';
+import '../../styles/documents.css';
 import './product-page.css';
 
 export const dynamicParams = false;

@@ -1,12 +1,5 @@
 'use client';
 import { FileText } from 'lucide-react';
-import type { DocumentKind } from './document-policy';
-export type DocumentInfo = {
-  kind: DocumentKind;
-  available: boolean;
-  updatedAt: string | null;
-  size: number | null;
-};
 export default function Downloads() {
   return (
     <section className="downloads-section" id="descargas">

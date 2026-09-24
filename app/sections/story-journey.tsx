@@ -1,9 +1,9 @@
 'use client';
-import PegaloName from './pegalo-name';
+import PegaloName from '../ui/pegalo-name';
 import { liquidSurface } from './liquid-surface';
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import './story.css';
+import '../styles/story.css';
 import { distanceAtY, type PathSample } from './scroll-path';
 
 export default function StoryJourney({

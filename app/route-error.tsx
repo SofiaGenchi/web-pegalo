@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import './route-states.css';
+import './styles/route-states.css';
 
 export default function RouteError({
   missing = false,

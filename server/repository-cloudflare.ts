@@ -1,5 +1,5 @@
 import { database } from './database-cloudflare';
-import type { SiteContent } from '../app/content-policy';
+import type { SiteContent } from '../app/catalog/content-policy';
 export async function findSession(token: string) {
   return database()
     .prepare(

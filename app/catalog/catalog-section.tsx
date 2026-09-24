@@ -8,7 +8,7 @@ import { productFamilies } from './products';
 import type { ManagedProduct as Product } from './content-policy';
 import { productPath } from './product-links';
 import { presentationBadges } from './product-presentations';
-import PegaloName from './pegalo-name';
+import PegaloName from '../ui/pegalo-name';
 
 type CatalogSectionProps = {
   catalogUnavailable: boolean;

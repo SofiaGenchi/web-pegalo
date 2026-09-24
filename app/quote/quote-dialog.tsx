@@ -10,10 +10,10 @@ import {
   DialogDescription,
   DialogClose,
 } from '@/components/ui/dialog';
-import type { ManagedProduct as Product } from './content-policy';
-import { quoteProductId, quotePresentation } from './product-presentations';
-import PegaloName from './pegalo-name';
-import './refinements.css';
+import type { ManagedProduct as Product } from '../catalog/content-policy';
+import { quoteProductId, quotePresentation } from '../catalog/product-presentations';
+import PegaloName from '../ui/pegalo-name';
+import '../styles/refinements.css';
 
 const whatsapp = (message: string) =>
   `https://wa.me/541164174036?text=${encodeURIComponent(message)}`;

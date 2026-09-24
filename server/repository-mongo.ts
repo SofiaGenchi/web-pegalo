@@ -1,6 +1,6 @@
 import { mongoDatabase } from './mongodb-client.mjs';
 import { MongoServerError } from 'mongodb';
-import type { SiteContent } from '../app/content-policy';
+import type { SiteContent } from '../app/catalog/content-policy';
 type User = { _id: string; username: string; password: string; active: number };
 type Session = { _id: string; userId: string; expiresAt: Date };
 type Attempt = { _id: string; count: number; expiresAt: Date };

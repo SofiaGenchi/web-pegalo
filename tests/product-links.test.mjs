@@ -15,9 +15,9 @@ async function moduleFrom(path) {
     'data:text/javascript;base64,' + Buffer.from(outputText).toString('base64')
   );
 }
-const { products } = await moduleFrom('../app/products.ts');
+const { products } = await moduleFrom('../app/catalog/products.ts');
 const { productPath, productSlug, uniqueProducts } = await moduleFrom(
-  '../app/product-links.ts',
+  '../app/catalog/product-links.ts',
 );
 
 await test('every product has a stable readable URL, including products without a legacy URL', () => {

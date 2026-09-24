@@ -3,6 +3,12 @@ export const documentLabels = {
   promociones: 'Promociones',
 } as const;
 export type DocumentKind = keyof typeof documentLabels;
+export type DocumentInfo = {
+  kind: DocumentKind;
+  available: boolean;
+  updatedAt: string | null;
+  size: number | null;
+};
 export const documentKinds: readonly DocumentKind[] = [];
 export const MAX_PDF_BYTES = 12 * 1024 * 1024;
 export function isDocumentKind(value: string): value is DocumentKind {

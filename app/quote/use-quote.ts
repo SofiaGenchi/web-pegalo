@@ -1,8 +1,8 @@
 'use client';
 import { useMemo, useSyncExternalStore } from 'react';
-import type { Product } from './products';
+import type { Product } from '../catalog/products';
 import { readQuote, type QuoteItem } from './quote-data';
-import { quoteOptions } from './product-presentations';
+import { quoteOptions } from '../catalog/product-presentations';
 const key = 'pegalo:quote:v1';
 const event = 'pegalo:quote-changed';
 
