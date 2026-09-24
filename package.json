@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "node scripts/run-node.mjs dev",
-    "build": "node scripts/run-node.mjs build",
+    "build": "node scripts/run-node.mjs build && node scripts/finalize-static.mjs",
     "start": "node scripts/run-node.mjs start",
     "lint": "oxlint",
     "format": "oxfmt",
