@@ -1,0 +1,594 @@
+@media (min-width: 1700px) {
+  .journey-product {
+    padding-inline: calc((100vw - 1450px) /2);
+  }
+  .scene-art {
+    height: 700px;
+  }
+}
+@media (max-width: 1000px) {
+  .journey-product {
+    gap: 7%;
+    padding-inline: 6%;
+    min-height: 820px;
+  }
+  .scene-art {
+    height: 490px;
+  }
+  .scene-copy h2 {
+    font-size: 57px;
+  }
+  .artesanato-scene .scene-copy h2 {
+    font-size: 48px;
+  }
+  .journey-intro {
+    padding-inline: 12%;
+  }
+  .story-button {
+    gap: 18px;
+    font-size: 13px;
+  }
+  .journey-hero {
+    min-height: 0;
+  }
+  .journey-hero h1 {
+    font-size: 82px;
+  }
+}
+@media (max-width: 700px) {
+  .journey-hero {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding: 270px 6% 90px;
+  }
+  .journey-hero h1 {
+    font-size: clamp(42px, 10.5vw, 72px);
+    letter-spacing: -0.07em;
+    line-height: 1.1;
+  }
+  .journey-hero-copy .story-eyebrow {
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+  }
+  .journey-hero-copy > p:not(.story-eyebrow) {
+    font-size: 16px;
+  }
+  .journey-hero-actions {
+    gap: 18px;
+  }
+  .hero-halo {
+    width: 440px;
+    height: 440px;
+    top: 60px;
+  }
+  .hero-side-note {
+    display: none;
+  }
+  .nozzle-scene {
+    top: 72px;
+    height: 176px;
+  }
+  .nozzle-crop {
+    width: 180px;
+    height: 176px;
+  }
+  .nozzle-crop img {
+    width: 180px;
+    height: 270px;
+  }
+  .nozzle-caption {
+    display: none;
+    left: auto;
+    right: 5%;
+    top: 100px;
+    font-size: 7px;
+    writing-mode: vertical-rl;
+  }
+  .drop-caption {
+    display: none;
+    top: 240px;
+    right: 65%;
+    font-size: 8px;
+  }
+  .journey-hero-foot {
+    font-size: 7px;
+    letter-spacing: 0.8px;
+    bottom: 25px;
+  }
+  .journey-hero-foot span:last-child {
+    display: none;
+  }
+  .journey-ribbon {
+    padding: 18px 0;
+  }
+  .journey-ribbon span {
+    font-size: 28px;
+    letter-spacing: -1px;
+  }
+  .journey-ribbon b {
+    padding: 0 20px;
+  }
+  .journey-intro {
+    min-height: 700px;
+    padding: 90px 10% 110px;
+  }
+  .journey-intro h2 {
+    font-size: clamp(36px, 9vw, 55px);
+  }
+  .intro-bottom {
+    gap: 30px;
+    grid-template-columns: 1fr;
+    margin-top: 36px;
+  }
+  .intro-year strong {
+    font-size: 66px;
+  }
+  .intro-bottom > p {
+    font-size: 14px;
+  }
+  .intro-graphic {
+    font-size: 150px;
+    right: 5%;
+    top: 15px;
+  }
+  .intro-route-point {
+    left: 4%;
+    top: 55%;
+  }
+  .story-eyebrow {
+    font-size: 9px;
+  }
+  .journey-product {
+    display: flex;
+    flex-direction: column;
+    gap: 45px;
+    padding: 95px 9% 110px;
+    border-radius: 32px 32px 0 0;
+    min-height: 0;
+    margin-top: -32px;
+  }
+  .chapter-label {
+    top: 28px;
+    left: 9%;
+    right: 9%;
+    font-size: 7px;
+    letter-spacing: 1px;
+    padding-bottom: 15px;
+  }
+  .scene-art {
+    width: 100%;
+    height: 400px;
+    flex-shrink: 0;
+  }
+  .scene-copy {
+    width: 100%;
+  }
+  .scene-copy h2 {
+    font-size: clamp(43px, 12vw, 65px);
+  }
+  .scene-copy > p:not(.story-eyebrow):not(.artesanato-logo) {
+    font-size: 14px;
+    margin: 24px 0;
+  }
+  .scene-index {
+    font-size: 75px;
+  }
+  .scene-orbit {
+    inset: 8% 0;
+  }
+  .scene-point {
+    left: 16%;
+    top: 55%;
+  }
+  .artesanato-scene .scene-point {
+    left: 84%;
+    top: 55%;
+  }
+  .artesanato-scene .scene-art {
+    order: -1;
+  }
+  .artesanato-scene .scene-copy h2 {
+    font-size: clamp(39px, 10vw, 56px);
+  }
+  .artesanato-logo {
+    font-size: 29px;
+    margin-bottom: 30px;
+  }
+  .material-tags {
+    gap: 6px;
+  }
+  .material-tags span {
+    font-size: 10px;
+    padding: 8px 12px;
+  }
+  .story-button {
+    min-height: 53px;
+    font-size: 12px;
+    padding: 14px 20px;
+  }
+  .scene-bottle {
+    will-change: auto;
+  }
+  .journey-finale {
+    border-radius: 32px 32px 0 0;
+    min-height: 720px;
+    padding: 90px 7% 60px;
+  }
+  .journey-finale h2 {
+    font-size: clamp(60px, 15vw, 90px);
+  }
+  .journey-finale > p:not(.story-eyebrow) {
+    font-size: 13px;
+  }
+  .final-graphic {
+    font-size: 180px;
+  }
+  .final-foot {
+    font-size: 8px;
+  }
+  .photo-caption {
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journey-ribbon > div {
+    animation: none;
+  }
+  .scene-bottle,
+  .scene-orbit,
+  .journey-hero-copy,
+  .intro-graphic,
+  .final-graphic {
+    transform: none !important;
+  }
+  .brand-journey * {
+    transition: none !important;
+  }
+  .adhesive-route g,
+  .drop-neck {
+    display: none;
+  }
+  .story-button:hover {
+    transform: none;
+  }
+  .drop-destination .story-button {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .journey-hero h1 span {
+    animation: hero-arrive 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .journey-hero h1 em {
+    animation: hero-arrive 1s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .journey-hero-copy > .story-eyebrow {
+    animation: hero-arrive 0.8s 0.1s both;
+  }
+  .journey-hero-actions {
+    animation: hero-actions-arrive 0.8s 0.3s both;
+  }
+}
+@keyframes hero-actions-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes hero-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.silicone-cord,
+.foam-cord,
+.foam-core {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+.silicone-cord {
+  stroke: #fff;
+  stroke-width: 12;
+  filter: drop-shadow(1px 2px 2px #102a8333);
+}
+.foam-cord {
+  stroke: #f5ebcc;
+  stroke-width: 23;
+  filter: url(#foam-surface);
+}
+.foam-core {
+  stroke: #fff9e7;
+  stroke-width: 12;
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .silicone-cord,
+  .foam-cord,
+  .foam-core {
+    display: none;
+  }
+}
+
+.journey-ribbon b {
+  color: inherit;
+}
+
+.journey-finale {
+  overflow: hidden;
+}
+.finale-liquid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+.liquid-front {
+  fill: none;
+  stroke: #ff655e;
+  stroke-width: 2;
+  stroke-opacity: 0.55;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.journey-finale .story-eyebrow,
+.journey-finale .final-foot {
+  position: relative;
+  z-index: 6;
+}
+.journey-finale.is-flooded h2 em {
+  color: #fff;
+}
+.journey-finale.is-flooded > p:not(.story-eyebrow) {
+  color: #fff;
+}
+.journey-finale.is-flooded .drop-destination .story-button {
+  background: #fff;
+  color: #102a83;
+  box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .finale-liquid {
+    display: none;
+  }
+}
+
+/* The liquid owns the deformation; the CTA stays stable and readable. */
+.drop-destination .story-button {
+  transform-origin: center bottom;
+  box-shadow: none;
+  transition: background-color 160ms cubic-bezier(0.23, 1, 0.32, 1), color 160ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Responsive pass for the narrative landing: content-first on phones, composed on tablets. */
+.brand-journey {
+  container-type: inline-size;
+}
+.brand-journey .story-button,
+.brand-journey .journey-catalog-shortcut,
+.brand-journey .final-catalog-link,
+.solution-links button {
+  min-height: 44px;
+}
+.journey-hero-copy,
+.scene-copy,
+.intro-bottom,
+.journey-finale > p:not(.story-eyebrow) {
+  min-width: 0;
+}
+.journey-hero h1,
+.scene-copy h2,
+.journey-intro h2,
+.journey-finale h2 {
+  text-wrap: balance;
+  overflow-wrap: normal;
+}
+.journey-hero-copy > p:not(.story-eyebrow),
+.scene-copy > p:not(.story-eyebrow):not(.artesanato-logo),
+.intro-bottom > p,
+.journey-finale > p:not(.story-eyebrow) {
+  text-wrap: pretty;
+}
+
+@media (width <= 1024px) and (width > 700px) {
+  .journey-hero {
+    padding-top: 300px;
+    padding-bottom: 82px;
+  }
+  .journey-hero h1 {
+    font-size: clamp(64px, 8vw, 82px);
+  }
+  .journey-product {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 6%;
+    min-height: 780px;
+  }
+  .scene-art {
+    height: clamp(430px, 50vw, 520px);
+  }
+  .scene-copy h2 {
+    font-size: clamp(48px, 6vw, 62px);
+  }
+  .artesanato-scene .scene-copy h2 {
+    font-size: clamp(44px, 5.5vw, 56px);
+  }
+  .journey-finale {
+    min-height: 720px;
+  }
+}
+
+@media (width <= 700px) {
+  .brand-journey h1,
+  .brand-journey h2 {
+    letter-spacing: -0.04em;
+  }
+  .journey-hero {
+    padding-inline: var(--page-gutter, 6%);
+    padding-top: clamp(228px, 64vw, 270px);
+  }
+  .journey-hero h1 {
+    font-size: clamp(40px, 12vw, 58px);
+    letter-spacing: -0.045em;
+  }
+  .journey-hero-copy > p:not(.story-eyebrow) {
+    font-size: 15px;
+    line-height: 1.72;
+  }
+  .journey-hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+  .journey-hero-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+  .story-button,
+  .journey-catalog-shortcut,
+  .final-catalog-link {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding-inline: 18px;
+  }
+  .journey-intro {
+    min-height: 0;
+    padding-inline: var(--page-gutter, 7%);
+  }
+  .journey-product {
+    padding-inline: var(--page-gutter, 7%);
+    gap: 34px;
+  }
+  .scene-art {
+    height: clamp(300px, 88vw, 390px);
+  }
+  .scene-bottle {
+    width: 112%;
+  }
+  .scene-copy h2 {
+    font-size: clamp(38px, 11vw, 56px);
+    letter-spacing: -0.045em;
+  }
+  .scene-copy > p:not(.story-eyebrow):not(.artesanato-logo) {
+    max-width: 48ch;
+  }
+  .solution-links button {
+    font-size: 14px;
+  }
+  .journey-finale {
+    min-height: 0;
+    padding-inline: var(--page-gutter, 7%);
+  }
+  .journey-finale h2 {
+    font-size: clamp(48px, 14vw, 76px);
+    letter-spacing: -0.045em;
+  }
+  .drop-destination {
+    display: block;
+    max-width: 360px;
+    margin-inline: auto;
+  }
+  .final-catalog-link {
+    max-width: 360px;
+    margin-inline: auto;
+  }
+}
+
+@media (width <= 430px) {
+  .journey-hero {
+    padding-bottom: 78px;
+  }
+  .hero-halo {
+    width: min(420px, 115vw);
+    height: min(420px, 115vw);
+  }
+  .nozzle-scene {
+    height: 164px;
+  }
+  .journey-hero-foot {
+    left: var(--page-gutter, 6%);
+    right: var(--page-gutter, 6%);
+  }
+  .journey-ribbon span {
+    font-size: clamp(23px, 7vw, 28px);
+  }
+  .journey-product {
+    padding-top: 88px;
+    padding-bottom: 92px;
+  }
+  .scene-art {
+    height: clamp(275px, 82vw, 345px);
+  }
+  .scene-orbit {
+    inset: 10% 1%;
+  }
+  .scene-index {
+    font-size: 58px;
+    letter-spacing: -4px;
+  }
+  .material-tags span {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .artesanato-logo {
+    font-size: clamp(24px, 8vw, 29px);
+    max-width: 100%;
+  }
+}
+
+@media (width <= 360px) {
+  .journey-hero h1 {
+    font-size: clamp(37px, 11.5vw, 44px);
+  }
+  .journey-hero-copy > p:not(.story-eyebrow),
+  .scene-copy > p:not(.story-eyebrow):not(.artesanato-logo),
+  .intro-bottom > p {
+    font-size: 14px;
+  }
+  .scene-copy h2 {
+    font-size: clamp(35px, 10.5vw, 44px);
+  }
+  .journey-finale h2 {
+    font-size: clamp(43px, 13vw, 56px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .drop-destination .story-button { transform: none !important; }
+}
+/* Keep the keyboard focus indicator inside the CTA, not across the material. */
+.drop-destination .story-button:focus-visible {
+  outline-offset: -5px;
+}
+
+
+/* Tablet artwork keeps equal axes instead of inheriting a tall desktop box. */
+@media (min-width: 701px) and (max-width: 1366px) {
+  .journey-product .scene-art {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+  .journey-product .scene-orbit {
+    inset: 0;
+  }
+}

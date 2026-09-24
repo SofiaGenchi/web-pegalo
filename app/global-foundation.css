@@ -1,0 +1,114 @@
+@font-face {
+  font-family: Montserrat;
+  src: url('/fonts/montserrat.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/open-sans.woff2') format('woff2');
+  font-weight: 300 800;
+  font-display: swap;
+}
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: #fff;
+  --color-popover: #f5f5f3;
+  --color-popover-foreground: #11151c;
+  --color-muted: #e6e8eb;
+  --color-muted-foreground: #5b626e;
+  --color-border: #d6d8dc;
+  --color-input: #d6d8dc;
+  --color-ring: #eb452f;
+  --color-accent: #e6e8eb;
+  --color-accent-foreground: #11151c;
+  --font-sans: Montserrat, Arial, sans-serif;
+  --radius-lg: 0.25rem;
+}
+:root {
+  --background: #10151d;
+  --foreground: #f4f4f1;
+  --primary: #f1000e;
+  --border: #d6d8dc;
+  --red: #f1000e;
+  --muted-foreground: #b0b6bf;
+  --radius: 0.25rem;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+textarea {
+  font: inherit;
+}
+button,
+a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+button,
+a,
+input,
+textarea {
+  outline-offset: 6px;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #f87855;
+}
+::selection {
+  background: var(--red);
+  color: white;
+}
+button {
+  border: 0;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+img {
+  max-width: 100%;
+}
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 20px;
+  background: white;
+  color: #111;
+  padding: 15px;
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 10px;
+}
