@@ -168,7 +168,6 @@ export default function ArgentinaMap({
       <div className="argentina-canvas">
         <svg
           viewBox="0 0 360 620"
-          role="img"
           aria-labelledby="argentina-map-title"
         >
           <title id="argentina-map-title">

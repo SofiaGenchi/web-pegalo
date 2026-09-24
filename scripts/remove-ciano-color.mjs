@@ -10,7 +10,7 @@ const moduleUrl = source => 'data:text/javascript;base64,' + Buffer.from(ts.tran
 try {
   const productsUrl=moduleUrl(await readFile(new URL('../app/products.ts',import.meta.url),'utf8'));
   const source=(await readFile(new URL('../app/content-policy.ts',import.meta.url),'utf8')).replace("from './products'",`from '${productsUrl}'`);
-  const {defaultContent,validateContent}=await import(moduleUrl(source));
+  const {validateContent}=await import(moduleUrl(source));
   await client.connect();
   const collection=client.db(config.databaseName).collection('site_content');
   const previous=await collection.findOne({_id:'main'});

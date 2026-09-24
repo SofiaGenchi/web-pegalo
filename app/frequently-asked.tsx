@@ -1,4 +1,5 @@
 import './frequently-asked.css';
+import Link from 'next/link';
 
 export default function FrequentlyAsked() {
   return (
@@ -27,13 +28,13 @@ export default function FrequentlyAsked() {
               las siliconas Pegalo de las fichas enlazadas.
             </p>
             <p>
-              <a href="/fichas/ficha-silicona-neutra-pegalo.pdf">
+              <Link href="/fichas/ficha-silicona-neutra-pegalo.pdf">
                 Ficha de silicona neutra (PDF)
-              </a>{' '}
+              </Link>{' '}
               ·{' '}
-              <a href="/fichas/ficha-silicona-acetica-pegalo.pdf">
+              <Link href="/fichas/ficha-silicona-acetica-pegalo.pdf">
                 Ficha de silicona acética (PDF)
-              </a>
+              </Link>
             </p>
           </div>
         </details>
@@ -52,9 +53,9 @@ export default function FrequentlyAsked() {
               exteriores, no se recomienda para inmersión continua en agua.
             </p>
             <p>
-              <a href="/fichas/ficha-sellador-zingueria-artesanato.pdf">
+              <Link href="/fichas/ficha-sellador-zingueria-artesanato.pdf">
                 Ver ficha del sellador de zinguería (PDF)
-              </a>
+              </Link>
             </p>
           </div>
         </details>
@@ -74,9 +75,9 @@ export default function FrequentlyAsked() {
               contacto directo con alimentos.
             </p>
             <p>
-              <a href="/fichas/ficha-crema-epoxy-pegalo.pdf">
+              <Link href="/fichas/ficha-crema-epoxy-pegalo.pdf">
                 Ver ficha del adhesivo epoxi (PDF)
-              </a>
+              </Link>
             </p>
           </div>
         </details>
@@ -86,7 +87,7 @@ export default function FrequentlyAsked() {
           <div className="faq-answer">
             <p>
               Elegí los productos y sus presentaciones en el{' '}
-              <a href="#catalogo">catálogo</a> y armá tu consulta. Indicanos las
+              <Link href="#catalogo">catálogo</Link> y armá tu consulta. Indicanos las
               cantidades y tu localidad; el equipo comercial te confirmará
               precios, disponibilidad, condiciones de compra y opciones de entrega.
             </p>

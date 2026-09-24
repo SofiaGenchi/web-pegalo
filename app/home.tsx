@@ -13,7 +13,6 @@ import './business-stack.css';
 import './business-sections.css';
 import SiteHeader, { navigation } from './site-header';
 import SiteFooter from './site-footer';
-import { productFamilies } from './products';
 import type { ManagedProduct as Product, Distributor } from './content-policy';
 import { useQuote } from './use-quote';
 import StoryJourney from './story-journey';

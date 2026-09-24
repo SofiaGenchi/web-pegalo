@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
 const { outputText } = ts.transpileModule(await readFile(new URL('../app/liquid-surface.ts', import.meta.url), 'utf8'), {compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}});
 const { liquidSurface } = await import('data:text/javascript;base64,' + Buffer.from(outputText).toString('base64'));
-test('liquid stays finite through descent and reverse on desktop and mobile',()=>{
+await test('liquid stays finite through descent and reverse on desktop and mobile',()=>{
   for (const [w,h,y,source] of [[1280,760,470,220],[390,680,450,200]]) {
     for(let i=0;i<=100;i++) {
       const p=i/100;
@@ -19,7 +19,7 @@ test('liquid stays finite through descent and reverse on desktop and mobile',()=
     assert.equal(liquidSurface(w,h,w/2,y,source,1,0).body,liquidSurface(w,h,w/2,y,source,1,20).body);
   }
 });
-test('one cubic silhouette stays connected and covers the panel at completion',()=>{
+await test('one cubic silhouette stays connected and covers the panel at completion',()=>{
   for(const [w,h] of [[1280,830],[390,760]]) {
     for(let step=1;step<=100;step++) {
       const s=liquidSurface(w,h,w/2,580,200,step/100,0);
@@ -46,7 +46,7 @@ test('one cubic silhouette stays connected and covers the panel at completion',(
     }
   }
 });
-test('expansion originates at the CTA and advances on all four sides',()=>{
+await test('expansion originates at the CTA and advances on all four sides',()=>{
   for(const [w,h] of [[1280,830],[390,760]]) {
     const cx=w/2,cy=h*.6;
     const values=liquidSurface(w,h,cx,cy,200,.3,0,58).body.match(/-?\d+(?:\.\d+)?/g).map(Number);

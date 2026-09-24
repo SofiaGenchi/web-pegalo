@@ -20,7 +20,7 @@ const { productPath, productSlug, uniqueProducts } = await moduleFrom(
   '../app/product-links.ts',
 );
 
-test('every product has a stable readable URL, including products without a legacy URL', () => {
+await test('every product has a stable readable URL, including products without a legacy URL', () => {
   for (const product of products) {
     assert.match(
       productPath(product),
@@ -37,7 +37,7 @@ test('every product has a stable readable URL, including products without a lega
   );
 });
 
-test('cianoacrilato presentations share one page without merging other products', () => {
+await test('cianoacrilato presentations share one page without merging other products', () => {
   const groups = new Map();
   for (const product of products) {
     const slug = productSlug(product);
@@ -52,7 +52,7 @@ test('cianoacrilato presentations share one page without merging other products'
   assert.equal(uniqueProducts(products).length, products.length - 2);
 });
 
-test('a remaining active presentation keeps the shared page in the catalog', () => {
+await test('a remaining active presentation keeps the shared page in the catalog', () => {
   const active = products.filter(
     (p) => p.id !== 'ciano-10' && p.id !== 'ciano-20',
   );

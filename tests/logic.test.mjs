@@ -23,7 +23,7 @@ const known = new Set(products.map((p) => p.id));
 const { quoteOptions, quotePresentation, quoteProductId } = await moduleFrom(
   '../app/product-presentations.ts',
 );
-test('quotes keep only the color and size combinations listed for each product', () => {
+await test('quotes keep only the color and size combinations listed for each product', () => {
   const acetica = products.find((p) => p.id === 'acetica');
   const options = quoteOptions(acetica);
   assert.equal(options.length, 5);
@@ -40,7 +40,7 @@ test('quotes keep only the color and size combinations listed for each product',
     'Presentación a confirmar',
   );
 });
-test('two presentations of a product retain independent quantities across reloads', () => {
+await test('two presentations of a product retain independent quantities across reloads', () => {
   const options = quoteOptions(products.find((p) => p.id === 'acetica'));
   const keys = new Set(['acetica', ...options.map((o) => o.key)]);
   const items = [
@@ -57,7 +57,7 @@ test('two presentations of a product retain independent quantities across reload
     [],
   );
 });
-test('decimal measures and model descriptions are not split into invented variants', () => {
+await test('decimal measures and model descriptions are not split into invented variants', () => {
   const decimal = { id: 'sample', size: '1,5 L y 4 L', colors: '' };
   assert.deepEqual(
     quoteOptions(decimal).map((o) => o.label),
@@ -77,7 +77,7 @@ test('decimal measures and model descriptions are not split into invented varian
     assert.equal(new Set(options.map((o) => o.key)).size, options.length, p.id);
   }
 });
-test('stored quotes reject corrupt JSON, invalid products and unexpected shapes', () => {
+await test('stored quotes reject corrupt JSON, invalid products and unexpected shapes', () => {
   for (const raw of ['broken', 'null', '{}', '42'])
     assert.deepEqual(readQuote(raw, known), []);
   assert.deepEqual(
@@ -94,7 +94,7 @@ test('stored quotes reject corrupt JSON, invalid products and unexpected shapes'
     [{ id: 'ciano-20', quantity: 24 }],
   );
 });
-test('quantities remain whole positive units within the supported range', () => {
+await test('quantities remain whole positive units within the supported range', () => {
   assert.equal(normalizeQuantity(0), 1);
   assert.equal(normalizeQuantity(-7), 1);
   assert.equal(normalizeQuantity(Infinity), 1);
@@ -109,7 +109,7 @@ test('quantities remain whole positive units within the supported range', () => 
     [{ id: 'acetica', quantity: 24 }],
   );
 });
-test('all catalog products have one family and an available local photograph', async () => {
+await test('all catalog products have one family and an available local photograph', async () => {
   assert.equal(known.size, 23);
   for (const p of products) {
     assert.equal(
@@ -122,7 +122,7 @@ test('all catalog products have one family and an available local photograph', a
     );
   }
 });
-test('scroll tracking is bounded, reversible and interpolated between samples', () => {
+await test('scroll tracking is bounded, reversible and interpolated between samples', () => {
   const samples = [
     { y: 100, distance: 0 },
     { y: 200, distance: 130 },
@@ -139,13 +139,13 @@ test('scroll tracking is bounded, reversible and interpolated between samples', 
 const { canManage, isPdf, isDocumentKind } = await moduleFrom(
   '../app/document-policy.ts',
 );
-test('document management denies anonymous, empty configuration and unlisted accounts', () => {
+await test('document management denies anonymous, empty configuration and unlisted accounts', () => {
   assert.equal(canManage(null, 'admin@example.com'), false);
   assert.equal(canManage('admin@example.com', ''), false);
   assert.equal(canManage('other@example.com', 'admin@example.com'), false);
   assert.equal(canManage('ADMIN@example.com', ' admin@example.com '), true);
 });
-test('disabled document slots and PDF signatures reject arbitrary files', () => {
+await test('disabled document slots and PDF signatures reject arbitrary files', () => {
   assert.equal(isDocumentKind('../other'), false);
   assert.equal(isDocumentKind('precios'), false);
   assert.equal(isDocumentKind('promociones'), false);
@@ -159,7 +159,7 @@ test('disabled document slots and PDF signatures reject arbitrary files', () => 
 const { shouldUseSimpleView, createViewDecision } = await moduleFrom(
   '../app/view-policy.ts',
 );
-test('automatic view honors reduced data, reduced motion and slow estimated networks', () => {
+await test('automatic view honors reduced data, reduced motion and slow estimated networks', () => {
   for (const signals of [
     { saveData: true },
     { reducedMotion: true },
@@ -179,7 +179,7 @@ test('automatic view honors reduced data, reduced motion and slow estimated netw
   assert.equal(shouldUseSimpleView({ downlink: 0, rtt: 0 }), false);
   assert.equal(shouldUseSimpleView({ downlink: NaN, rtt: Infinity }), false);
 });
-test('network fluctuations cannot replace the view during a visit', () => {
+await test('network fluctuations cannot replace the view during a visit', () => {
   let current = { effectiveType: '3g' };
   const view = createViewDecision(() => current);
   assert.equal(view(), true);

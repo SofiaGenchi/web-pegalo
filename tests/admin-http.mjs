@@ -9,7 +9,7 @@ const base = 'http://localhost:3000';
 const token = (await readFile(new URL('../work/admin-activation.txt', import.meta.url), 'utf8')).trim();
 let cookie = '';
 async function call(path, method = 'GET', body, options = {}) {
-  return fetch(base + path, { method, headers: { ...(method !== 'GET' ? { Origin: base } : {}), ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(cookie ? { Cookie: cookie } : {}), ...options }, body: body === undefined ? undefined : JSON.stringify(body) });
+  return fetch(base + path, { method, headers: { ...(method !== 'GET' ? { Origin: base } : {}), ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(cookie ? { Cookie: cookie } : {}), ...options }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
 }
 const password = randomBytes(24).toString('hex');
 let r = await call('/api/admin/content'); assert.equal(r.status,401);

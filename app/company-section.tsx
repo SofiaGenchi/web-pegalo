@@ -1,5 +1,3 @@
-import PegaloName from './pegalo-name';
-
 export default function CompanySection({
   journey = false,
 }: {

@@ -131,7 +131,7 @@ export default function ProductEditor({
               disabled={!storageAvailable}
               accept="image/png,image/jpeg,image/webp"
               onChange={(e) => {
-                void onUpload(e.target.files?.[0], 'image');
+                onUpload(e.target.files?.[0], 'image');
                 e.target.value = '';
               }}
             />
@@ -147,7 +147,7 @@ export default function ProductEditor({
               disabled={!storageAvailable}
               accept="application/pdf"
               onChange={(e) => {
-                void onUpload(e.target.files?.[0], 'technicalPdf');
+                onUpload(e.target.files?.[0], 'technicalPdf');
                 e.target.value = '';
               }}
             />

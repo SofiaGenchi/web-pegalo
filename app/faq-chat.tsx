@@ -185,14 +185,14 @@ export default function FaqChat({ hidden }: { hidden: boolean }) {
               ))}
             </div>
             {activeTopic && (
-              <div className="faq-chat-answer-box" role="region" aria-live="polite">
+              <section className="faq-chat-answer-box" aria-label="Respuesta del asistente" aria-live="polite">
                 <p>{activeTopic.answer}</p>
                 {activeTopic.href && (
                   <a href={activeTopic.href} onClick={close}>
                     {activeTopic.link}
                   </a>
                 )}
-              </div>
+              </section>
             )}
           </div>
 

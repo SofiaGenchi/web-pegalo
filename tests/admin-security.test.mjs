@@ -12,7 +12,7 @@ async function load(path) {
 }
 const { hashPassword, verifyPassword } = await load('../app/password.ts');
 const { validateContent, defaultContent } = await load('../app/content-policy.ts');
-test('passwords use independent salts and reject incorrect passwords and damaged hashes', async () => {
+await test('passwords use independent salts and reject incorrect passwords and damaged hashes', async () => {
   const password = 'test-only-long-passphrase';
   const first = await hashPassword(password), second = await hashPassword(password);
   assert.notEqual(first, second); assert.ok(!first.includes(password));
@@ -20,7 +20,7 @@ test('passwords use independent salts and reject incorrect passwords and damaged
   assert.equal(await verifyPassword('incorrect', first), false);
   assert.equal(await verifyPassword(password, 'broken'), false);
 });
-test('content rejects script URLs, duplicate IDs and invalid distributor coordinates', () => {
+await test('content rejects script URLs, duplicate IDs and invalid distributor coordinates', () => {
   assert.equal(validateContent(defaultContent), true);
   for (const mutation of [c => { c.products[0].image = 'javascript:alert(1)'; }, c => { c.products[0].technicalPdf = 'https://evil.example/file'; }, c => c.products.push(c.products[0])]) {
     const c = structuredClone(defaultContent); mutation(c); assert.equal(validateContent(c), false);
