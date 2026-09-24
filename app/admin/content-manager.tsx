@@ -1,10 +1,9 @@
 'use client';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import {
-  Package,
-  MapPin,
   FileText,
+  MapPin,
+  Package,
   LogOut,
   Plus,
   Save,
@@ -19,6 +18,8 @@ import { productFamilies } from '../products';
 import type { DocumentInfo } from '../downloads';
 import DocumentManager from './document-manager';
 import '../documents.css';
+import ProductEditor from './product-editor';
+import DistributorEditor from './distributor-editor';
 type Tab = 'products' | 'distributors' | 'documents';
 export default function ContentManager({
   initial,
@@ -349,261 +350,17 @@ export default function ContentManager({
             <section className="admin-detail">
               <fieldset disabled={busy}>
                 {tab === 'products' && product ? (
-                  <>
-                    <div className="admin-detail-title">
-                      <h2>{product.name}</h2>
-                      <label className="admin-toggle">
-                        <input
-                          type="checkbox"
-                          checked={product.active}
-                          onChange={(e) =>
-                            editProduct({ active: e.target.checked })
-                          }
-                        />
-                        Visible en la web
-                      </label>
-                    </div>
-                    <label>
-                      Nombre
-                      <input
-                        value={product.name}
-                        maxLength={150}
-                        onChange={(e) => editProduct({ name: e.target.value })}
-                      />
-                    </label>
-                    <div className="admin-fields">
-                      <label>
-                        Marca principal
-                        <select
-                          value={product.line}
-                          onChange={(e) =>
-                            editProduct({
-                              line: e.target.value,
-                              lines: [
-                                ...new Set([...product.lines, e.target.value]),
-                              ],
-                            })
-                          }
-                        >
-                          {['Pegalo', 'Artesanato', 'Instalador'].map((l) => (
-                            <option key={l}>{l}</option>
-                          ))}
-                        </select>
-                      </label>
-                      <label>
-                        Tipo de producto
-                        <select
-                          value={product.family}
-                          onChange={(e) =>
-                            editProduct({ family: e.target.value })
-                          }
-                        >
-                          {productFamilies.map((f) => (
-                            <option key={f.name}>{f.name}</option>
-                          ))}
-                        </select>
-                      </label>
-                    </div>
-                    <div className="admin-line-options">
-                      <span>Aparece en las líneas</span>
-                      {['Pegalo', 'Artesanato', 'Instalador'].map((l) => (
-                        <label key={l}>
-                          <input
-                            type="checkbox"
-                            checked={product.lines.includes(l)}
-                            disabled={product.line === l}
-                            onChange={(e) =>
-                              editProduct({
-                                lines: e.target.checked
-                                  ? [...product.lines, l]
-                                  : product.lines.filter((x) => x !== l),
-                              })
-                            }
-                          />
-                          {l}
-                        </label>
-                      ))}
-                    </div>
-                    <label>
-                      Presentación
-                      <input
-                        value={product.size}
-                        maxLength={150}
-                        onChange={(e) => editProduct({ size: e.target.value })}
-                      />
-                    </label>
-                    <label>
-                      Descripción y usos
-                      <textarea
-                        rows={4}
-                        maxLength={3000}
-                        value={product.use}
-                        onChange={(e) => editProduct({ use: e.target.value })}
-                      />
-                    </label>
-                    <label>
-                      Colores / disponibilidad
-                      <input
-                        maxLength={300}
-                        value={product.colors}
-                        onChange={(e) =>
-                          editProduct({ colors: e.target.value })
-                        }
-                      />
-                    </label>
-                    <div className="admin-fields">
-                      <div className="admin-upload">
-                        {product.image && (
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={140}
-                            height={110}
-                            unoptimized
-                          />
-                        )}
-                        <label>
-                          Foto del producto
-                          <input
-                            type="file"
-                            disabled={!storageAvailable}
-                            accept="image/png,image/jpeg,image/webp"
-                            onChange={(e) => {
-                              void upload(e.target.files?.[0], 'image');
-                              e.target.value = '';
-                            }}
-                          />
-                        </label>
-                        <small>PNG, JPG o WebP. Hasta 5 MB.</small>
-                      </div>
-                      <div className="admin-upload">
-                        <FileText size={28} />
-                        <label>
-                          Ficha técnica
-                          <input
-                            type="file"
-                            disabled={!storageAvailable}
-                            accept="application/pdf"
-                            onChange={(e) => {
-                              void upload(e.target.files?.[0], 'technicalPdf');
-                              e.target.value = '';
-                            }}
-                          />
-                        </label>
-                        <small>PDF. Hasta 12 MB.</small>
-                        {product.technicalPdf && (
-                          <>
-                            <a
-                              href={product.technicalPdf}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Descargar ficha actual
-                            </a>
-                            <button
-                              type="button"
-                              onClick={() => editProduct({ technicalPdf: '' })}
-                            >
-                              Quitar ficha
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                ) : tab === 'distributors' && distributor ? (
-                  <>
-                    <div className="admin-detail-title">
-                      <h2>{distributor.name}</h2>
-                      <label className="admin-toggle">
-                        <input
-                          type="checkbox"
-                          checked={distributor.active}
-                          onChange={(e) =>
-                            editDistributor({ active: e.target.checked })
-                          }
-                        />
-                        Visible en el mapa
-                      </label>
-                    </div>
-                    {(
-                      [
-                        'name',
-                        'address',
-                        'locality',
-                        'province',
-                        'phone',
-                        'email',
-                      ] as const
-                    ).map((key, i) => (
-                      <label key={key}>
-                        {
-                          [
-                            'Nombre comercial',
-                            'Dirección',
-                            'Localidad',
-                            'Provincia',
-                            'Teléfono (opcional)',
-                            'Correo electrónico (opcional)',
-                          ][i]
-                        }
-                        <input
-                          type={key === 'email' ? 'email' : 'text'}
-                          value={distributor[key]}
-                          onChange={(e) =>
-                            editDistributor({ [key]: e.target.value })
-                          }
-                        />
-                      </label>
-                    ))}
-                    <div className="admin-fields">
-                      <label>
-                        Latitud
-                        <input
-                          type="number"
-                          step="any"
-                          min={-55.5}
-                          max={-21.5}
-                          value={distributor.latitude}
-                          onChange={(e) =>
-                            editDistributor({
-                              latitude: e.target.valueAsNumber,
-                            })
-                          }
-                        />
-                      </label>
-                      <label>
-                        Longitud
-                        <input
-                          type="number"
-                          step="any"
-                          min={-73.7}
-                          max={-53.5}
-                          value={distributor.longitude}
-                          onChange={(e) =>
-                            editDistributor({
-                              longitude: e.target.valueAsNumber,
-                            })
-                          }
-                        />
-                      </label>
-                    </div>
-                    <p className="admin-help">
-                      Ingresá las coordenadas confirmadas del local, en grados
-                      decimales. El mapa nacional muestra una ubicación
-                      aproximada. Revisá las coordenadas sugeridas antes de
-                      publicar.
-                    </p>
-                  </>
+                  <ProductEditor
+                    product={product}
+                    storageAvailable={storageAvailable}
+                    onEdit={editProduct}
+                    onUpload={upload}
+                  />
                 ) : (
-                  <div className="admin-empty">
-                    <MapPin size={36} />
-                    <h2>La red de distribuidores</h2>
-                    <p>
-                      Agregá los datos de un local y activá su visibilidad para
-                      que aparezca en el mapa de Argentina.
-                    </p>
-                  </div>
+                  <DistributorEditor
+                    distributor={distributor}
+                    onEdit={editDistributor}
+                  />
                 )}
               </fieldset>
             </section>

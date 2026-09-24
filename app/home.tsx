@@ -1,36 +1,21 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { productPath, uniqueProducts } from './product-links';
-import {
-  presentationBadges,
-  quoteProductId,
-  quotePresentation,
-} from './product-presentations';
+import CatalogSection from './catalog-section';
+import QuoteDialog from './quote-dialog';
 import PegaloName from './pegalo-name';
 import CompanySection from './company-section';
 import BusinessSections from './business-sections';
 import BusinessStack from './business-stack';
 import './business-stack.css';
 import './business-sections.css';
-import { X, Plus, Search } from 'lucide-react';
 import SiteHeader, { navigation } from './site-header';
 import SiteFooter from './site-footer';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
-
 import { productFamilies } from './products';
 import type { ManagedProduct as Product, Distributor } from './content-policy';
 import { useQuote } from './use-quote';
-import './refinements.css';
 import StoryJourney from './story-journey';
 import Downloads from './downloads';
 import BackToTop from './back-to-top';
@@ -38,9 +23,6 @@ import FaqChat from './faq-chat';
 import './documents.css';
 import './simple-view.css';
 import { useSimpleView } from './use-simple-view';
-
-const whatsapp = (message: string) =>
-  `https://wa.me/541164174036?text=${encodeURIComponent(message)}`;
 
 export default function Home({
   products,
@@ -74,12 +56,10 @@ export default function Home({
   };
   const [activeSection, setActiveSection] = useState('inicio');
   const [quoteOpen, setQuoteOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [locality, setLocality] = useState('');
-  const [note, setNote] = useState('');
   useEffect(() => {
     const openLinkedProduct = () => {
-      if (new URL(window.location.href).searchParams.get('consulta') === '1') setQuoteOpen(true);
+      if (new URL(window.location.href).searchParams.get('consulta') === '1')
+        setQuoteOpen(true);
       const id = new URL(window.location.href).searchParams.get('producto');
       const product = products.find((product) => product.id === id);
       if (product) router.replace(productPath(product));
@@ -162,9 +142,7 @@ export default function Home({
       id: string;
       zoneDown: number;
       zoneUp: number;
-    }> = [
-      { id: 'empresa', zoneDown: 100, zoneUp: 100 },
-    ];
+    }> = [{ id: 'empresa', zoneDown: 100, zoneUp: 100 }];
     const lockMs = 900;
 
     const getTop = (el: HTMLElement) =>
@@ -183,8 +161,11 @@ export default function Home({
             ? ({ section: contacto, id: 'contacto' as const } as const)
             : null,
         ]
-          .filter((item): item is { section: HTMLElement; id: 'empresa' | 'contacto' } =>
-            !!item
+          .filter(
+            (
+              item,
+            ): item is { section: HTMLElement; id: 'empresa' | 'contacto' } =>
+              !!item,
           )
           .map((item) => ({
             section: item.section,
@@ -370,7 +351,14 @@ export default function Home({
       <a href="#contenido" className="skip-link">
         Saltar al contenido
       </a>
-      <SiteHeader home quoteCount={quote.length} onQuote={() => setQuoteOpen(true)} menu={menu} onMenuChange={setMenu} activeSection={activeSection} />
+      <SiteHeader
+        home
+        quoteCount={quote.length}
+        onQuote={() => setQuoteOpen(true)}
+        menu={menu}
+        onMenuChange={setMenu}
+        activeSection={activeSection}
+      />
       <main id="contenido">
         {simple ? (
           <section className="simple-intro" id="inicio">
@@ -403,205 +391,20 @@ export default function Home({
             onBrowse={browse}
           />
         )}
-        <section className="catalog section" id="catalogo" tabIndex={-1}>
-          <div className="section-heading" data-reveal>
-            <p className="eyebrow">EXPLORÁ EL CATÁLOGO</p>
-            <h2>
-              Soluciones
-              <br />
-              <span>para cada aplicación.</span>
-            </h2>
-            <p>
-              Encontrá los productos que mejor se adaptan
-              <br />a tu negocio y armá tu consulta.
-            </p>
-          </div>
-          {catalogUnavailable ? (
-            <div className="catalog-unavailable" aria-live="polite">
-              <h3>No pudimos cargar los productos.</h3>
-              <p>
-                Podés consultar precios y promociones o escribirnos mientras
-                consultar disponibilidad y condiciones mientras
-                restablecemos el catálogo.
-              </p>
-              <div className="catalog-recovery-actions">
-                <button
-                  className="button"
-                  onClick={() => window.location.reload()}
-                >
-                  Reintentar
-                </button>
-                <button className="button" onClick={() => setQuoteOpen(true)}>
-                  Consultar a ventas
-                </button>
-                <a href="#descargas">Descargas</a>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="catalog-tools">
-                <div className="filters" aria-label="Filtrar por línea">
-                  {['Todos', 'Pegalo', 'Artesanato', 'Instalador'].map((l) => (
-                    <button
-                      aria-pressed={filter === l}
-                      key={l}
-                      onClick={() => setFilter(l)}
-                      className={filter === l ? 'active' : ''}
-                    >
-                      {l}
-                    </button>
-                  ))}
-                </div>
-                <label className="search">
-                  <Search size={18} />
-                  <input
-                    type="search"
-                    aria-label="Buscar productos"
-                    placeholder="¿Qué estás buscando?"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
-                </label>
-              </div>
-              <div
-                className="family-filters"
-                aria-label="Filtrar por tipo de producto"
-              >
-                {['Todos', ...productFamilies.map((group) => group.name)].map(
-                  (group) => (
-                    <button
-                      key={group}
-                      aria-pressed={family === group}
-                      onClick={() => setFamily(group)}
-                    >
-                      {group === 'Todos' ? 'Todos los tipos' : group}
-                    </button>
-                  ),
-                )}
-              </div>
-              <div className="catalog-summary">
-                <output className="result-count">
-                  Mostrando {shownProducts.length} de {visible.length} productos
-                </output>
-                {(family !== 'Todos' || filter !== 'Todos' || query) && (
-                  <button
-                    onClick={() => {
-                      setFamily('Todos');
-                      setFilter('Todos');
-                      setQuery('');
-                    }}
-                  >
-                    Limpiar filtros <X size={14} />
-                  </button>
-                )}
-                <span>
-                  Seleccioná los productos sobre los que querés consultar.
-                </span>
-              </div>
-              <div className="product-grid" id="catalog-product-grid">
-                {visible.map((p, index) => (
-                  <article className="product-card" key={p.id} style={index >= visibleCount ? { display: 'none' } : undefined}>
-                    <Link
-                      className="product-open"
-                      href={productPath(p)}
-                      aria-label={'Ver ' + p.name}
-                    >
-                      <div className="product-image">
-                        <span className="product-line">
-                          {p.line === 'Pegalo' ? <PegaloName /> : p.line}
-                        </span>
-                        <Image
-                          unoptimized
-                          width={500}
-                          height={500}
-                          src={p.image || '/product-placeholder.svg'}
-                          alt={p.name}
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      </div>
-                      <div className="product-info">
-                        <h3>{p.name}</h3>
-                        <span className="product-application">{p.use}</span>
-                        <div
-                          className="presentation-badges"
-                          aria-label="Presentaciones disponibles"
-                        >
-                          {presentationBadges(p).map((presentation) => (
-                            <span key={presentation}>{presentation}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </Link>
-                    <Link
-                      className={'add-product'}
-                      href={productPath(p)}
-                    >
-                      <Plus size={16} /> Elegir y agregar
-                    </Link>
-                  </article>
-                ))}
-              </div>
-              {visible.length > 4 && (
-                <div className="catalog-more">
-                  <button
-                    type="button"
-                    className="story-button"
-                    aria-controls="catalog-product-grid"
-                    onClick={() => {
-                      if (shownProducts.length < visible.length) {
-                        setVisibleCount((count) =>
-                          Math.min(count + 4, visible.length),
-                        );
-                      } else {
-                        setVisibleCount(4);
-                        requestAnimationFrame(() => {
-                          const catalog = document.getElementById('catalogo');
-                          if (!catalog) return;
-                          catalog.focus({ preventScroll: true });
-                          const top =
-                            catalog.getBoundingClientRect().top +
-                            window.scrollY -
-                            100;
-                          window.scrollTo({
-                            top: Math.max(0, top),
-                            behavior: window.matchMedia(
-                              '(prefers-reduced-motion: reduce)',
-                            ).matches
-                              ? 'instant'
-                              : 'smooth',
-                          });
-                        });
-                      }
-                    }}
-                  >
-                    {shownProducts.length < visible.length
-                      ? 'Ver más productos'
-                      : 'Ver menos'}
-                  </button>
-                </div>
-              )}
-              {!visible.length && (
-                <div className="no-results">
-                  <h3>No encontramos ese producto.</h3>
-                  <p>
-                    Probá con otro nombre o consultanos por lo que necesitás.
-                  </p>
-                  <button
-                    className="button"
-                    onClick={() => {
-                      setQuery('');
-                      setFilter('Todos');
-                      setFamily('Todos');
-                    }}
-                  >
-                    Ver todos los productos
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-        </section>
+        <CatalogSection
+          catalogUnavailable={catalogUnavailable}
+          filter={filter}
+          setFilter={setFilter}
+          family={family}
+          setFamily={setFamily}
+          query={query}
+          setQuery={setQuery}
+          visible={visible}
+          shownProducts={shownProducts}
+          visibleCount={visibleCount}
+          setVisibleCount={setVisibleCount}
+          onQuoteOpen={() => setQuoteOpen(true)}
+        />
         <BusinessStack>
           <Downloads />
           <CompanySection />
@@ -611,113 +414,13 @@ export default function Home({
       <SiteFooter />
       <BackToTop raised={false} hidden={menu || quoteOpen} />
       <FaqChat hidden={menu || quoteOpen} />
-      <Dialog open={quoteOpen} onOpenChange={setQuoteOpen}>
-        <DialogContent className="quote-dialog" showCloseButton={false}>
-          <DialogClose className="modal-close" aria-label="Cerrar consulta">
-            <X />
-          </DialogClose>
-          <p className="eyebrow">VENTA MAYORISTA / ASESORAMIENTO</p>
-          <DialogTitle className="detail-title">
-            Hablemos de tu proyecto.
-          </DialogTitle>
-          <DialogDescription>
-            Prepará tu consulta y continuá por WhatsApp para enviarla al equipo
-            de <PegaloName />.
-          </DialogDescription>
-          <div className="quote-items">
-            {quote.length ? (
-              quote.map((id) => {
-                const p = products.find((x) => x.id === quoteProductId(id))!;
-                return (
-                  <div key={id} className="quote-row">
-                    <Image
-                      unoptimized
-                      src={p.image || '/product-placeholder.svg'}
-                      alt=""
-                      width={64}
-                      height={64}
-                    />
-                    <div className="quote-row-info">
-                      <strong>{p.name}</strong>
-                      <span>{quotePresentation(p, id)}</span>
-                    </div>
-                    <button
-                      aria-label={'Quitar ' + p.name}
-                      onClick={() => setQuote((q) => q.filter((x) => x !== id))}
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                );
-              })
-            ) : (
-              <p>
-                Podés consultarnos directamente o agregar productos desde el
-                catálogo.
-              </p>
-            )}
-          </div>
-          <label className="field">
-            Nombre o comercio
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              autoComplete="organization"
-              placeholder="¿Cómo te llamás?"
-            />
-          </label>
-          <label className="field">
-            Localidad y provincia
-            <input
-              value={locality}
-              onChange={(e) => setLocality(e.target.value)}
-              placeholder="¿Desde dónde nos escribís?"
-            />
-          </label>
-          <label className="field">
-            Tu consulta
-            <textarea
-              rows={3}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Contanos qué te gustaría saber sobre los productos…"
-            />
-          </label>
-          <a
-            className="button"
-            target="_blank"
-            rel="noreferrer"
-            href={whatsapp(
-              [
-                'Hola Pegalo, quisiera realizar una consulta.',
-                name && 'Nombre / comercio: ' + name,
-                locality && 'Localidad: ' + locality,
-                quote.length &&
-                  'Productos de interés:\n' +
-                    quote
-                      .map(
-                        (id) =>
-                          '• ' +
-                          products.find((p) => p.id === quoteProductId(id))!
-                            .name +
-                          ' (' +
-                          quotePresentation(
-                            products.find((p) => p.id === quoteProductId(id))!,
-                            id,
-                          ) +
-                          ')',
-                      )
-                      .join('\n'),
-                note,
-              ]
-                .filter(Boolean)
-                .join('\n\n'),
-            )}
-          >
-            Continuar por WhatsApp
-          </a>
-        </DialogContent>
-      </Dialog>
+      <QuoteDialog
+        open={quoteOpen}
+        onOpenChange={setQuoteOpen}
+        products={products}
+        quote={quote}
+        setQuote={setQuote}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import Loading, { SessionReady } from './route-loading';
+import Loading, { FirstVisitIntro } from './route-loading';
 import './globals.css';
 import { siteOrigin } from './seo';
 export const metadata: Metadata = {
@@ -24,9 +24,9 @@ export default function RootLayout({
   return (
     <html lang="es-AR">
       <body>
+        <FirstVisitIntro />
         <Suspense fallback={<Loading />}>
           {children}
-          <SessionReady />
         </Suspense>
       </body>
     </html>

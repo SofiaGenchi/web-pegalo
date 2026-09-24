@@ -16,6 +16,11 @@
   font-family: Montserrat, Arial, sans-serif;
   text-align: center;
 }
+.first-visit-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
 .route-state-brand {
   font-family: 'Pegalo State', sans-serif;
   font-size: clamp(48px, 12vw, 100px);
