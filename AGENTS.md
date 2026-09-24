@@ -5,7 +5,7 @@
 - La web pública se genera como sitio estático (`next.config.ts`: `output: 'export'`). Debe poder servir sus páginas y recursos sin una base de datos ni un servidor de aplicación en ejecución.
 - El catálogo publicado sale de `app/catalog/products.ts` y `app/catalog/content-policy.ts` mediante `server/repository-static.ts`.
 - `parked-admin/` contiene trabajo preliminar para un panel de administración. Está fuera de las rutas publicadas. No lo actives ni conectes una base de datos como efecto secundario de cambios en la web pública.
-- El despliegue previsto es Dokploy en el VPS de Pegalo. La configuración concreta de despliegue todavía no está incorporada al repositorio.
+- La web se despliega en Dokploy en el VPS de Pegalo. La configuración de producción está en `Dockerfile` y `deploy/`.
 
 ## Dónde trabajar
 
@@ -27,7 +27,9 @@
 
 ## Ramas y publicación
 
-- `QAS` es la rama de trabajo e integración. Los cambios se preparan, verifican y suben allí.
+- Cada desarrollador crea su propia rama a partir de `QAS` para cada cambio. No hagas commits ni push directos a `QAS`.
+- Cuando el cambio esté listo y verificado, abrí un pull request desde esa rama hacia `QAS`. Revisá el diff y las verificaciones antes de integrarlo.
+- `QAS` es la rama de integración y pruebas. Probá allí los cambios antes de promoverlos a producción.
 - `main` representa la versión de producción. No hagas commits ni push directos a `main`.
 - Para publicar, abrí un pull request de `QAS` hacia `main`. Revisá el diff y las verificaciones antes de integrarlo.
-- El despliegue automático de producción debe tomar únicamente `main`. No asumas que está configurado hasta comprobarlo en Dokploy con un despliegue real.
+- El despliegue automático de producción toma únicamente `main`; comprobá el resultado en Dokploy después de cada integración.
