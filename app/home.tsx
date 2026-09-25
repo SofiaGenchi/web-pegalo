@@ -57,9 +57,13 @@ export default function Home({
   const [quoteOpen, setQuoteOpen] = useState(false);
   useEffect(() => {
     const openLinkedProduct = () => {
-      if (new URL(window.location.href).searchParams.get('consulta') === '1')
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('consulta') === '1') {
         setQuoteOpen(true);
-      const id = new URL(window.location.href).searchParams.get('producto');
+        url.searchParams.delete('consulta');
+        window.history.replaceState(window.history.state, '', url);
+      }
+      const id = url.searchParams.get('producto');
       const product = products.find((product) => product.id === id);
       if (product) router.replace(productPath(product));
     };
