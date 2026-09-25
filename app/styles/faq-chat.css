@@ -282,11 +282,6 @@
   letter-spacing: 0.1px;
 }
 
-.site .back-to-top {
-  right: auto;
-  left: max(18px, env(safe-area-inset-left));
-}
-
 @media (max-width: 480px) {
   .faq-chat {
     right: max(12px, env(safe-area-inset-right));
